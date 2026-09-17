@@ -397,11 +397,12 @@
       matchingLoading = true;
       const pool = IDIOMS.filter(item => item.sourceId);
       matchingRound = shuffle(pool).slice(0, 10);
-      matchingMeanings = matchingRound.map(item => ({ ...item, meaning: '正在讀取官方釋義…' }));
+      matchingMeanings = [];
       matchingPairs = new Map(); selectedMatchingId = null; matchingSubmitted = false;
       byId('matchingResult').innerHTML = ''; renderMatching();
+      byId('matchingStatus').textContent = '正在更新索引與載入 10 則官方釋義…';
       const meanings = await Promise.all(matchingRound.map(item => fetchOfficialMeaning(item)));
-      matchingMeanings = matchingRound.map((item, index) => ({ ...item, meaning: meanings[index] }));
+      matchingMeanings = shuffle(matchingRound.map((item, index) => ({ ...item, meaning: meanings[index] })));
       matchingLoading = false;
       renderMatching();
     }
