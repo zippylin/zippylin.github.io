@@ -62,6 +62,26 @@
     }
     .nav-button:hover, .nav-button.active { color: var(--teal); background: rgba(23, 107, 103, .09); }
     .nav-button span { margin-left: 5px; font-size: 12px; }
+    .matching-section { padding: 0 0 80px; }
+    .matching-panel { position: relative; border-top: 1px solid var(--line); padding-top: 22px; }
+    .matching-board { position: relative; display: grid; grid-template-columns: 1fr 1fr; gap: 48px; padding: 18px 0; }
+    .matching-lines { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
+    .matching-column { position: relative; z-index: 1; display: grid; gap: 10px; }
+    .matching-row { display: flex; align-items: center; gap: 8px; min-height: 52px; }
+    .matching-node { flex: 1; min-height: 52px; border: 1px solid var(--line); border-radius: 4px; padding: 10px 13px; color: var(--teal-deep); background: var(--white); text-align: left; transition: .2s ease; }
+    .matching-node:hover, .matching-node.selected { border-color: var(--teal); box-shadow: 0 0 0 3px rgba(23, 107, 103, .1); }
+    .matching-node.connected { border-color: var(--gold); background: #fffaf0; }
+    .matching-node.is-correct { border-color: var(--teal); background: rgba(23, 107, 103, .12); }
+    .matching-node.is-wrong { border-color: var(--coral); background: rgba(220, 118, 94, .12); }
+    .meaning-node { color: var(--ink); font-size: 13px; line-height: 1.55; }
+    .quiz-save { flex: 0 0 auto; border: 0; padding: 7px; color: var(--coral); background: transparent; font-size: 18px; }
+    .quiz-actions { display: flex; align-items: center; gap: 14px; margin-top: 8px; }
+    .quiz-status { color: var(--muted); font-size: 13px; }
+    .quiz-result { margin-top: 20px; padding: 18px 20px; border-left: 3px solid var(--gold); background: rgba(255, 253, 249, .75); }
+    .quiz-result strong { color: var(--teal-deep); font-family: 'Noto Serif TC', serif; font-size: 22px; }
+    .quiz-result p { margin: 5px 0 0; color: var(--muted); }
+    .quiz-result:empty { display: none; }
+    .quiz-line { fill: none; stroke: var(--gold); stroke-width: 2; stroke-linecap: round; }
 
     .hero { display: grid; grid-template-columns: 1.05fr .95fr; gap: 46px; align-items: center; padding: 50px 0 70px; }
     .eyebrow { display: flex; align-items: center; gap: 10px; color: var(--coral); font-size: 13px; font-weight: 700; letter-spacing: .18em; }
@@ -124,6 +144,7 @@
       h1 { font-size: clamp(40px, 12vw, 64px); }
       .daily-card { padding: 30px 24px 25px; }
       .entries { grid-template-columns: 1fr; }
+      .matching-board { gap: 16px; }
       .section-heading { display: block; }
       .section-heading p { margin-top: 4px; }
       .catalog-entries { grid-template-columns: repeat(2, 1fr); }
@@ -134,6 +155,9 @@
       nav { gap: 0; }
       .card-actions { flex-direction: column; }
       .action-button { width: 100%; }
+      .matching-board { grid-template-columns: 1fr; gap: 14px; }
+      .matching-lines { display: none; }
+      .matching-column { gap: 8px; }
       .footer-row { display: block; }
       .footer-row span + span { display: block; margin-top: 7px; }
     }
@@ -148,6 +172,7 @@
       </a>
       <nav aria-label="主要導覽">
         <button class="nav-button active" data-target="top">今日 <span>DAILY</span></button>
+        <button class="nav-button" data-target="matching">連連看 <span>MATCH</span></button>
         <button class="nav-button" data-target="catalog">索引 <span>INDEX</span></button>
         <button class="nav-button" data-target="memory">記憶 <span>SAVED</span></button>
         <button class="nav-button" data-target="history">歷史 <span>HISTORY</span></button>
@@ -175,6 +200,15 @@
           <button class="action-button" id="saveButton"><span class="icon">♡</span><span>記住它</span></button>
         </div>
       </article>
+    </section>
+
+    <section class="matching-section" id="matching" aria-labelledby="matchingTitle">
+      <div class="section-heading"><div><h2 id="matchingTitle">成語連連看</h2><p>隨機抽出十則成語，點選左側成語，再點選右側對應的解釋。</p></div><p>每題 10 分</p></div>
+      <div class="matching-panel">
+        <div class="matching-board" id="matchingBoard"><svg class="matching-lines" id="matchingLines" aria-hidden="true"></svg><div class="matching-column" id="idiomChoices"></div><div class="matching-column" id="meaningChoices"></div></div>
+        <div class="quiz-actions"><button class="action-button primary" id="submitMatching">提交答案</button><span class="quiz-status" id="matchingStatus">已配對 0／10</span></div>
+        <div class="quiz-result" id="matchingResult" aria-live="polite"></div>
+      </div>
     </section>
 
     <section class="content-section" id="catalog" aria-labelledby="catalogTitle">
@@ -218,6 +252,11 @@
       return featured ? { ...entry, ...featured, sourceId: entry.sourceId } : { ...entry, pinyin: '—', meaning: '這則成語已收錄在離線索引。連線後可開啟教育部《成語典》查看完整釋義。', category: '完整索引' };
     });
     const STORAGE = { saved: 'daily-idiom-saved', history: 'daily-idiom-history', visit: 'daily-idiom-visits' };
+    let matchingRound = [];
+    let matchingMeanings = [];
+    let matchingPairs = new Map();
+    let selectedMatchingId = null;
+    let matchingSubmitted = false;
     const getData = key => JSON.parse(localStorage.getItem(key) || '[]');
     const setData = (key, value) => localStorage.setItem(key, JSON.stringify(value));
     let current = IDIOMS.find(item => featuredByTitle.has(item.title)) || IDIOMS[0];
@@ -279,6 +318,62 @@
       renderEntries('historyEntries', history, '你的閱讀足跡會出現在這裡。', byId('historySearch').value);
     }
 
+    function shuffle(items) { return [...items].sort(() => Math.random() - 0.5); }
+
+    function renderMatchingLines() {
+      const board = byId('matchingBoard'); const svg = byId('matchingLines');
+      if (!board || window.innerWidth <= 430) return;
+      const boardRect = board.getBoundingClientRect();
+      svg.setAttribute('viewBox', `0 0 ${boardRect.width} ${boardRect.height}`);
+      svg.innerHTML = [...matchingPairs].map(([idiomId, meaningId]) => {
+        const from = board.querySelector(`[data-quiz-idiom="${idiomId}"]`).getBoundingClientRect();
+        const to = board.querySelector(`[data-quiz-meaning="${meaningId}"]`).getBoundingClientRect();
+        const x1 = from.right - boardRect.left; const y1 = from.top + from.height / 2 - boardRect.top;
+        const x2 = to.left - boardRect.left; const y2 = to.top + to.height / 2 - boardRect.top;
+        return `<path class="quiz-line" d="M ${x1} ${y1} C ${x1 + 50} ${y1}, ${x2 - 50} ${y2}, ${x2} ${y2}"></path>`;
+      }).join('');
+    }
+
+    function renderMatching() {
+      byId('idiomChoices').innerHTML = matchingRound.map(item => `<div class="matching-row"><button class="matching-node ${matchingPairs.has(item.id) ? 'connected' : ''} ${selectedMatchingId === item.id ? 'selected' : ''}" data-quiz-idiom="${item.id}">${item.title}</button><button class="quiz-save" data-quiz-save="${item.id}" aria-label="${isSaved(item.id) ? '取消記住' : '記住'}${item.title}">${isSaved(item.id) ? '♥' : '♡'}</button></div>`).join('');
+      byId('meaningChoices').innerHTML = matchingMeanings.map(item => `<div class="matching-row"><button class="matching-node meaning-node ${[...matchingPairs.values()].includes(item.id) ? 'connected' : ''}" data-quiz-meaning="${item.id}">${item.meaning}</button></div>`).join('');
+      byId('matchingStatus').textContent = `已配對 ${matchingPairs.size}／10`;
+      byId('submitMatching').disabled = matchingSubmitted;
+      byId('idiomChoices').querySelectorAll('[data-quiz-idiom]').forEach(button => button.addEventListener('click', () => { if (!matchingSubmitted) { selectedMatchingId = button.dataset.quizIdiom; renderMatching(); } }));
+      byId('meaningChoices').querySelectorAll('[data-quiz-meaning]').forEach(button => button.addEventListener('click', () => {
+        if (matchingSubmitted || !selectedMatchingId) return;
+        const meaningId = button.dataset.quizMeaning;
+        for (const [idiomId, oldMeaningId] of matchingPairs) if (oldMeaningId === meaningId || idiomId === selectedMatchingId) matchingPairs.delete(idiomId);
+        matchingPairs.set(selectedMatchingId, meaningId); selectedMatchingId = null; renderMatching();
+      }));
+      byId('idiomChoices').querySelectorAll('[data-quiz-save]').forEach(button => button.addEventListener('click', event => { event.stopPropagation(); toggleSaved(button.dataset.quizSave); renderMatching(); renderLists(); }));
+      requestAnimationFrame(renderMatchingLines);
+    }
+
+    function toggleSaved(id) {
+      const saved = getData(STORAGE.saved); const item = IDIOMS.find(entry => String(entry.id) === String(id));
+      if (!item) return;
+      setData(STORAGE.saved, saved.some(entry => String(entry.id) === String(id)) ? saved.filter(entry => String(entry.id) !== String(id)) : [{ ...item, savedAt: new Date().toISOString() }, ...saved]);
+    }
+
+    function startMatching() {
+      matchingRound = shuffle(FEATURED_IDIOMS).slice(0, 10).map(item => IDIOMS.find(entry => entry.title === item.title) || item);
+      matchingMeanings = shuffle(matchingRound);
+      matchingPairs = new Map(); selectedMatchingId = null; matchingSubmitted = false;
+      byId('matchingResult').innerHTML = ''; renderMatching();
+    }
+
+    byId('submitMatching').addEventListener('click', () => {
+      if (matchingPairs.size < 10) { byId('matchingResult').innerHTML = '<strong>還差一點</strong><p>請先完成十組配對，再提交答案。</p>'; return; }
+      matchingSubmitted = true;
+      let score = 0;
+      matchingRound.forEach(item => { const meaning = matchingMeanings.find(entry => entry.id === matchingPairs.get(item.id)); if (meaning && meaning.title === item.title) score += 10; });
+      byId('matchingResult').innerHTML = `<strong>得分 ${score}／100</strong><p>${score === 100 ? '全部答對，這十則成語已經連成一片。' : '答案已揭曉，紅色標記代表需要再看一眼的配對。'}</p>`;
+      renderMatching();
+      matchingRound.forEach(item => { const button = byId('idiomChoices').querySelector(`[data-quiz-idiom="${item.id}"]`); const meaning = matchingMeanings.find(entry => entry.id === matchingPairs.get(item.id)); if (button) button.classList.add(meaning && meaning.title === item.title ? 'is-correct' : 'is-wrong'); });
+    });
+    window.addEventListener('resize', renderMatchingLines);
+
     byId('randomButton').addEventListener('click', () => {
       const choices = FEATURED_IDIOMS.filter(item => item.title !== current.title);
       const next = choices[Math.floor(Math.random() * choices.length)];
@@ -304,7 +399,7 @@
     const visits = getData(STORAGE.visit); if (!visits.includes(todayKey())) { visits.push(todayKey()); setData(STORAGE.visit, visits); }
     byId('dayCount').textContent = visits.length;
     const history = getData(STORAGE.history); if (history.length) current = IDIOMS.find(item => item.id === history[0].id) || history[0];
-    renderCurrent(); renderLists(); renderCatalog();
+    renderCurrent(); renderLists(); renderCatalog(); startMatching();
   </script>
 </body>
 </html>
