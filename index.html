@@ -203,7 +203,7 @@
     </section>
 
     <section class="matching-section" id="matching" aria-labelledby="matchingTitle">
-      <div class="section-heading"><div><h2 id="matchingTitle">成語連連看</h2><p>隨機抽出十則成語，點選左側成語，再點選右側對應的解釋。</p></div><p>每題 10 分</p></div>
+      <div class="section-heading"><div><h2 id="matchingTitle">成語連連看</h2><p>從完整成語索引隨機抽出十則，點選左側成語，再點選右側對應的官方釋義。</p></div><p>每題 10 分</p></div>
       <div class="matching-panel">
         <div class="matching-board" id="matchingBoard"><svg class="matching-lines" id="matchingLines" aria-hidden="true"></svg><div class="matching-column" id="idiomChoices"></div><div class="matching-column" id="meaningChoices"></div></div>
         <div class="quiz-actions"><button class="action-button primary" id="submitMatching">提交答案</button><span class="quiz-status" id="matchingStatus">已配對 0／10</span></div>
@@ -243,7 +243,27 @@
       { id: 'xiao-lu-ke-qin', title: '小鹿可親', pinyin: 'xiǎo lù kě qīn', meaning: '比喻年輕而可親近的人，帶有親切喜愛的意味。', category: '溫柔詞彙' },
       { id: 'qing-mei-zhu-ma', title: '青梅竹馬', pinyin: 'qīng méi zhú mǎ', meaning: '形容男女小時候天真融洽地一起玩耍，彼此熟識的關係。', category: '人情風景' },
       { id: 'xiong-you-cheng-zhu', title: '胸有成竹', pinyin: 'xiōng yǒu chéng zhú', meaning: '比喻做事之前早有通盤的考慮與安排，因而非常有把握。', category: '準備好了' },
-      { id: 'ming-ri-huang-hua', title: '明日黃花', pinyin: 'míng rì huáng huā', meaning: '比喻已失去新聞價值或過時的事物。', category: '時間流轉' }
+      { id: 'ming-ri-huang-hua', title: '明日黃花', pinyin: 'míng rì huáng huā', meaning: '比喻已失去新聞價值或過時的事物。', category: '時間流轉' },
+      { id: 'an-bu-dang-che', title: '安步當車', pinyin: 'ān bù dàng chē', meaning: '以從容緩步代替乘車，形容安貧樂道、生活從容。', category: '生活態度' },
+      { id: 'bai-shou-qi-jia', title: '白手起家', pinyin: 'bái shǒu qǐ jiā', meaning: '沒有任何憑藉，靠自己的力量建立事業。', category: '努力累積' },
+      { id: 'bei-dao-er-chi', title: '背道而馳', pinyin: 'bèi dào ér chí', meaning: '比喻彼此方向不同，目的相反。', category: '方向選擇' },
+      { id: 'bi-shang-liang-shan', title: '逼上梁山', pinyin: 'bī shàng liáng shān', meaning: '比喻被迫採取某種行動或反抗。', category: '處境轉折' },
+      { id: 'bing-lai-jiang-dang', title: '兵來將擋', pinyin: 'bīng lái jiàng dǎng', meaning: '比喻遇到任何問題，都有辦法加以應付。', category: '應變之道' },
+      { id: 'bu-ke-si-yi', title: '不可思議', pinyin: 'bù kě sī yì', meaning: '形容事物神奇或奧妙，超出常人的想像。', category: '奇妙時刻' },
+      { id: 'bu-ming-jue-li', title: '不名一文', pinyin: 'bù míng yī wén', meaning: '形容非常貧窮，身上一文錢也沒有。', category: '處世提醒' },
+      { id: 'cai-hua-man-mian', title: '才華橫溢', pinyin: 'cái huá héng yì', meaning: '形容才華充分展露，表現非常出色。', category: '才能展現' },
+      { id: 'cang-tou-lu-wei', title: '藏頭露尾', pinyin: 'cáng tóu lù wěi', meaning: '形容說話躲躲閃閃，不把真相完全說出來。', category: '言語觀察' },
+      { id: 'cheng-feng-po-lang', title: '乘風破浪', pinyin: 'chéng fēng pò làng', meaning: '比喻志向遠大，不畏艱難，勇往直前。', category: '勇往直前' },
+      { id: 'chi-chi-ke-wei', title: '持之以恆', pinyin: 'chí zhī yǐ héng', meaning: '長久堅持下去，毫不鬆懈。', category: '堅持練習' },
+      { id: 'chu-lei-ba-cui', title: '出類拔萃', pinyin: 'chū lèi bá cuì', meaning: '形容才能特別優異，超出同類。', category: '卓越表現' },
+      { id: 'da-gong-gao-cheng', title: '大功告成', pinyin: 'dà gōng gào chéng', meaning: '重大的工作順利完成。', category: '完成時刻' },
+      { id: 'da-qi-wan-cheng', title: '大器晚成', pinyin: 'dà qì wǎn chéng', meaning: '比喻成名或成就較晚，但終能有所成就。', category: '時間與成長' },
+      { id: 'dang-ji-li-duan', title: '當機立斷', pinyin: 'dāng jī lì duàn', meaning: '掌握時機，立即作出果斷的決定。', category: '決斷時刻' },
+      { id: 'de-guo-qie-qie', title: '得過且過', pinyin: 'dé guò qiě guò', meaning: '只求目前勉強過得去，不作長遠打算。', category: '生活提醒' },
+      { id: 'deng-xian-shi-zhi', title: '等閒視之', pinyin: 'děng xián shì zhī', meaning: '把事情看得平常，不加重視或當作重要問題。', category: '態度觀察' },
+      { id: 'er-mu-yi-xin', title: '耳目一新', pinyin: 'ěr mù yī xīn', meaning: '所見所聞都感到新鮮，令人耳目開明。', category: '新鮮視野' },
+      { id: 'fan-lao-ren-yuan', title: '返老還童', pinyin: 'fǎn lǎo huán tóng', meaning: '由老年恢復青春，常用來形容恢復活力。', category: '生命活力' },
+      { id: 'feng-yu-tong-zhou', title: '風雨同舟', pinyin: 'fēng yǔ tóng zhōu', meaning: '比喻共同度過困難，互相扶持。', category: '並肩同行' }
     ];
     const featuredByTitle = new Map(FEATURED_IDIOMS.map(item => [item.title, item]));
     const IDIOM_INDEX = window.IDIOM_INDEX.map(entry => ({ ...entry, title: entry.title.replace(/<d>主<\/d>/g, '').replace(/<[^>]*>/g, '') }));
@@ -257,6 +277,8 @@
     let matchingPairs = new Map();
     let selectedMatchingId = null;
     let matchingSubmitted = false;
+    let matchingLoading = false;
+    const meaningCache = new Map();
     const getData = key => JSON.parse(localStorage.getItem(key) || '[]');
     const setData = (key, value) => localStorage.setItem(key, JSON.stringify(value));
     let current = IDIOMS.find(item => featuredByTitle.has(item.title)) || IDIOMS[0];
@@ -320,6 +342,21 @@
 
     function shuffle(items) { return [...items].sort(() => Math.random() - 0.5); }
 
+    async function fetchOfficialMeaning(item) {
+      if (meaningCache.has(item.sourceId)) return meaningCache.get(item.sourceId);
+      try {
+        const response = await fetch(`https://dict.idioms.moe.edu.tw/bookView.jsp?ID=${item.sourceId}`);
+        const html = await response.text();
+        const document = new DOMParser().parseFromString(html, 'text/html');
+        const heading = [...document.querySelectorAll('h4')].find(node => node.textContent.trim() === '語義說明');
+        const meaning = heading?.nextSibling?.textContent?.trim() || item.meaning;
+        meaningCache.set(item.sourceId, meaning);
+        return meaning;
+      } catch (error) {
+        return item.meaning;
+      }
+    }
+
     function renderMatchingLines() {
       const board = byId('matchingBoard'); const svg = byId('matchingLines');
       if (!board || window.innerWidth <= 430) return;
@@ -338,7 +375,7 @@
       byId('idiomChoices').innerHTML = matchingRound.map(item => `<div class="matching-row"><button class="matching-node ${matchingPairs.has(item.id) ? 'connected' : ''} ${selectedMatchingId === item.id ? 'selected' : ''}" data-quiz-idiom="${item.id}">${item.title}</button><button class="quiz-save" data-quiz-save="${item.id}" aria-label="${isSaved(item.id) ? '取消記住' : '記住'}${item.title}">${isSaved(item.id) ? '♥' : '♡'}</button></div>`).join('');
       byId('meaningChoices').innerHTML = matchingMeanings.map(item => `<div class="matching-row"><button class="matching-node meaning-node ${[...matchingPairs.values()].includes(item.id) ? 'connected' : ''}" data-quiz-meaning="${item.id}">${item.meaning}</button></div>`).join('');
       byId('matchingStatus').textContent = `已配對 ${matchingPairs.size}／10`;
-      byId('submitMatching').disabled = matchingSubmitted;
+      byId('submitMatching').disabled = matchingSubmitted || matchingLoading;
       byId('idiomChoices').querySelectorAll('[data-quiz-idiom]').forEach(button => button.addEventListener('click', () => { if (!matchingSubmitted) { selectedMatchingId = button.dataset.quizIdiom; renderMatching(); } }));
       byId('meaningChoices').querySelectorAll('[data-quiz-meaning]').forEach(button => button.addEventListener('click', () => {
         if (matchingSubmitted || !selectedMatchingId) return;
@@ -356,11 +393,17 @@
       setData(STORAGE.saved, saved.some(entry => String(entry.id) === String(id)) ? saved.filter(entry => String(entry.id) !== String(id)) : [{ ...item, savedAt: new Date().toISOString() }, ...saved]);
     }
 
-    function startMatching() {
-      matchingRound = shuffle(FEATURED_IDIOMS).slice(0, 10).map(item => IDIOMS.find(entry => entry.title === item.title) || item);
-      matchingMeanings = shuffle(matchingRound);
+    async function startMatching() {
+      matchingLoading = true;
+      const pool = IDIOMS.filter(item => item.sourceId);
+      matchingRound = shuffle(pool).slice(0, 10);
+      matchingMeanings = matchingRound.map(item => ({ ...item, meaning: '正在讀取官方釋義…' }));
       matchingPairs = new Map(); selectedMatchingId = null; matchingSubmitted = false;
       byId('matchingResult').innerHTML = ''; renderMatching();
+      const meanings = await Promise.all(matchingRound.map(item => fetchOfficialMeaning(item)));
+      matchingMeanings = matchingRound.map((item, index) => ({ ...item, meaning: meanings[index] }));
+      matchingLoading = false;
+      renderMatching();
     }
 
     byId('submitMatching').addEventListener('click', () => {
