@@ -442,9 +442,11 @@ window.IDIOM_MEANINGS = {"1":"形容人非常吝嗇。貶義。","2":"比喻妄�
     window.addEventListener('resize', renderMatchingLines);
 
     byId('randomButton').addEventListener('click', () => {
-      const choices = FEATURED_IDIOMS.filter(item => item.title !== current.title);
+      const historyTitles = new Set(getData(STORAGE.history).map(item => item.title));
+      const unseenChoices = IDIOMS.filter(item => item.title !== current.title && !historyTitles.has(item.title));
+      const choices = unseenChoices.length ? unseenChoices : IDIOMS.filter(item => item.title !== current.title);
       const next = choices[Math.floor(Math.random() * choices.length)];
-      showIdiom(IDIOMS.find(item => item.title === next.title) || next);
+      if (next) showIdiom(next);
     });
     byId('saveButton').addEventListener('click', () => {
       const saved = getData(STORAGE.saved);
