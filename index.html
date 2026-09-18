@@ -393,15 +393,15 @@ window.IDIOM_MEANINGS = {"1":"形容人非常吝嗇。貶義。","2":"比喻妄�
     }
 
     function renderMatching() {
-      byId('idiomChoices').innerHTML = matchingRound.map(item => `<div class="matching-row"><button class="matching-node ${matchingPairs.has(item.id) ? 'connected' : ''} ${selectedMatchingId === item.id ? 'selected' : ''}" data-quiz-idiom="${item.id}">${item.title}</button><button class="quiz-save" data-quiz-save="${item.id}" aria-label="${isSaved(item.id) ? '取消記住' : '記住'}${item.title}">${isSaved(item.id) ? '♥' : '♡'}</button></div>`).join('');
-      byId('meaningChoices').innerHTML = matchingMeanings.map(item => `<div class="matching-row"><button class="matching-node meaning-node ${[...matchingPairs.values()].includes(item.id) ? 'connected' : ''}" data-quiz-meaning="${item.id}">${item.meaning}</button></div>`).join('');
+      byId('idiomChoices').innerHTML = matchingRound.map(item => `<div class="matching-row"><button class="matching-node ${matchingPairs.has(String(item.id)) ? 'connected' : ''} ${selectedMatchingId === String(item.id) ? 'selected' : ''}" data-quiz-idiom="${item.id}">${item.title}</button><button class="quiz-save" data-quiz-save="${item.id}" aria-label="${isSaved(item.id) ? '取消記住' : '記住'}${item.title}">${isSaved(item.id) ? '♥' : '♡'}</button></div>`).join('');
+      byId('meaningChoices').innerHTML = matchingMeanings.map(item => `<div class="matching-row"><button class="matching-node meaning-node ${[...matchingPairs.values()].includes(String(item.id)) ? 'connected' : ''}" data-quiz-meaning="${item.id}">${item.meaning}</button></div>`).join('');
       byId('matchingStatus').textContent = `已配對 ${matchingPairs.size}／10`;
       byId('submitMatching').disabled = matchingSubmitted || matchingLoading;
       byId('restartMatching').disabled = matchingLoading;
-      byId('idiomChoices').querySelectorAll('[data-quiz-idiom]').forEach(button => button.addEventListener('click', () => { if (!matchingSubmitted) { selectedMatchingId = button.dataset.quizIdiom; renderMatching(); } }));
+      byId('idiomChoices').querySelectorAll('[data-quiz-idiom]').forEach(button => button.addEventListener('click', () => { if (!matchingSubmitted) { selectedMatchingId = String(button.dataset.quizIdiom); renderMatching(); } }));
       byId('meaningChoices').querySelectorAll('[data-quiz-meaning]').forEach(button => button.addEventListener('click', () => {
         if (matchingSubmitted || !selectedMatchingId) return;
-        const meaningId = button.dataset.quizMeaning;
+        const meaningId = String(button.dataset.quizMeaning);
         for (const [idiomId, oldMeaningId] of matchingPairs) if (oldMeaningId === meaningId || idiomId === selectedMatchingId) matchingPairs.delete(idiomId);
         matchingPairs.set(selectedMatchingId, meaningId); selectedMatchingId = null; renderMatching();
       }));
@@ -434,10 +434,10 @@ window.IDIOM_MEANINGS = {"1":"形容人非常吝嗇。貶義。","2":"比喻妄�
       if (matchingPairs.size < 10) { byId('matchingResult').innerHTML = '<strong>還差一點</strong><p>請先完成十組配對，再提交答案。</p>'; return; }
       matchingSubmitted = true;
       let score = 0;
-      matchingRound.forEach(item => { const meaning = matchingMeanings.find(entry => entry.id === matchingPairs.get(item.id)); if (meaning && meaning.title === item.title) score += 10; });
+      matchingRound.forEach(item => { const meaning = matchingMeanings.find(entry => String(entry.id) === matchingPairs.get(String(item.id))); if (meaning && meaning.title === item.title) score += 10; });
       byId('matchingResult').innerHTML = `<strong>得分 ${score}／100</strong><p>${score === 100 ? '全部答對，這十則成語已經連成一片。' : '答案已揭曉，紅色標記代表需要再看一眼的配對。'}</p>`;
       renderMatching();
-      matchingRound.forEach(item => { const button = byId('idiomChoices').querySelector(`[data-quiz-idiom="${item.id}"]`); const meaning = matchingMeanings.find(entry => entry.id === matchingPairs.get(item.id)); if (button) button.classList.add(meaning && meaning.title === item.title ? 'is-correct' : 'is-wrong'); });
+      matchingRound.forEach(item => { const button = byId('idiomChoices').querySelector(`[data-quiz-idiom="${item.id}"]`); const meaning = matchingMeanings.find(entry => String(entry.id) === matchingPairs.get(String(item.id))); if (button) button.classList.add(meaning && meaning.title === item.title ? 'is-correct' : 'is-wrong'); });
     });
     window.addEventListener('resize', renderMatchingLines);
 
