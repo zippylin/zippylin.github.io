@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#f7f3ec">
+    <meta name="description" content="用清楚的例句和互動練習學會英文 12 種基本時態。">
+    <title>英文時態學習指南</title>
+    <style>
+        :root {
+            --paper: #f7f3ec;
+            --paper-deep: #eee6d9;
+            --ink: #23333a;
+            --muted: #687477;
+            --line: #d8cec0;
+            --teal: #176b67;
+            --teal-deep: #0f4d4b;
+            --coral: #dc765e;
+            --gold: #d6a64f;
+            --white: #fffdf9;
+            --correct: #176b52;
+            --wrong: #b84d3d;
+        }
+
+        * { box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            min-width: 320px;
+            margin: 0;
+            color: var(--ink);
+            background:
+                radial-gradient(ellipse at 90% 6%, rgba(214, 166, 79, .14), transparent 28rem),
+                var(--paper);
+            font-family: 'Noto Sans TC', 'Microsoft JhengHei', sans-serif;
+            line-height: 1.7;
+        }
+        a { color: inherit; }
+        button, input { font: inherit; }
+        button { cursor: pointer; }
+        .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; }
+        .page { width: min(1060px, calc(100% - 40px)); margin: 0 auto; }
+        .site-header { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 22px 0; }
+        .brand { color: var(--teal-deep); font-family: 'Noto Serif TC', 'PMingLiU', serif; font-size: 16px; font-weight: 800; text-decoration: none; }
+        .home-link { color: var(--muted); font-size: 13px; text-decoration-color: var(--line); text-underline-offset: 4px; }
+        .home-link:hover { color: var(--teal); }
+        .hero { padding: 28px 0 42px; }
+        .eyebrow { color: var(--coral); font-size: 12px; font-weight: 700; letter-spacing: .14em; }
+        h1, h2, h3 { font-family: 'Noto Serif TC', 'PMingLiU', serif; }
+        h1 { margin: 8px 0 12px; font-size: clamp(36px, 6vw, 58px); line-height: 1.2; }
+        .hero p { max-width: 660px; margin: 0; color: var(--muted); }
+        .quick-nav { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 24px; }
+        .quick-nav a { border: 1px solid var(--line); border-radius: 3px; padding: 7px 12px; color: var(--teal-deep); background: rgba(255, 253, 249, .65); font-size: 13px; text-decoration: none; }
+        .quick-nav a:hover { border-color: var(--teal); background: var(--white); }
+
+        .section { padding: 34px 0 48px; border-top: 1px solid var(--line); scroll-margin-top: 18px; }
+        .section-heading { display: flex; align-items: end; justify-content: space-between; gap: 18px; margin-bottom: 18px; }
+        .section-heading h2 { margin: 0; font-size: 29px; }
+        .section-heading p { max-width: 480px; margin: 0; color: var(--muted); font-size: 13px; }
+        .table-wrap { overflow-x: auto; border: 1px solid var(--line); background: var(--white); }
+        .tense-table { width: 100%; min-width: 660px; border-collapse: collapse; font-size: 13px; }
+        .tense-table th, .tense-table td { padding: 12px 14px; border-bottom: 1px solid var(--line); border-right: 1px solid var(--line); text-align: left; }
+        .tense-table th { color: var(--white); background: var(--teal-deep); font-weight: 700; }
+        .tense-table th:first-child { background: var(--ink); }
+        .tense-table tr:last-child td { border-bottom: 0; }
+        .tense-table td:first-child { color: var(--teal-deep); background: rgba(23, 107, 103, .06); font-weight: 700; }
+        .tense-table td:last-child, .tense-table th:last-child { border-right: 0; }
+        .legend { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 13px; color: var(--muted); font-size: 12px; }
+        .legend span::before { display: inline-block; width: 8px; height: 8px; margin-right: 7px; border-radius: 50%; background: var(--teal); content: ''; }
+        .legend span:nth-child(2)::before { background: var(--coral); }
+        .legend span:nth-child(3)::before { background: var(--gold); }
+
+        .lesson-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+        .lesson-card { min-width: 0; padding: 17px 18px 16px; border: 1px solid var(--line); border-top: 3px solid var(--teal); background: rgba(255, 253, 249, .8); }
+        .lesson-card.family-past { border-top-color: var(--coral); }
+        .lesson-card.family-future { border-top-color: var(--gold); }
+        .lesson-number { color: var(--muted); font-size: 11px; letter-spacing: .08em; }
+        .lesson-card h3 { min-height: 54px; margin: 5px 0 8px; color: var(--teal-deep); font-size: 19px; line-height: 1.4; }
+        .lesson-card.family-past h3 { color: #9f4b3c; }
+        .lesson-card.family-future h3 { color: #80611f; }
+        .tense-name { display: block; margin-top: 2px; color: var(--muted); font-family: 'Noto Sans TC', 'Microsoft JhengHei', sans-serif; font-size: 11px; font-weight: 400; }
+        .formula { min-height: 42px; margin: 0 0 9px; padding: 8px 9px; color: var(--teal-deep); background: rgba(23, 107, 103, .08); font-family: Georgia, serif; font-size: 13px; }
+        .family-past .formula { color: #874438; background: rgba(220, 118, 94, .1); }
+        .family-future .formula { color: #70551b; background: rgba(214, 166, 79, .15); }
+        .lesson-use { min-height: 42px; margin: 0 0 10px; color: var(--muted); font-size: 12px; }
+        .example { margin-top: 8px; padding: 9px 10px; border-left: 2px solid var(--line); background: rgba(247, 243, 236, .7); font-size: 12px; line-height: 1.65; }
+        .example p { margin: 0 0 5px; }
+        .example p:last-child { margin-bottom: 0; }
+        .example strong { color: var(--teal-deep); }
+        .family-past .example strong { color: #9f4b3c; }
+        .family-future .example strong { color: #80611f; }
+
+        .study-notes { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+        .note { padding: 18px 20px; border-left: 3px solid var(--gold); background: rgba(255, 253, 249, .72); }
+        .note h3 { margin: 0 0 8px; font-size: 17px; }
+        .note ul { margin: 0; padding-left: 20px; color: var(--muted); font-size: 13px; }
+
+        .practice-intro { margin: -4px 0 20px; color: var(--muted); font-size: 14px; }
+        .quiz-shell { border-top: 3px solid var(--teal); padding-top: 18px; }
+        .quiz-topline { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin-bottom: 9px; color: var(--muted); font-size: 13px; }
+        .quiz-score { color: var(--teal-deep); font-weight: 700; }
+        .progress-track { height: 8px; overflow: hidden; background: var(--paper-deep); }
+        .progress-fill { width: 0; height: 100%; background: var(--teal); transition: width .3s ease; }
+        .question-area { max-width: 760px; padding: 28px 0 14px; }
+        .question-level { display: inline-block; margin-bottom: 8px; color: var(--coral); font-size: 12px; font-weight: 700; letter-spacing: .06em; }
+        .question-area h3 { margin: 0 0 18px; font-size: clamp(20px, 4vw, 26px); line-height: 1.5; }
+        .question-sentence { margin: 0 0 18px; color: var(--ink); font-family: Georgia, 'Times New Roman', serif; font-size: 19px; line-height: 1.7; }
+        .question-sentence .blank { display: inline-block; min-width: 90px; border-bottom: 2px solid var(--gold); color: var(--teal-deep); text-align: center; }
+        .options { display: grid; max-width: 620px; gap: 8px; }
+        .option-button { width: 100%; border: 1px solid var(--line); border-radius: 3px; padding: 11px 14px; color: var(--ink); background: var(--white); text-align: left; transition: border-color .15s ease, background .15s ease; }
+        .option-button:hover:not(:disabled), .option-button:focus-visible { border-color: var(--teal); outline: 2px solid rgba(23, 107, 103, .12); }
+        .option-button:disabled { cursor: default; opacity: 1; }
+        .option-button.is-correct { border-color: var(--correct); color: var(--correct); background: #e8f3ec; }
+        .option-button.is-wrong { border-color: var(--wrong); color: var(--wrong); background: #fbebe7; }
+        .answer-form { display: flex; max-width: 620px; gap: 8px; }
+        .answer-input { min-width: 0; flex: 1; border: 1px solid var(--line); border-radius: 3px; padding: 11px 13px; color: var(--ink); background: var(--white); }
+        .answer-input:focus { border-color: var(--teal); outline: 3px solid rgba(23, 107, 103, .12); }
+        .submit-button, .next-button, .restart-button { border: 1px solid var(--teal); border-radius: 3px; padding: 10px 15px; color: var(--white); background: var(--teal); font-weight: 700; }
+        .submit-button:hover, .next-button:hover, .restart-button:hover { background: var(--teal-deep); }
+        .submit-button:disabled { cursor: default; opacity: .65; }
+        .feedback { max-width: 760px; min-height: 0; margin-top: 15px; padding: 0; }
+        .feedback:not(:empty) { padding: 13px 15px; border-left: 3px solid var(--teal); background: rgba(23, 107, 103, .08); }
+        .feedback.is-wrong:not(:empty) { border-left-color: var(--coral); background: rgba(220, 118, 94, .1); }
+        .feedback strong { display: block; margin-bottom: 3px; color: var(--correct); }
+        .feedback.is-wrong strong { color: var(--wrong); }
+        .feedback p { margin: 0; color: var(--muted); font-size: 13px; }
+        .next-button { margin-top: 16px; }
+        .result { max-width: 760px; padding-top: 26px; }
+        .result[hidden], .next-button[hidden], .question-area[hidden] { display: none; }
+        .result-score { margin: 0 0 4px; color: var(--teal-deep); font-family: 'Noto Serif TC', 'PMingLiU', serif; font-size: 34px; }
+        .result-message { margin: 0 0 20px; color: var(--muted); }
+        .review-list { display: grid; gap: 8px; margin: 0 0 20px; padding: 0; list-style: none; }
+        .review-item { padding: 12px 14px; border-left: 3px solid var(--coral); background: rgba(255, 253, 249, .8); font-size: 13px; }
+        .review-item strong { display: block; margin-bottom: 3px; }
+        .review-item p { margin: 2px 0 0; color: var(--muted); }
+        .review-empty { padding: 13px 15px; border-left: 3px solid var(--teal); color: var(--teal-deep); background: rgba(23, 107, 103, .08); }
+        footer { padding: 22px 0 34px; border-top: 1px solid var(--line); color: var(--muted); font-size: 12px; }
+
+        @media (max-width: 760px) {
+            .lesson-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .section-heading { align-items: start; flex-direction: column; gap: 5px; }
+        }
+        @media (max-width: 520px) {
+            .page { width: min(100% - 28px, 460px); }
+            .site-header { padding: 16px 0; }
+            .hero { padding: 24px 0 30px; }
+            .section { padding: 27px 0 36px; }
+            .section-heading h2 { font-size: 25px; }
+            .lesson-grid { grid-template-columns: 1fr; gap: 9px; }
+            .lesson-card h3, .formula, .lesson-use { min-height: 0; }
+            .study-notes { grid-template-columns: 1fr; }
+            .answer-form { flex-direction: column; }
+            .submit-button { min-height: 44px; }
+            .question-sentence { font-size: 17px; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
+        }
+    </style>
+</head>
+<body>
+    <header class="page site-header">
+        <a class="brand" href="index.html">英文時態學習</a>
+        <a class="home-link" href="index.html">← 回學習首頁</a>
+    </header>
+
+    <main class="page">
+        <section class="hero">
+            <div class="eyebrow">ENGLISH GRAMMAR · 12 TENSES</div>
+            <h1>英文時態學習指南</h1>
+            <p>先看懂「時間」和「動作狀態」，再用例句理解句型。讀完教學後，做幾題練習確認自己真的掌握了。</p>
+            <nav class="quick-nav" aria-label="頁面導覽">
+                <a href="#overview">時態總覽</a>
+                <a href="#lessons">時態詳解</a>
+                <a href="#practice">互動練習</a>
+            </nav>
+        </section>
+
+        <section class="section" id="overview" aria-labelledby="overview-title">
+            <div class="section-heading">
+                <h2 id="overview-title">時態總覽</h2>
+                <p>先看動作發生的時間，再判斷它是一般事實、進行中的動作，還是已完成的動作。</p>
+            </div>
+            <div class="table-wrap" role="region" aria-label="英文時態總覽表，可左右滑動" tabindex="0">
+                <table class="tense-table">
+                    <thead>
+                        <tr><th scope="col">時間</th><th scope="col">一般 Simple</th><th scope="col">進行 Continuous</th><th scope="col">完成 Perfect</th><th scope="col">完成進行 Perfect Continuous</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><th scope="row">現在</th><td>習慣、事實<br>work(s)</td><td>正在發生<br>am/is/are working</td><td>已完成或持續至今<br>have/has worked</td><td>持續一段時間<br>have/has been working</td></tr>
+                        <tr><th scope="row">過去</th><td>過去發生<br>worked</td><td>過去某刻正在發生<br>was/were working</td><td>過去另一動作前已完成<br>had worked</td><td>過去某刻前持續一段時間<br>had been working</td></tr>
+                        <tr><th scope="row">未來</th><td>將會發生<br>will work</td><td>未來某刻正在發生<br>will be working</td><td>未來某刻前會完成<br>will have worked</td><td>未來某刻前將持續一段時間<br>will have been working</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="legend" aria-label="時態分類顏色">
+                <span>現在</span><span>過去</span><span>未來</span>
+            </div>
+        </section>
+
+        <section class="section" id="lessons" aria-labelledby="lessons-title">
+            <div class="section-heading">
+                <h2 id="lessons-title">12 種時態詳解</h2>
+                <p>每張卡片包含基本結構、常見用法，以及原有的例句。</p>
+            </div>
+            <div class="lesson-grid">
+                <article class="lesson-card family-present">
+                    <span class="lesson-number">01 · 現在</span>
+                    <h3>一般現在時<span class="tense-name">Simple Present Tense</span></h3>
+                    <p class="formula">S + V(s/es) + O</p>
+                    <p class="lesson-use">習慣、事實或固定狀態。第三人稱單數動詞通常加 s/es。</p>
+                    <div class="example"><p>She <strong>works</strong> in a bank.（她在銀行工作。）</p><p>They <strong>play</strong> football every weekend.（他們每週末踢足球。）</p></div>
+                </article>
+                <article class="lesson-card family-past">
+                    <span class="lesson-number">02 · 過去</span>
+                    <h3>一般過去時<span class="tense-name">Simple Past Tense</span></h3>
+                    <p class="formula">S + V-ed / 過去式 + O</p>
+                    <p class="lesson-use">描述已在過去發生、結束的動作。</p>
+                    <div class="example"><p>He <strong>visited</strong> his grandparents yesterday.（他昨天去看望祖父母。）</p><p>We <strong>watched</strong> a movie last night.（我們昨晚看了一部電影。）</p></div>
+                </article>
+                <article class="lesson-card family-future">
+                    <span class="lesson-number">03 · 未來</span>
+                    <h3>一般未來時<span class="tense-name">Simple Future Tense</span></h3>
+                    <p class="formula">S + will + V + O</p>
+                    <p class="lesson-use">描述將來會發生的動作或預測。</p>
+                    <div class="example"><p>I <strong>will call</strong> you tomorrow.（我明天會打電話給你。）</p><p>They <strong>shall arrive</strong> at 8 o'clock.（他們八點會到達。）</p></div>
+                </article>
+                <article class="lesson-card family-present">
+                    <span class="lesson-number">04 · 現在</span>
+                    <h3>現在進行時<span class="tense-name">Present Continuous Tense</span></h3>
+                    <p class="formula">S + am/is/are + V-ing + O</p>
+                    <p class="lesson-use">描述此刻正在進行的動作，常搭配 now。</p>
+                    <div class="example"><p>She <strong>is reading</strong> a book now.（她現在正在讀書。）</p><p>We <strong>are playing</strong> basketball.（我們正在打籃球。）</p></div>
+                </article>
+                <article class="lesson-card family-past">
+                    <span class="lesson-number">05 · 過去</span>
+                    <h3>過去進行時<span class="tense-name">Past Continuous Tense</span></h3>
+                    <p class="formula">S + was/were + V-ing + O</p>
+                    <p class="lesson-use">描述過去某個時間正在進行的動作。</p>
+                    <div class="example"><p>He <strong>was studying</strong> when I called.（我打電話時他正在學習。）</p><p>They <strong>were watching</strong> TV at 8 PM.（他們晚上八點正在看電視。）</p></div>
+                </article>
+                <article class="lesson-card family-future">
+                    <span class="lesson-number">06 · 未來</span>
+                    <h3>將來進行時<span class="tense-name">Future Continuous Tense</span></h3>
+                    <p class="formula">S + will be + V-ing + O</p>
+                    <p class="lesson-use">描述未來某個時間正在進行的動作。</p>
+                    <div class="example"><p>I <strong>will be traveling</strong> next week.（我下週會在旅行。）</p><p>She <strong>will be working</strong> at that time.（她那時候會在工作。）</p></div>
+                </article>
+                <article class="lesson-card family-present">
+                    <span class="lesson-number">07 · 現在</span>
+                    <h3>現在完成時<span class="tense-name">Present Perfect Tense</span></h3>
+                    <p class="formula">S + have/has + V-ed / p.p. + O</p>
+                    <p class="lesson-use">描述已完成且與現在有關，或從過去延續至今的狀態。</p>
+                    <div class="example"><p>I <strong>have finished</strong> my homework.（我已完成作業。）</p><p>They <strong>have lived</strong> here for 5 years.（他們住這裡已經五年了。）</p></div>
+                </article>
+                <article class="lesson-card family-past">
+                    <span class="lesson-number">08 · 過去</span>
+                    <h3>過去完成時<span class="tense-name">Past Perfect Tense</span></h3>
+                    <p class="formula">S + had + V-ed / p.p. + O</p>
+                    <p class="lesson-use">表示在過去另一個動作或時間點之前已完成。</p>
+                    <div class="example"><p>He <strong>had left</strong> before I arrived.（我到達前他就已經離開了。）</p><p>We <strong>had eaten</strong> dinner when they came.（他們來的時候我們已經吃過晚餐了。）</p></div>
+                </article>
+                <article class="lesson-card family-future">
+                    <span class="lesson-number">09 · 未來</span>
+                    <h3>將來完成時<span class="tense-name">Future Perfect Tense</span></h3>
+                    <p class="formula">S + will have + V-ed / p.p. + O</p>
+                    <p class="lesson-use">表示到未來某個時間之前將會完成。</p>
+                    <div class="example"><p>I <strong>will have graduated</strong> by next year.（我明年之前會畢業。）</p><p>She <strong>will have finished</strong> her project.（她會完成她的計畫。）</p></div>
+                </article>
+                <article class="lesson-card family-present">
+                    <span class="lesson-number">10 · 現在</span>
+                    <h3>現在完成進行時<span class="tense-name">Present Perfect Continuous Tense</span></h3>
+                    <p class="formula">S + have/has been + V-ing + O</p>
+                    <p class="lesson-use">強調動作從過去開始，一直持續到現在。</p>
+                    <div class="example"><p>I <strong>have been studying</strong> English for 3 years.（我已經學英語三年了。）</p><p>They <strong>have been working</strong> here since 2010.（他們從 2010 年就在這裡工作。）</p></div>
+                </article>
+                <article class="lesson-card family-past">
+                    <span class="lesson-number">11 · 過去</span>
+                    <h3>過去完成進行時<span class="tense-name">Past Perfect Continuous Tense</span></h3>
+                    <p class="formula">S + had been + V-ing + O</p>
+                    <p class="lesson-use">強調動作在過去另一個時間點之前已持續一段時間。</p>
+                    <div class="example"><p>He <strong>had been waiting</strong> for an hour when she arrived.（她到達時他已經等了一小時。）</p><p>We <strong>had been discussing</strong> the problem for hours.（我們討論那個問題好幾個小時了。）</p></div>
+                </article>
+                <article class="lesson-card family-future">
+                    <span class="lesson-number">12 · 未來</span>
+                    <h3>將來完成進行時<span class="tense-name">Future Perfect Continuous Tense</span></h3>
+                    <p class="formula">S + will have been + V-ing + O</p>
+                    <p class="lesson-use">強調到未來某個時間點，動作將已持續一段時間。</p>
+                    <div class="example"><p>I <strong>will have been working</strong> here for 10 years by next month.（下個月我會在這裡工作十年。）</p><p>She <strong>will have been living</strong> in this city for 5 years next year.（明年她會在這個城市住五年。）</p></div>
+                </article>
+            </div>
+        </section>
+
+        <section class="section" aria-labelledby="tips-title">
+            <div class="section-heading"><h2 id="tips-title">學習要點</h2><p>先找線索，再組句型，會比死背名稱容易記住。</p></div>
+            <div class="study-notes">
+                <div class="note"><h3>先找時間線索</h3><ul><li>now、at the moment：留意現在進行時</li><li>yesterday、last night：留意一般過去時</li><li>by next year、by 8 PM：留意完成類時態</li></ul></div>
+                <div class="note"><h3>再看動作狀態</h3><ul><li>習慣或事實：一般時態</li><li>某個時刻正在發生：進行時態</li><li>強調完成或持續多久：完成／完成進行時態</li></ul></div>
+            </div>
+        </section>
+
+        <section class="section" id="practice" aria-labelledby="practice-title">
+            <div class="section-heading">
+                <h2 id="practice-title">互動練習</h2>
+                <p>共 12 題，從辨認時態到複合句運用。每題作答後會立即顯示答案和簡短解說。</p>
+            </div>
+            <p class="practice-intro">選擇題和填空題交錯出現；填空請輸入完整動詞片語。分數以第一次作答為準。</p>
+            <div class="quiz-shell">
+                <div class="quiz-topline"><span id="question-count">第 1 題，共 12 題</span><span class="quiz-score" id="score-count">答對 0 題</span></div>
+                <div class="progress-track" role="progressbar" aria-label="練習完成進度" aria-valuemin="0" aria-valuemax="12" aria-valuenow="0"><div class="progress-fill" id="progress-fill"></div></div>
+                <div class="question-area" id="question-area" aria-live="polite"></div>
+                <div class="feedback" id="feedback" role="status" aria-live="polite"></div>
+                <button class="next-button" id="next-button" type="button" hidden>下一題 →</button>
+                <section class="result" id="result" aria-live="polite" hidden>
+                    <p class="result-score" id="result-score"></p>
+                    <p class="result-message" id="result-message"></p>
+                    <h3>答案檢視</h3>
+                    <div id="review-content"></div>
+                    <button class="restart-button" id="restart-button" type="button">再練習一次</button>
+                </section>
+            </div>
+        </section>
+    </main>
+
+    <footer class="page">慢慢練習，讓句型變成直覺。</footer>
+
+    <script>
+        const questions = [
+            {
+                level: '第 1 階段 · 入門 · 選擇題',
+                prompt: '哪一句描述「每天都做的習慣」？',
+                sentence: '',
+                type: 'choice',
+                options: ['She works in a bank.', 'She is working in a bank now.', 'She worked in a bank yesterday.'],
+                answer: 'She works in a bank.',
+                explanation: '每天的工作是習慣或固定狀態，用一般現在時；主詞 She 的動詞加 s。'
+            },
+            {
+                level: '第 1 階段 · 入門 · 填空題',
+                prompt: '依照 yesterday 的時間線索，填入 visit 的正確形式。',
+                sentence: 'He ____ his grandparents yesterday.',
+                type: 'fill',
+                answers: ['visited'],
+                displayAnswer: 'visited',
+                explanation: 'yesterday 表示明確的過去時間，使用一般過去時 visited。'
+            },
+            {
+                level: '第 1 階段 · 入門 · 選擇題',
+                prompt: 'now 表示動作正在發生，選出正確句子。',
+                sentence: '',
+                type: 'choice',
+                options: ['She reads a book now.', 'She is reading a book now.', 'She has read a book now.'],
+                answer: 'She is reading a book now.',
+                explanation: '此刻正在進行的動作使用現在進行時：am/is/are + V-ing。'
+            },
+            {
+                level: '第 1 階段 · 入門 · 填空題',
+                prompt: '我打電話時，他正在讀書。填入 study 的正確形式。',
+                sentence: 'He ____ when I called.',
+                type: 'fill',
+                answers: ['was studying'],
+                displayAnswer: 'was studying',
+                explanation: '過去某一刻正在進行的動作，用過去進行時 was/were + V-ing。'
+            },
+            {
+                level: '第 2 階段 · 進階 · 選擇題',
+                prompt: '明天會打電話，哪個句型最合適？',
+                sentence: '',
+                type: 'choice',
+                options: ['I called you tomorrow.', 'I will call you tomorrow.', 'I have called you tomorrow.'],
+                answer: 'I will call you tomorrow.',
+                explanation: 'tomorrow 指向未來，這裡使用 will + 原形動詞。'
+            },
+            {
+                level: '第 2 階段 · 進階 · 填空題',
+                prompt: '作業已經完成，填入 finish 的正確形式。',
+                sentence: 'I ____ my homework.',
+                type: 'fill',
+                answers: ['have finished'],
+                displayAnswer: 'have finished',
+                explanation: '主詞 I 搭配 have；現在完成時結構是 have/has + 過去分詞。'
+            },
+            {
+                level: '第 2 階段 · 進階 · 選擇題',
+                prompt: '他在我到達之前已經離開。選出能表達「先離開」的句子。',
+                sentence: '',
+                type: 'choice',
+                options: ['He left before I arrived.', 'He had left before I arrived.', 'He has left before I arrived.'],
+                answer: 'He had left before I arrived.',
+                explanation: '兩件事都在過去，較早發生的離開使用過去完成時 had + 過去分詞。'
+            },
+            {
+                level: '第 2 階段 · 進階 · 填空題',
+                prompt: '明天晚上八點，我會正在工作。填入 work 的正確形式。',
+                sentence: 'At 8 PM tomorrow, I ____.',
+                type: 'fill',
+                answers: ['will be working'],
+                displayAnswer: 'will be working',
+                explanation: '未來某個時間正在進行的動作，用將來進行時 will be + V-ing。'
+            },
+            {
+                level: '第 3 階段 · 挑戰 · 選擇題',
+                prompt: '強調「從三年前開始，一直學到現在」的持續動作，選出最合適的句子。',
+                sentence: '',
+                type: 'choice',
+                options: ['I study English for three years.', 'I have studied English for three years.', 'I have been studying English for three years.'],
+                answer: 'I have been studying English for three years.',
+                explanation: 'for three years 加上持續中的動作，使用現在完成進行時 have/has been + V-ing。'
+            },
+            {
+                level: '第 3 階段 · 挑戰 · 填空題',
+                prompt: '她到達時，他已經等了一小時。填入 wait 的正確形式。',
+                sentence: 'He ____ for an hour when she arrived.',
+                type: 'fill',
+                answers: ['had been waiting'],
+                displayAnswer: 'had been waiting',
+                explanation: '等候在 she arrived 之前已持續一小時，強調過去的持續時間，用 had been + V-ing。'
+            },
+            {
+                level: '第 3 階段 · 挑戰 · 選擇題',
+                prompt: '到明年之前，她會完成計畫。選出正確句子。',
+                sentence: '',
+                type: 'choice',
+                options: ['She will finish her project by next year.', 'She will have finished her project by next year.', 'She had finished her project by next year.'],
+                answer: 'She will have finished her project by next year.',
+                explanation: 'by next year 表示未來某個時間點之前會完成，使用將來完成時 will have + 過去分詞。'
+            },
+            {
+                level: '第 3 階段 · 挑戰 · 填空題',
+                prompt: '到下個月為止，我在這裡工作就滿十年了。填入 work 的正確形式。',
+                sentence: 'By next month, I ____ here for ten years.',
+                type: 'fill',
+                answers: ['will have been working'],
+                displayAnswer: 'will have been working',
+                explanation: 'by next month 加上 for ten years，強調到未來時間點前持續的年數，用 will have been + V-ing。'
+            }
+        ];
+
+        const questionArea = document.getElementById('question-area');
+        const feedback = document.getElementById('feedback');
+        const nextButton = document.getElementById('next-button');
+        const result = document.getElementById('result');
+        const progress = document.querySelector('.progress-track');
+        const progressFill = document.getElementById('progress-fill');
+        const answers = Array(questions.length).fill(null);
+        let currentIndex = 0;
+
+        function renderQuestion() {
+            const question = questions[currentIndex];
+            document.getElementById('question-count').textContent = `第 ${currentIndex + 1} 題，共 ${questions.length} 題`;
+            document.getElementById('score-count').textContent = `答對 ${answers.filter((answer) => answer?.correct).length} 題`;
+            questionArea.hidden = false;
+            result.hidden = true;
+            feedback.className = 'feedback';
+            feedback.replaceChildren();
+            nextButton.hidden = true;
+
+            const heading = document.createElement('h3');
+            heading.textContent = question.prompt;
+            const level = document.createElement('span');
+            level.className = 'question-level';
+            level.textContent = question.level;
+            questionArea.replaceChildren(level, heading);
+
+            if (question.sentence) {
+                const sentence = document.createElement('p');
+                sentence.className = 'question-sentence';
+                sentence.textContent = question.sentence;
+                questionArea.append(sentence);
+            }
+
+            if (question.type === 'choice') {
+                const options = document.createElement('div');
+                options.className = 'options';
+                question.options.forEach((option) => {
+                    const button = document.createElement('button');
+                    button.className = 'option-button';
+                    button.type = 'button';
+                    button.textContent = option;
+                    button.addEventListener('click', () => submitAnswer(option));
+                    options.append(button);
+                });
+                questionArea.append(options);
+            } else {
+                const form = document.createElement('form');
+                form.className = 'answer-form';
+                form.innerHTML = '<label class="sr-only" for="answer-input">輸入完整動詞片語</label><input class="answer-input" id="answer-input" name="answer" autocomplete="off" placeholder="輸入完整動詞片語" required><button class="submit-button" type="submit">確認答案</button>';
+                form.addEventListener('submit', (event) => {
+                    event.preventDefault();
+                    submitAnswer(form.elements.answer.value);
+                });
+                questionArea.append(form);
+                form.elements.answer.focus();
+            }
+            progress.setAttribute('aria-valuenow', String(currentIndex));
+            progressFill.style.width = `${(currentIndex / questions.length) * 100}%`;
+        }
+
+        function submitAnswer(value) {
+            if (answers[currentIndex]) return;
+            const question = questions[currentIndex];
+            const isCorrect = question.type === 'choice'
+                ? value === question.answer
+                : question.answers.includes(value.trim().toLowerCase().replace(/\s+/g, ' '));
+            answers[currentIndex] = { value, correct: isCorrect };
+            document.getElementById('score-count').textContent = `答對 ${answers.filter((answer) => answer?.correct).length} 題`;
+
+            questionArea.querySelectorAll('button, input').forEach((control) => { control.disabled = true; });
+            if (question.type === 'choice') {
+                questionArea.querySelectorAll('.option-button').forEach((button) => {
+                    if (button.textContent === question.answer) button.classList.add('is-correct');
+                    if (button.textContent === value && !isCorrect) button.classList.add('is-wrong');
+                });
+            }
+
+            feedback.className = `feedback${isCorrect ? '' : ' is-wrong'}`;
+            const title = document.createElement('strong');
+            title.textContent = isCorrect ? '答對了！' : `再記一下：答案是「${question.type === 'choice' ? question.answer : question.displayAnswer}」。`;
+            const explanation = document.createElement('p');
+            explanation.textContent = question.explanation;
+            feedback.replaceChildren(title, explanation);
+            nextButton.textContent = currentIndex === questions.length - 1 ? '查看分數與答案 →' : '下一題 →';
+            nextButton.hidden = false;
+            progress.setAttribute('aria-valuenow', String(currentIndex + 1));
+            progressFill.style.width = `${((currentIndex + 1) / questions.length) * 100}%`;
+        }
+
+        function showResults() {
+            questionArea.hidden = true;
+            feedback.replaceChildren();
+            nextButton.hidden = true;
+            result.hidden = false;
+            const score = answers.filter((answer) => answer?.correct).length;
+            document.getElementById('result-score').textContent = `${score} / ${questions.length} 題答對`;
+            document.getElementById('result-message').textContent = score === questions.length
+                ? '太好了，這次全部答對！'
+                : score >= 8 ? '掌握得不錯，看看錯題的說明會更牢固。' : '別急著背答案，回到對應時態卡片看看例句，再練一次。';
+
+            const review = document.getElementById('review-content');
+            const missed = questions.map((question, index) => ({ question, index })).filter(({ index }) => !answers[index].correct);
+            if (missed.length === 0) {
+                review.innerHTML = '<p class="review-empty">沒有錯題，完成得很好！</p>';
+            } else {
+                const list = document.createElement('ul');
+                list.className = 'review-list';
+                missed.forEach(({ question, index }) => {
+                    const item = document.createElement('li');
+                    item.className = 'review-item';
+                    const heading = document.createElement('strong');
+                    heading.textContent = `第 ${index + 1} 題｜正確答案：${question.type === 'choice' ? question.answer : question.displayAnswer}`;
+                    const prompt = document.createElement('p');
+                    prompt.textContent = question.prompt;
+                    const explanation = document.createElement('p');
+                    explanation.textContent = question.explanation;
+                    item.append(heading, prompt, explanation);
+                    list.append(item);
+                });
+                review.replaceChildren(list);
+            }
+            progress.setAttribute('aria-valuenow', String(questions.length));
+            progressFill.style.width = '100%';
+        }
+
+        nextButton.addEventListener('click', () => {
+            if (currentIndex === questions.length - 1) {
+                showResults();
+                return;
+            }
+            currentIndex += 1;
+            renderQuestion();
+        });
+
+        document.getElementById('restart-button').addEventListener('click', () => {
+            answers.fill(null);
+            currentIndex = 0;
+            renderQuestion();
+            document.getElementById('practice').scrollIntoView({ behavior: 'smooth' });
+        });
+
+        renderQuestion();
+    </script>
+</body>
+</html>
