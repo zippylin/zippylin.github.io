@@ -145,7 +145,7 @@
         .story-card { max-width: 820px; padding: 20px; border: 1px solid var(--line); background: rgba(255, 253, 249, .8); }
         .story-card h3 { margin: 0 0 12px; color: var(--teal-deep); }
         .story-paragraph { margin: 0 0 14px; font-family: Georgia, 'Times New Roman', serif; font-size: 17px; line-height: 2.2; }
-        .story-blank { width: 145px; max-width: 100%; border: 0; border-bottom: 2px solid var(--gold); border-radius: 0; padding: 2px 5px; color: var(--ink); background: transparent; font: inherit; }
+        .story-blank { max-width: 100%; border: 1px solid var(--gold); border-radius: 3px; padding: 1px 4px; color: var(--teal-deep); background: var(--white); font: inherit; font-size: 15px; }
         .story-blank:focus { outline: 2px solid rgba(23, 107, 103, .18); }
         .story-blank:disabled { color: var(--teal-deep); }
         .story-results { max-width: 820px; margin-top: 16px; }
@@ -173,7 +173,6 @@
             .submit-button { min-height: 44px; }
             .question-sentence { font-size: 17px; }
             .story-card { padding: 15px; }
-            .story-blank { width: 120px; }
         }
         @media (prefers-reduced-motion: reduce) {
             *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
@@ -325,7 +324,7 @@
         <section class="section" id="stories" aria-labelledby="stories-title">
             <div class="section-heading">
                 <h2 id="stories-title">時態短文練習</h2>
-                <p>從 100 篇短文中依難度隨機挑選一篇，完成 5 個動詞填空後查看得分與完整解答。</p>
+                <p>從 100 篇短文中依難度隨機挑選一篇，完成 5 題四選一選擇後查看得分與完整解答。</p>
             </div>
             <p class="practice-intro">簡單適合國中、中等適合高中、困難適合大學以上程度。每篇短文都會依上下文練習時態。</p>
             <div class="story-controls">
@@ -611,14 +610,14 @@
                 level: 'easy', title: 'A Saturday at the Library',
                 build: (v) => [
                     [`Every Saturday, ${v.name} `, { gap: 0 }, ` the ${v.place}. Today, she `, { gap: 1 }, ` a notebook and a book about birds.`],
-                    [`Last week, she `, { gap: 2 }, ` a story about a lost dog. She `, { gap: 3 }, ` it so much that she told `, { gap: 4 }, ` about it on Monday.`]
+                    [`Last week, she `, { gap: 2 }, ` a story about a lost dog. She `, { gap: 3 }, `                     it so much that she told ${v.subject} about it on Monday. Next week, she `, { gap: 4 }, ` another story.`]
                 ],
-                answers: (v) => ['visits', 'is carrying', 'read', 'enjoyed', v.subject]
+                                   answers: ['visits', 'is carrying', 'read', 'enjoyed', 'will read']
             },
             {
                 level: 'easy', title: 'A Garden Project',
                 build: (v) => [
-                    [`Every spring, ${v.name} `, { gap: 0 }, ` flowers near the ${v.place}. This morning, she `, { gap: 1 }, ` the soil with her friends.`],
+                    [`Every spring, ${v.name} `, { gap: 0 }, ` flowers near the ${v.place}. Right now, she `, { gap: 1 }, ` the soil with her friends.`],
                     [`Yesterday, they `, { gap: 2 }, ` three young trees. They `, { gap: 3 }, ` the garden again tomorrow, and by next month they `, { gap: 4 }, ` many new plants.`]
                 ],
                 answers: ['plants', 'is preparing', 'planted', 'will visit', 'will have grown']
@@ -635,7 +634,7 @@
                 level: 'medium', title: 'Preparing for the School Fair',
                 build: (v) => [
                     [`${v.name} and ${v.subject} `, { gap: 0 }, ` for the school fair all week. They `, { gap: 1 }, ` posters when the teacher arrived yesterday.`],
-                    [`They `, { gap: 2 }, ` the plans before they started building the booth. By Friday, they `, { gap: 3 }, ` everything, and they `, { gap: 4 }, ` at the fair all afternoon.`]
+                    [`They `, { gap: 2 }, ` the plans before they started building the booth. By Friday, they `, { gap: 3 }, ` everything, and tomorrow afternoon they `, { gap: 4 }, ` at the fair.`]
                 ],
                 answers: ['have been preparing', 'were making', 'had discussed', 'will have finished', 'will be working']
             },
@@ -722,7 +721,7 @@
             {
                 level: 'medium', title: 'A Long Bike Ride',
                 build: (v) => [
-                    [`${v.name} `, { gap: 0 }, ` her bike to the ${v.place} many times. Today she `, { gap: 1 }, ` there again.`],
+                    [`${v.name} `, { gap: 0 }, ` her bike to the ${v.place} many times. Right now, she `, { gap: 1 }, ` there again.`],
                     [`When she arrived last week, it already `, { gap: 2 }, `. At 5 PM tomorrow, she `, { gap: 3 }, ` home, and by sunset she `, { gap: 4 }, ` all her books.`]
                 ],
                 answers: ['has ridden', 'is riding', 'had closed', 'will be riding', 'will have returned']
@@ -769,7 +768,7 @@
             }
         ];
         const storyTenses = {
-            'A Saturday at the Library': ['一般現在時', '現在進行時', '一般過去時', '一般過去時', null],
+            'A Saturday at the Library': ['一般現在時', '現在進行時', '一般過去時', '一般過去時', '一般未來時'],
             'A Garden Project': ['一般現在時', '現在進行時', '一般過去時', '一般未來時', '將來完成時'],
             'The Missing Camera': ['一般現在時', '一般過去時', '過去進行時', '一般現在時', '一般未來時'],
             'Preparing for the School Fair': ['現在完成進行時', '過去進行時', '過去完成時', '將來完成時', '將來進行時'],
@@ -790,9 +789,32 @@
             'A Restored Painting': ['現在完成進行時', '現在完成時', '過去完成時', '將來進行時', '將來完成時'],
             'The Marathon Plan': ['一般現在時', '現在完成進行時', '過去進行時', '過去完成時', '將來完成時']
         };
+        const storyDistractors = {
+            'A Saturday at the Library': [['visited', 'is visiting', 'will have visited'], ['carried', 'had carried', 'carry'], ['reads', 'is reading', 'will read'], ['enjoys', 'will enjoy', 'is enjoying'], ['reads', 'has read', 'was reading']],
+            'A Garden Project': [['planted', 'is planting', 'will plant'], ['prepared', 'will prepare', 'has prepared'], ['plants', 'will plant', 'is planting'], ['has visited', 'visited', 'had visited'], ['grew', 'have grown', 'are growing']],
+            'The Missing Camera': [['took', 'is taking', 'will take'], ['leaves', 'will leave', 'is leaving'], ['looks', 'has looked', 'will look'], ['had', 'will have', 'is having'], ['traveled', 'travels', 'has traveled']],
+            'Preparing for the School Fair': [['prepared', 'will prepare', 'are preparing'], ['make', 'will make', 'have made'], ['discuss', 'will discuss', 'have discussed'], ['finished', 'have finished', 'are finishing'], ['worked', 'work', 'have worked']],
+            'A Journey to the Coast': [['traveled', 'has traveled', 'had traveled'], ['book', 'will book', 'are booking'], ['reads', 'will read', 'are reading'], ['walked', 'walk', 'have walked'], ['visited', 'visit', 'are visiting']],
+            'Learning to Cook': [['tried', 'is trying', 'will have tried'], ['learned', 'learns', 'will learn'], ['cooks', 'will cook', 'has cooked'], ['prepares', 'will prepare', 'has prepared'], ['made', 'will make', 'had made']],
+            'The Community Newsletter': [['wrote', 'writes', 'will write'], ['is writing', 'has written', 'will have written'], ['finishes', 'will finish', 'has finished'], ['wrote', 'writes', 'has written'], ['worked', 'has worked', 'had worked']],
+            'The Research Expedition': [['has studied', 'studied', 'will study'], ['collected', 'collects', 'will collect'], ['travels', 'will travel', 'has traveled'], ['changes', 'will change', 'are changing'], ['completed', 'complete', 'have completed']],
+            'An Unfinished Invention': [['develops', 'will develop', 'had developed'], ['revised', 'revises', 'will revise'], ['tests', 'has been testing', 'will test'], ['completed', 'completes', 'is completing'], ['has been working', 'was working', 'works']],
+            'The History of a Neighborhood': [['documented', 'document', 'will document'], ['have worked', 'worked', 'are working'], ['start', 'will start', 'have started'], ['considers', 'will consider', 'has considered'], ['celebrated', 'has celebrated', 'had celebrated']],
+            'A Rainy Day': [['stayed', 'is staying', 'will stay'], ['did', 'does', 'will do'], ['starts', 'will start', 'is starting'], ['drew', 'has drawn', 'had drawn'], ['gave', 'has given', 'had given']],
+            'The School Bus': [['is catching', 'will catch', 'has caught'], ['misses', 'will miss', 'is missing'], ['runs', 'will run', 'has run'], ['sat', 'will sit', 'had sat'], ['arrived', 'arrive', 'had arrived']],
+            'A Birthday Surprise': [['buys', 'will buy', 'is buying'], ['wrapped', 'will wrap', 'had wrapped'], ['gives', 'will give', 'has given'], ['opened', 'has opened', 'had opened'], ['sang', 'has sung', 'had sung']],
+            'The Science Club': [['attended', 'attends', 'will attend'], ['met', 'is meeting', 'will meet'], ['test', 'will test', 'have tested'], ['build', 'will build', 'are building'], ['launched', 'have launched', 'had launched']],
+            'A Long Bike Ride': [['rides', 'will ride', 'is riding'], ['rode', 'will ride', 'had ridden'], ['closes', 'will close', 'has closed'], ['rode', 'rides', 'has ridden'], ['returned', 'returns', 'has returned']],
+            'The Photo Contest': [['took', 'takes', 'will take'], ['picked', 'is picking', 'will pick'], ['edits', 'will edit', 'has edited'], ['saves', 'will save', 'is saving'], ['submitted', 'submits', 'has submitted']],
+            'A New Neighbor': [['moves', 'will move', 'was moving'], ['unpacks', 'unpacked', 'will unpack'], ['cleans', 'will clean', 'is cleaning'], ['brought', 'has brought', 'had brought'], ['met', 'meets', 'has met']],
+            'The Debate Team': [['prepared', 'prepares', 'will prepare'], ['has been practicing', 'practiced', 'practices'], ['has been rehearsing', 'will have been rehearsing', 'rehearses'], ['revises', 'will revise', 'has revised'], ['faced', 'has faced', 'had faced']],
+            'A Restored Painting': [['restored', 'restore', 'will restore'], ['remove', 'will remove', 'are removing'], ['stores', 'will store', 'has stored'], ['applied', 'apply', 'have applied'], ['returned', 'returns', 'has returned']],
+            'The Marathon Plan': [['is running', 'will run', 'had run'], ['trains', 'trained', 'will train'], ['recovers', 'will recover', 'has recovered'], ['skips', 'will skip', 'is skipping'], ['completed', 'completes', 'is completing']]
+        };
         const storyArticles = articleTemplates.flatMap((template) => storyVariants.map((variant, index) => ({
             ...template,
             tenses: storyTenses[template.title],
+            distractors: storyDistractors[template.title],
             title: `${template.title} · ${variant.name}`,
             paragraphs: template.build(variant, index),
             answers: typeof template.answers === 'function' ? template.answers(variant) : template.answers
@@ -819,43 +841,51 @@
                     if (typeof chunk === 'string') {
                         paragraph.append(document.createTextNode(chunk));
                     } else {
-                        const input = document.createElement('input');
-                        input.className = 'story-blank';
-                        input.type = 'text';
-                        input.name = `gap-${chunk.gap}`;
-                        input.autocomplete = 'off';
-                        input.setAttribute('aria-label', `第 ${chunk.gap + 1} 格答案`);
-                        input.required = true;
-                        paragraph.append(input);
+                        const select = document.createElement('select');
+                        select.className = 'story-blank';
+                        select.name = `gap-${chunk.gap}`;
+                        select.setAttribute('aria-label', `第 ${chunk.gap + 1} 題選項`);
+                        select.required = true;
+                        const placeholder = document.createElement('option');
+                        placeholder.value = '';
+                        placeholder.textContent = `(${chunk.gap + 1}) 請選擇`;
+                        select.append(placeholder);
+                        shuffle([currentStory.answers[chunk.gap], ...currentStory.distractors[chunk.gap]]).forEach((choice) => {
+                            const option = document.createElement('option');
+                            option.value = choice;
+                            option.textContent = choice;
+                            select.append(option);
+                        });
+                        paragraph.append(select);
                     }
                 });
                 content.append(paragraph);
             });
             storyForm.hidden = false;
             storyResults.hidden = true;
-            storyForm.querySelectorAll('input').forEach((input) => { input.disabled = false; });
+            storyForm.querySelectorAll('select').forEach((select) => { select.disabled = false; });
         }
 
         document.getElementById('new-story').addEventListener('click', renderStory);
         document.getElementById('story-again').addEventListener('click', renderStory);
         storyForm.addEventListener('submit', (event) => {
             event.preventDefault();
-            const inputs = [...storyForm.querySelectorAll('input')];
-            const answers = inputs.map((input) => input.value.trim().toLowerCase().replace(/\s+/g, ' '));
-            const score = answers.filter((answer, index) => answer === currentStory.answers[index].toLowerCase()).length;
+            const selects = [...storyForm.querySelectorAll('select')];
+            const answers = selects.map((select) => select.value);
+            const score = answers.filter((answer, index) => answer === currentStory.answers[index]).length;
             document.getElementById('story-score').textContent = `得分：${score} / ${currentStory.answers.length}`;
             const review = document.getElementById('story-answer-review');
             review.replaceChildren();
             currentStory.answers.forEach((answer, index) => {
                 const item = document.createElement('p');
-                item.className = `story-result-item${answers[index] === answer.toLowerCase() ? '' : ' is-wrong'}`;
-                item.textContent = `${index + 1}. 你的答案：${inputs[index].value.trim()}｜正確答案：${answer}`;
+                item.className = `story-result-item${answers[index] === answer ? '' : ' is-wrong'}`;
+                item.textContent = `${index + 1}. 你的答案：${answers[index]}｜正確答案：${answer}`;
                 review.append(item);
-                inputs[index].disabled = true;
+                selects[index].disabled = true;
             });
             storyResults.querySelector('.analysis')?.remove();
             analyzeWeakness(
-                currentStory.answers.map((answer, index) => ({ tense: currentStory.tenses[index], correct: answers[index] === answer.toLowerCase() })),
+                currentStory.answers.map((answer, index) => ({ tense: currentStory.tenses[index], correct: answers[index] === answer })),
                 storyResults
             );
             storyResults.hidden = false;
