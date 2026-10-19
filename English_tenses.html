@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#f7f3ec">
-    <meta name="description" content="用 12 種英文時態教學、200 題隨機測驗與 50 篇分級短文練習英文。">
+    <meta name="description" content="用 12 種英文時態教學、200 題隨機測驗與 100 篇分級短文練習英文。">
     <title>英文時態學習指南</title>
     <style>
         :root {
@@ -325,7 +325,7 @@
         <section class="section" id="stories" aria-labelledby="stories-title">
             <div class="section-heading">
                 <h2 id="stories-title">時態短文練習</h2>
-                <p>從 50 篇短文中依難度隨機挑選一篇，完成 5 個動詞填空後查看得分與完整解答。</p>
+                <p>從 100 篇短文中依難度隨機挑選一篇，完成 5 個動詞填空後查看得分與完整解答。</p>
             </div>
             <p class="practice-intro">簡單適合國中、中等適合高中、困難適合大學以上程度。每篇短文都會依上下文練習時態。</p>
             <div class="story-controls">
@@ -686,6 +686,86 @@
                     [`Before the old station closed, residents `, { gap: 2 }, ` a campaign to protect it. The council `, { gap: 3 }, ` the proposal when the meeting began, and the community `, { gap: 4 }, ` the restored station next year.`]
                 ],
                 answers: ['have been documenting', 'will have been working', 'had started', 'was considering', 'will be celebrating']
+            },
+            {
+                level: 'easy', title: 'A Rainy Day',
+                build: (v) => [
+                    [`On rainy days, ${v.name} `, { gap: 0 }, ` at home. Right now, she `, { gap: 1 }, ` a puzzle with her brother.`],
+                    [`Yesterday, she `, { gap: 2 }, ` a new puzzle after lunch. Tomorrow, she `, { gap: 3 }, ` a picture for ${v.subject}, and she `, { gap: 4 }, ` it to them on Monday.`]
+                ],
+                answers: ['stays', 'is doing', 'started', 'will draw', 'will give']
+            },
+            {
+                level: 'easy', title: 'The School Bus',
+                build: (v) => [
+                    [`${v.name} usually `, { gap: 0 }, ` the school bus at 7 o'clock. This morning, she `, { gap: 1 }, ` it because she woke up late.`],
+                    [`While she `, { gap: 2 }, ` to the stop, the next bus arrived. She `, { gap: 3 }, ` on it now, and she `, { gap: 4 }, ` at school before the bell.`]
+                ],
+                answers: ['catches', 'missed', 'was running', 'is sitting', 'will arrive']
+            },
+            {
+                level: 'easy', title: 'A Birthday Surprise',
+                build: (v) => [
+                    [`Tomorrow is ${v.name}'s mother's birthday. ${v.name} `, { gap: 0 }, ` a gift already, and she `, { gap: 1 }, ` it now.`],
+                    [`Last year, she `, { gap: 2 }, ` her mother a card. This year, her mother `, { gap: 3 }, ` the gift at breakfast, and ${v.subject} `, { gap: 4 }, ` a birthday song.`]
+                ],
+                answers: ['has bought', 'is wrapping', 'gave', 'will open', 'will sing']
+            },
+            {
+                level: 'medium', title: 'The Science Club',
+                build: (v) => [
+                    [`${v.name} `, { gap: 0 }, ` the science club since September. Every Thursday, the club `, { gap: 1 }, ` in the lab.`],
+                    [`Last week, the members `, { gap: 2 }, ` a model rocket when the bell rang. They `, { gap: 3 }, ` it before the meeting began, and next week they `, { gap: 4 }, ` it outside.`]
+                ],
+                answers: ['has been attending', 'meets', 'were testing', 'had built', 'will launch']
+            },
+            {
+                level: 'medium', title: 'A Long Bike Ride',
+                build: (v) => [
+                    [`${v.name} `, { gap: 0 }, ` her bike to the ${v.place} many times. Today she `, { gap: 1 }, ` there again.`],
+                    [`When she arrived last week, it already `, { gap: 2 }, `. At 5 PM tomorrow, she `, { gap: 3 }, ` home, and by sunset she `, { gap: 4 }, ` all her books.`]
+                ],
+                answers: ['has ridden', 'is riding', 'had closed', 'will be riding', 'will have returned']
+            },
+            {
+                level: 'medium', title: 'The Photo Contest',
+                build: (v) => [
+                    [`${v.name} `, { gap: 0 }, ` photos for the contest all month. She `, { gap: 1 }, ` her best picture every Friday.`],
+                    [`Last Friday, she `, { gap: 2 }, ` a photo when the power went out. She `, { gap: 3 }, ` her work earlier, so nothing was lost. By next Friday, she `, { gap: 4 }, ` her final entry.`]
+                ],
+                answers: ['has been taking', 'picks', 'was editing', 'had saved', 'will have submitted']
+            },
+            {
+                level: 'medium', title: 'A New Neighbor',
+                build: (v) => [
+                    [`A new neighbor `, { gap: 0 }, ` into the house next to ${v.name}. At the moment, the neighbor `, { gap: 1 }, ` boxes.`],
+                    [`Before the neighbor arrived, ${v.name} `, { gap: 2 }, ` the front garden. Tomorrow, she `, { gap: 3 }, ` some fruit, and by the weekend she `, { gap: 4 }, ` the whole family.`]
+                ],
+                answers: ['has moved', 'is unpacking', 'had cleaned', 'will bring', 'will have met']
+            },
+            {
+                level: 'hard', title: 'The Debate Team',
+                build: (v) => [
+                    [`${v.name} `, { gap: 0 }, ` for the debate final for three weeks. By Friday, she `, { gap: 1 }, ` her speech for a full month.`],
+                    [`When the coach arrived yesterday, she `, { gap: 2 }, ` for two hours. She `, { gap: 3 }, ` her closing argument at that moment, and next Monday she `, { gap: 4 }, ` the strongest team in the region.`]
+                ],
+                answers: ['has been preparing', 'will have been practicing', 'had been rehearsing', 'was revising', 'will be facing']
+            },
+            {
+                level: 'hard', title: 'A Restored Painting',
+                build: (v) => [
+                    [`Experts `, { gap: 0 }, ` the old painting that ${v.name} discovered near the ${v.place} since spring. They `, { gap: 1 }, ` most of the dust already.`],
+                    [`Before they began, the museum `, { gap: 2 }, ` it in a basement for decades. At noon tomorrow, they `, { gap: 3 }, ` the final layer, and by next month the painting `, { gap: 4 }, ` to the gallery.`]
+                ],
+                answers: ['have been restoring', 'have removed', 'had stored', 'will be applying', 'will have returned']
+            },
+            {
+                level: 'hard', title: 'The Marathon Plan',
+                build: (v) => [
+                    [`${v.name} `, { gap: 0 }, ` five kilometers every morning. She `, { gap: 1 }, ` for the city marathon since January.`],
+                    [`Last spring, she `, { gap: 2 }, ` from an injury, so she `, { gap: 3 }, ` every race for a year. By the time the marathon starts, she `, { gap: 4 }, ` more than 600 kilometers of training.`]
+                ],
+                answers: ['runs', 'has been training', 'was recovering', 'had skipped', 'will have completed']
             }
         ];
         const storyTenses = {
@@ -698,7 +778,17 @@
             'The Community Newsletter': ['現在完成進行時', '一般現在時', '過去完成時', '將來完成時', '將來進行時'],
             'The Research Expedition': ['將來完成進行時', '現在完成時', '過去進行時', '過去完成時', '將來完成時'],
             'An Unfinished Invention': ['現在完成進行時', '現在完成時', '過去完成進行時', '將來完成時', '將來完成進行時'],
-            'The History of a Neighborhood': ['現在完成進行時', '將來完成進行時', '過去完成時', '過去進行時', '將來進行時']
+            'The History of a Neighborhood': ['現在完成進行時', '將來完成進行時', '過去完成時', '過去進行時', '將來進行時'],
+            'A Rainy Day': ['一般現在時', '現在進行時', '一般過去時', '一般未來時', '一般未來時'],
+            'The School Bus': ['一般現在時', '一般過去時', '過去進行時', '現在進行時', '一般未來時'],
+            'A Birthday Surprise': ['現在完成時', '現在進行時', '一般過去時', '一般未來時', '一般未來時'],
+            'The Science Club': ['現在完成進行時', '一般現在時', '過去進行時', '過去完成時', '一般未來時'],
+            'A Long Bike Ride': ['現在完成時', '現在進行時', '過去完成時', '將來進行時', '將來完成時'],
+            'The Photo Contest': ['現在完成進行時', '一般現在時', '過去進行時', '過去完成時', '將來完成時'],
+            'A New Neighbor': ['現在完成時', '現在進行時', '過去完成時', '一般未來時', '將來完成時'],
+            'The Debate Team': ['現在完成進行時', '將來完成進行時', '過去完成進行時', '過去進行時', '將來進行時'],
+            'A Restored Painting': ['現在完成進行時', '現在完成時', '過去完成時', '將來進行時', '將來完成時'],
+            'The Marathon Plan': ['一般現在時', '現在完成進行時', '過去進行時', '過去完成時', '將來完成時']
         };
         const storyArticles = articleTemplates.flatMap((template) => storyVariants.map((variant, index) => ({
             ...template,
