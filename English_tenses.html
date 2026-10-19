@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#f7f3ec">
-    <meta name="description" content="用清楚的例句和互動練習學會英文 12 種基本時態。">
+    <meta name="description" content="用 12 種英文時態教學、200 題隨機測驗與 50 篇分級短文練習英文。">
     <title>英文時態學習指南</title>
     <style>
         :root {
@@ -133,6 +133,27 @@
         .review-item strong { display: block; margin-bottom: 3px; }
         .review-item p { margin: 2px 0 0; color: var(--muted); }
         .review-empty { padding: 13px 15px; border-left: 3px solid var(--teal); color: var(--teal-deep); background: rgba(23, 107, 103, .08); }
+        .analysis { max-width: 760px; margin: 0 0 20px; padding: 14px 16px; border-left: 3px solid var(--gold); background: rgba(214, 166, 79, .12); font-size: 14px; }
+        .analysis h3 { margin: 0 0 6px; color: var(--teal-deep); font-size: 18px; }
+        .analysis ul { margin: 0 0 10px; padding-left: 20px; }
+        .analysis .restart-button { display: block; margin-top: 12px; }
+        .story-controls { display: flex; flex-wrap: wrap; align-items: end; gap: 10px; margin: 18px 0; }
+        .story-controls label { display: grid; gap: 4px; color: var(--muted); font-size: 13px; }
+        .story-controls select, .story-controls button, .story-submit { min-height: 42px; border: 1px solid var(--line); border-radius: 3px; padding: 8px 12px; color: var(--ink); background: var(--white); font: inherit; }
+        .story-controls button, .story-submit { border-color: var(--teal); color: var(--white); background: var(--teal); font-weight: 700; }
+        .story-controls button:hover, .story-submit:hover { background: var(--teal-deep); }
+        .story-card { max-width: 820px; padding: 20px; border: 1px solid var(--line); background: rgba(255, 253, 249, .8); }
+        .story-card h3 { margin: 0 0 12px; color: var(--teal-deep); }
+        .story-paragraph { margin: 0 0 14px; font-family: Georgia, 'Times New Roman', serif; font-size: 17px; line-height: 2.2; }
+        .story-blank { width: 145px; max-width: 100%; border: 0; border-bottom: 2px solid var(--gold); border-radius: 0; padding: 2px 5px; color: var(--ink); background: transparent; font: inherit; }
+        .story-blank:focus { outline: 2px solid rgba(23, 107, 103, .18); }
+        .story-blank:disabled { color: var(--teal-deep); }
+        .story-results { max-width: 820px; margin-top: 16px; }
+        .story-results[hidden] { display: none; }
+        .story-results h3 { margin: 0 0 6px; color: var(--teal-deep); }
+        .story-results p { margin: 4px 0; }
+        .story-result-item { padding: 10px 12px; border-bottom: 1px solid var(--line); font-size: 13px; }
+        .story-result-item.is-wrong { color: var(--wrong); }
         footer { padding: 22px 0 34px; border-top: 1px solid var(--line); color: var(--muted); font-size: 12px; }
 
         @media (max-width: 760px) {
@@ -151,6 +172,8 @@
             .answer-form { flex-direction: column; }
             .submit-button { min-height: 44px; }
             .question-sentence { font-size: 17px; }
+            .story-card { padding: 15px; }
+            .story-blank { width: 120px; }
         }
         @media (prefers-reduced-motion: reduce) {
             *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
@@ -171,6 +194,7 @@
             <nav class="quick-nav" aria-label="頁面導覽">
                 <a href="#overview">時態總覽</a>
                 <a href="#lessons">時態詳解</a>
+                <a href="#stories">短文練習</a>
                 <a href="#practice">互動練習</a>
             </nav>
         </section>
@@ -298,15 +322,43 @@
             </div>
         </section>
 
+        <section class="section" id="stories" aria-labelledby="stories-title">
+            <div class="section-heading">
+                <h2 id="stories-title">時態短文練習</h2>
+                <p>從 50 篇短文中依難度隨機挑選一篇，完成 5 個動詞填空後查看得分與完整解答。</p>
+            </div>
+            <p class="practice-intro">簡單適合國中、中等適合高中、困難適合大學以上程度。每篇短文都會依上下文練習時態。</p>
+            <div class="story-controls">
+                <label for="story-level">選擇難易度
+                    <select id="story-level">
+                        <option value="easy">簡單｜國中程度</option>
+                        <option value="medium">中等｜高中程度</option>
+                        <option value="hard">困難｜大學含以上</option>
+                    </select>
+                </label>
+                <button id="new-story" type="button">抽一篇短文</button>
+            </div>
+            <form id="story-form" class="story-card" hidden>
+                <h3 id="story-title"></h3>
+                <div id="story-content"></div>
+                <button class="story-submit" type="submit">交卷並查看分數</button>
+            </form>
+            <section class="story-results" id="story-results" aria-live="polite" hidden>
+                <h3 id="story-score"></h3>
+                <div id="story-answer-review"></div>
+                <button class="restart-button" id="story-again" type="button">再抽一篇</button>
+            </section>
+        </section>
+
         <section class="section" id="practice" aria-labelledby="practice-title">
             <div class="section-heading">
                 <h2 id="practice-title">互動練習</h2>
-                <p>共 12 題，從辨認時態到複合句運用。每題作答後會立即顯示答案和簡短解說。</p>
+                <p>題庫共 200 題，每次隨機抽 10 題。每題作答後會立即顯示答案和簡短解說。</p>
             </div>
-            <p class="practice-intro">選擇題和填空題交錯出現；填空請輸入完整動詞片語。分數以第一次作答為準。</p>
+            <p class="practice-intro">涵蓋 12 種時態；每次練習題目都會重新隨機排列。分數以第一次作答為準。</p>
             <div class="quiz-shell">
-                <div class="quiz-topline"><span id="question-count">第 1 題，共 12 題</span><span class="quiz-score" id="score-count">答對 0 題</span></div>
-                <div class="progress-track" role="progressbar" aria-label="練習完成進度" aria-valuemin="0" aria-valuemax="12" aria-valuenow="0"><div class="progress-fill" id="progress-fill"></div></div>
+                <div class="quiz-topline"><span id="question-count">第 1 題，共 10 題</span><span class="quiz-score" id="score-count">答對 0 題</span></div>
+                <div class="progress-track" role="progressbar" aria-label="練習完成進度" aria-valuemin="0" aria-valuemax="10" aria-valuenow="0"><div class="progress-fill" id="progress-fill"></div></div>
                 <div class="question-area" id="question-area" aria-live="polite"></div>
                 <div class="feedback" id="feedback" role="status" aria-live="polite"></div>
                 <button class="next-button" id="next-button" type="button" hidden>下一題 →</button>
@@ -324,7 +376,7 @@
     <footer class="page">慢慢練習，讓句型變成直覺。</footer>
 
     <script>
-        const questions = [
+        const starterQuestions = [
             {
                 level: '第 1 階段 · 入門 · 選擇題',
                 prompt: '哪一句描述「每天都做的習慣」？',
@@ -435,13 +487,297 @@
             }
         ];
 
+        const verbs = [
+            { base: 'visit', third: 'visits', past: 'visited', participle: 'visited', ing: 'visiting', object: 'the museum' },
+            { base: 'play', third: 'plays', past: 'played', participle: 'played', ing: 'playing', object: 'the piano' },
+            { base: 'study', third: 'studies', past: 'studied', participle: 'studied', ing: 'studying', object: 'English' },
+            { base: 'make', third: 'makes', past: 'made', participle: 'made', ing: 'making', object: 'a model' },
+            { base: 'take', third: 'takes', past: 'took', participle: 'taken', ing: 'taking', object: 'photographs' },
+            { base: 'see', third: 'sees', past: 'saw', participle: 'seen', ing: 'seeing', object: 'the mountains' },
+            { base: 'build', third: 'builds', past: 'built', participle: 'built', ing: 'building', object: 'a tree house' },
+            { base: 'travel', third: 'travels', past: 'traveled', participle: 'traveled', ing: 'traveling', object: 'to the coast' },
+            { base: 'work', third: 'works', past: 'worked', participle: 'worked', ing: 'working', object: 'on a project' },
+            { base: 'learn', third: 'learns', past: 'learned', participle: 'learned', ing: 'learning', object: 'a new skill' },
+            { base: 'cook', third: 'cooks', past: 'cooked', participle: 'cooked', ing: 'cooking', object: 'dinner' },
+            { base: 'drive', third: 'drives', past: 'drove', participle: 'driven', ing: 'driving', object: 'to the city' },
+            { base: 'speak', third: 'speaks', past: 'spoke', participle: 'spoken', ing: 'speaking', object: 'with a teacher' },
+            { base: 'write', third: 'writes', past: 'wrote', participle: 'written', ing: 'writing', object: 'a short story' },
+            { base: 'eat', third: 'eats', past: 'ate', participle: 'eaten', ing: 'eating', object: 'lunch' },
+            { base: 'go', third: 'goes', past: 'went', participle: 'gone', ing: 'going', object: 'to the library' }
+        ];
+        const subjects = [
+            { text: 'I', third: false, am: 'am', was: 'was', have: 'have' },
+            { text: 'Mia', third: true, am: 'is', was: 'was', have: 'has' },
+            { text: 'We', third: false, am: 'are', was: 'were', have: 'have' },
+            { text: 'The students', third: false, am: 'are', was: 'were', have: 'have' },
+            { text: 'Daniel', third: true, am: 'is', was: 'was', have: 'has' },
+            { text: 'My friends', third: false, am: 'are', was: 'were', have: 'have' },
+            { text: 'You', third: false, am: 'are', was: 'were', have: 'have' },
+            { text: 'The guide', third: true, am: 'is', was: 'was', have: 'has' }
+        ];
+        const tensePatterns = [
+            { name: '一般現在時', cue: 'every Saturday', level: '第 1 階段 · 入門', answer: (v, s) => s.third ? v.third : v.base, sentence: (s, v) => `${s} ____ ${v.object} every Saturday.`, explanation: 'every Saturday 表示固定習慣，使用一般現在時；第三人稱單數動詞加 s 或 es。' },
+            { name: '一般過去時', cue: 'last Saturday', level: '第 1 階段 · 入門', answer: (v) => v.past, sentence: (s, v) => `${s} ____ ${v.object} last Saturday.`, explanation: 'last Saturday 是明確的過去時間，使用動詞過去式。' },
+            { name: '一般未來時', cue: 'tomorrow', level: '第 1 階段 · 入門', answer: (v) => `will ${v.base}`, sentence: (s, v) => `${s} ____ ${v.object} tomorrow.`, explanation: 'tomorrow 指向未來，使用 will + 原形動詞。' },
+            { name: '現在進行時', cue: 'right now', level: '第 1 階段 · 入門', answer: (v, s) => `${s.am} ${v.ing}`, sentence: (s, v) => `${s} ____ ${v.object} right now.`, explanation: 'right now 表示此刻正在發生，使用 am/is/are + V-ing。' },
+            { name: '過去進行時', cue: 'at 8 PM last night', level: '第 1 階段 · 入門', answer: (v, s) => `${s.was} ${v.ing}`, sentence: (s, v) => `${s} ____ ${v.object} at 8 PM last night.`, explanation: '過去某一時刻正在發生的動作，用 was/were + V-ing。' },
+            { name: '將來進行時', cue: 'at 8 PM tomorrow', level: '第 1 階段 · 入門', answer: (v) => `will be ${v.ing}`, sentence: (s, v) => `${s} ____ ${v.object} at 8 PM tomorrow.`, explanation: '未來某一時刻正在進行的動作，用 will be + V-ing。' },
+            { name: '現在完成時', cue: 'already', level: '第 2 階段 · 中等', answer: (v, s) => `${s.have} ${v.participle}`, sentence: (s, v) => `${s} ____ ${v.object} already.`, explanation: 'already 常用來表示動作已完成；現在完成時為 have/has + 過去分詞。' },
+            { name: '過去完成時', cue: 'before the guests arrived', level: '第 2 階段 · 中等', answer: (v) => `had ${v.participle}`, sentence: (s, v) => `${s} ____ ${v.object} before the guests arrived.`, explanation: '動作在另一個過去動作之前已完成，使用 had + 過去分詞。' },
+            { name: '將來完成時', cue: 'by next Friday', level: '第 2 階段 · 中等', answer: (v) => `will have ${v.participle}`, sentence: (s, v) => `${s} ____ ${v.object} by next Friday.`, explanation: 'by next Friday 表示未來某時之前會完成，使用 will have + 過去分詞。' },
+            { name: '現在完成進行時', cue: 'for two hours', level: '第 3 階段 · 挑戰', answer: (v, s) => `${s.have} been ${v.ing}`, sentence: (s, v) => `${s} ____ ${v.object} for two hours.`, explanation: 'for two hours 強調動作從過去持續到現在，使用 have/has been + V-ing。' },
+            { name: '過去完成進行時', cue: 'for two hours before sunset', level: '第 3 階段 · 挑戰', answer: (v) => `had been ${v.ing}`, sentence: (s, v) => `${s} ____ ${v.object} for two hours before sunset.`, explanation: '動作在過去某時間之前已持續一段時間，使用 had been + V-ing。' },
+            { name: '將來完成進行時', cue: 'for two hours by noon tomorrow', level: '第 3 階段 · 挑戰', answer: (v) => `will have been ${v.ing}`, sentence: (s, v) => `${s} ____ ${v.object} for two hours by noon tomorrow.`, explanation: 'by noon tomorrow 搭配持續時間，強調到未來時間點為止的持續動作。' }
+        ];
+        const generatedQuestions = verbs.flatMap((verb, verbIndex) => tensePatterns.map((tense, tenseIndex) => {
+            const subject = subjects[(verbIndex + tenseIndex) % subjects.length];
+            const answer = tense.answer(verb, subject);
+            return {
+                level: `${tense.level} · ${tense.name} · 填空題`,
+                prompt: `依照「${tense.cue}」的時間線索，填入 ${verb.base} 的正確形式。`,
+                sentence: tense.sentence(subject.text, verb),
+                type: 'fill',
+                tense: tense.name,
+                answers: [answer],
+                displayAnswer: answer,
+                explanation: tense.explanation
+            };
+        })).slice(0, 188);
+        ['一般現在時', '一般過去時', '現在進行時', '過去進行時', '一般未來時', '現在完成時', '過去完成時', '將來進行時', '現在完成進行時', '過去完成進行時', '將來完成時', '將來完成進行時']
+            .forEach((name, index) => { starterQuestions[index].tense = name; });
+        const questionPool = [...starterQuestions, ...generatedQuestions];
+
+        const analyzeWeakness = (records, container, onPractice) => {
+            const stats = new Map();
+            records.filter((record) => record.tense).forEach(({ tense, correct }) => {
+                const entry = stats.get(tense) || { total: 0, right: 0 };
+                entry.total += 1;
+                if (correct) entry.right += 1;
+                stats.set(tense, entry);
+            });
+            const weak = [...stats].filter(([, entry]) => entry.right < entry.total)
+                .sort((a, b) => (a[1].right / a[1].total) - (b[1].right / b[1].total) || b[1].total - a[1].total);
+            const box = document.createElement('div');
+            box.className = 'analysis';
+            const heading = document.createElement('h3');
+            heading.textContent = '學習弱點分析';
+            box.append(heading);
+            if (weak.length === 0) {
+                const ok = document.createElement('p');
+                ok.textContent = '這一回所有時態都答對了，可以再抽新題挑戰。';
+                box.append(ok);
+            } else {
+                const list = document.createElement('ul');
+                weak.forEach(([tense, entry]) => {
+                    const item = document.createElement('li');
+                    item.textContent = `${tense}：答對 ${entry.right} / ${entry.total}，建議回到「12 種時態詳解」複習公式與例句，再多做這個時態的題目。`;
+                    list.append(item);
+                });
+                box.append(list);
+                const link = document.createElement('a');
+                link.href = '#lessons';
+                link.textContent = '前往時態詳解 →';
+                box.append(link);
+                if (onPractice) {
+                    const button = document.createElement('button');
+                    button.type = 'button';
+                    button.className = 'restart-button';
+                    button.textContent = '針對弱點再練習 10 題';
+                    button.addEventListener('click', () => onPractice(weak.map(([tense]) => tense)));
+                    box.append(button);
+                }
+            }
+            container.prepend(box);
+        };
+        const shuffle = (items) => {
+            const shuffled = [...items];
+            for (let index = shuffled.length - 1; index > 0; index -= 1) {
+                const swapIndex = Math.floor(Math.random() * (index + 1));
+                [shuffled[index], shuffled[swapIndex]] = [shuffled[swapIndex], shuffled[index]];
+            }
+            return shuffled;
+        };
+        let questions = shuffle(questionPool).slice(0, 10);
+
+        const storyVariants = [
+            { name: 'Mia', place: 'town library', subject: 'her classmates' },
+            { name: 'Lily', place: 'science museum', subject: 'her cousins' },
+            { name: 'Ava', place: 'riverside park', subject: 'her neighbors' },
+            { name: 'Nora', place: 'school garden', subject: 'her teammates' },
+            { name: 'Emma', place: 'community center', subject: 'her friends' }
+        ];
+        const articleTemplates = [
+            {
+                level: 'easy', title: 'A Saturday at the Library',
+                build: (v) => [
+                    [`Every Saturday, ${v.name} `, { gap: 0 }, ` the ${v.place}. Today, she `, { gap: 1 }, ` a notebook and a book about birds.`],
+                    [`Last week, she `, { gap: 2 }, ` a story about a lost dog. She `, { gap: 3 }, ` it so much that she told `, { gap: 4 }, ` about it on Monday.`]
+                ],
+                answers: (v) => ['visits', 'is carrying', 'read', 'enjoyed', v.subject]
+            },
+            {
+                level: 'easy', title: 'A Garden Project',
+                build: (v) => [
+                    [`Every spring, ${v.name} `, { gap: 0 }, ` flowers near the ${v.place}. This morning, she `, { gap: 1 }, ` the soil with her friends.`],
+                    [`Yesterday, they `, { gap: 2 }, ` three young trees. They `, { gap: 3 }, ` the garden again tomorrow, and by next month they `, { gap: 4 }, ` many new plants.`]
+                ],
+                answers: ['plants', 'is preparing', 'planted', 'will visit', 'will have grown']
+            },
+            {
+                level: 'easy', title: 'The Missing Camera',
+                build: (v) => [
+                    [`${v.name} usually `, { gap: 0 }, ` photos at the ${v.place}. Yesterday, she `, { gap: 1 }, ` her camera on a bench.`],
+                    [`While she `, { gap: 2 }, ` for it, a helpful visitor found it. ${v.name} `, { gap: 3 }, ` the camera now, and she `, { gap: 4 }, ` more carefully next time.`]
+                ],
+                answers: ['takes', 'left', 'was looking', 'has', 'will travel']
+            },
+            {
+                level: 'medium', title: 'Preparing for the School Fair',
+                build: (v) => [
+                    [`${v.name} and ${v.subject} `, { gap: 0 }, ` for the school fair all week. They `, { gap: 1 }, ` posters when the teacher arrived yesterday.`],
+                    [`They `, { gap: 2 }, ` the plans before they started building the booth. By Friday, they `, { gap: 3 }, ` everything, and they `, { gap: 4 }, ` at the fair all afternoon.`]
+                ],
+                answers: ['have been preparing', 'were making', 'had discussed', 'will have finished', 'will be working']
+            },
+            {
+                level: 'medium', title: 'A Journey to the Coast',
+                build: (v) => [
+                    [`Next summer, ${v.name} `, { gap: 0 }, ` to the coast with ${v.subject}. They `, { gap: 1 }, ` the train tickets already.`],
+                    [`Before the trip, they `, { gap: 2 }, ` a travel guide. At this time tomorrow, they `, { gap: 3 }, ` along the shore, and by evening they `, { gap: 4 }, ` the old lighthouse.`]
+                ],
+                answers: ['will travel', 'have booked', 'had read', 'will be walking', 'will have visited']
+            },
+            {
+                level: 'medium', title: 'Learning to Cook',
+                build: (v) => [
+                    [`${v.name} `, { gap: 0 }, ` a new recipe every month. Since January, she `, { gap: 1 }, ` many dishes with her family.`],
+                    [`Yesterday, she `, { gap: 2 }, ` soup when the phone rang. She `, { gap: 3 }, ` dinner before her guests arrived, and now she `, { gap: 4 }, ` a fresh salad.`]
+                ],
+                answers: ['tries', 'has learned', 'was cooking', 'had prepared', 'is making']
+            },
+            {
+                level: 'medium', title: 'The Community Newsletter',
+                build: (v) => [
+                    [`${v.name} `, { gap: 0 }, ` the community newsletter for two years. She `, { gap: 1 }, ` articles every Wednesday.`],
+                    [`Last week, she `, { gap: 2 }, ` an interview before the editor called. By next issue, she `, { gap: 3 }, ` five stories, and she `, { gap: 4 }, ` with the design team tomorrow morning.`]
+                ],
+                answers: ['has been writing', 'writes', 'had finished', 'will have written', 'will be working']
+            },
+            {
+                level: 'hard', title: 'The Research Expedition',
+                build: (v) => [
+                    [`By the time the research team reaches the island, ${v.name} `, { gap: 0 }, ` climate records for six months. She `, { gap: 1 }, ` similar data since the project began.`],
+                    [`The team `, { gap: 2 }, ` at dawn yesterday when the weather changed. They `, { gap: 3 }, ` their route before the storm arrived, and by next week they `, { gap: 4 }, ` the final report.`]
+                ],
+                answers: ['will have been studying', 'has collected', 'was traveling', 'had changed', 'will have completed']
+            },
+            {
+                level: 'hard', title: 'An Unfinished Invention',
+                build: (v) => [
+                    [`For several months, ${v.name} `, { gap: 0 }, ` a device that saves energy. She `, { gap: 1 }, ` its design three times so far.`],
+                    [`When the judges visited last year, she `, { gap: 2 }, ` the prototype for weeks. She `, { gap: 3 }, ` the final test before their next visit, and by then she `, { gap: 4 }, ` on the project for a full year.`]
+                ],
+                answers: ['has been developing', 'has revised', 'had been testing', 'will have completed', 'will have been working']
+            },
+            {
+                level: 'hard', title: 'The History of a Neighborhood',
+                build: (v) => [
+                    [`Local historians `, { gap: 0 }, ` the neighborhood's history since the archive opened. By next autumn, they `, { gap: 1 }, ` there for a decade.`],
+                    [`Before the old station closed, residents `, { gap: 2 }, ` a campaign to protect it. The council `, { gap: 3 }, ` the proposal when the meeting began, and the community `, { gap: 4 }, ` the restored station next year.`]
+                ],
+                answers: ['have been documenting', 'will have been working', 'had started', 'was considering', 'will be celebrating']
+            }
+        ];
+        const storyTenses = {
+            'A Saturday at the Library': ['一般現在時', '現在進行時', '一般過去時', '一般過去時', null],
+            'A Garden Project': ['一般現在時', '現在進行時', '一般過去時', '一般未來時', '將來完成時'],
+            'The Missing Camera': ['一般現在時', '一般過去時', '過去進行時', '一般現在時', '一般未來時'],
+            'Preparing for the School Fair': ['現在完成進行時', '過去進行時', '過去完成時', '將來完成時', '將來進行時'],
+            'A Journey to the Coast': ['一般未來時', '現在完成時', '過去完成時', '將來進行時', '將來完成時'],
+            'Learning to Cook': ['一般現在時', '現在完成時', '過去進行時', '過去完成時', '現在進行時'],
+            'The Community Newsletter': ['現在完成進行時', '一般現在時', '過去完成時', '將來完成時', '將來進行時'],
+            'The Research Expedition': ['將來完成進行時', '現在完成時', '過去進行時', '過去完成時', '將來完成時'],
+            'An Unfinished Invention': ['現在完成進行時', '現在完成時', '過去完成進行時', '將來完成時', '將來完成進行時'],
+            'The History of a Neighborhood': ['現在完成進行時', '將來完成進行時', '過去完成時', '過去進行時', '將來進行時']
+        };
+        const storyArticles = articleTemplates.flatMap((template) => storyVariants.map((variant, index) => ({
+            ...template,
+            tenses: storyTenses[template.title],
+            title: `${template.title} · ${variant.name}`,
+            paragraphs: template.build(variant, index),
+            answers: typeof template.answers === 'function' ? template.answers(variant) : template.answers
+        })));
+
+        const storyForm = document.getElementById('story-form');
+        const storyResults = document.getElementById('story-results');
+        let currentStory = null;
+        let previousStoryIndex = -1;
+
+        function renderStory() {
+            const level = document.getElementById('story-level').value;
+            const eligible = storyArticles.map((story, index) => ({ story, index })).filter(({ story }) => story.level === level);
+            let selection = Math.floor(Math.random() * eligible.length);
+            if (eligible.length > 1 && eligible[selection].index === previousStoryIndex) selection = (selection + 1) % eligible.length;
+            ({ story: currentStory, index: previousStoryIndex } = eligible[selection]);
+            document.getElementById('story-title').textContent = currentStory.title;
+            const content = document.getElementById('story-content');
+            content.replaceChildren();
+            currentStory.paragraphs.forEach((chunks) => {
+                const paragraph = document.createElement('p');
+                paragraph.className = 'story-paragraph';
+                chunks.forEach((chunk) => {
+                    if (typeof chunk === 'string') {
+                        paragraph.append(document.createTextNode(chunk));
+                    } else {
+                        const input = document.createElement('input');
+                        input.className = 'story-blank';
+                        input.type = 'text';
+                        input.name = `gap-${chunk.gap}`;
+                        input.autocomplete = 'off';
+                        input.setAttribute('aria-label', `第 ${chunk.gap + 1} 格答案`);
+                        input.required = true;
+                        paragraph.append(input);
+                    }
+                });
+                content.append(paragraph);
+            });
+            storyForm.hidden = false;
+            storyResults.hidden = true;
+            storyForm.querySelectorAll('input').forEach((input) => { input.disabled = false; });
+        }
+
+        document.getElementById('new-story').addEventListener('click', renderStory);
+        document.getElementById('story-again').addEventListener('click', renderStory);
+        storyForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+            const inputs = [...storyForm.querySelectorAll('input')];
+            const answers = inputs.map((input) => input.value.trim().toLowerCase().replace(/\s+/g, ' '));
+            const score = answers.filter((answer, index) => answer === currentStory.answers[index].toLowerCase()).length;
+            document.getElementById('story-score').textContent = `得分：${score} / ${currentStory.answers.length}`;
+            const review = document.getElementById('story-answer-review');
+            review.replaceChildren();
+            currentStory.answers.forEach((answer, index) => {
+                const item = document.createElement('p');
+                item.className = `story-result-item${answers[index] === answer.toLowerCase() ? '' : ' is-wrong'}`;
+                item.textContent = `${index + 1}. 你的答案：${inputs[index].value.trim()}｜正確答案：${answer}`;
+                review.append(item);
+                inputs[index].disabled = true;
+            });
+            storyResults.querySelector('.analysis')?.remove();
+            analyzeWeakness(
+                currentStory.answers.map((answer, index) => ({ tense: currentStory.tenses[index], correct: answers[index] === answer.toLowerCase() })),
+                storyResults
+            );
+            storyResults.hidden = false;
+        });
+
         const questionArea = document.getElementById('question-area');
         const feedback = document.getElementById('feedback');
         const nextButton = document.getElementById('next-button');
         const result = document.getElementById('result');
         const progress = document.querySelector('.progress-track');
         const progressFill = document.getElementById('progress-fill');
-        const answers = Array(questions.length).fill(null);
+        let answers = Array(questions.length).fill(null);
         let currentIndex = 0;
 
         function renderQuestion() {
@@ -536,26 +872,33 @@
                 : score >= 8 ? '掌握得不錯，看看錯題的說明會更牢固。' : '別急著背答案，回到對應時態卡片看看例句，再練一次。';
 
             const review = document.getElementById('review-content');
-            const missed = questions.map((question, index) => ({ question, index })).filter(({ index }) => !answers[index].correct);
-            if (missed.length === 0) {
-                review.innerHTML = '<p class="review-empty">沒有錯題，完成得很好！</p>';
-            } else {
-                const list = document.createElement('ul');
-                list.className = 'review-list';
-                missed.forEach(({ question, index }) => {
-                    const item = document.createElement('li');
-                    item.className = 'review-item';
-                    const heading = document.createElement('strong');
-                    heading.textContent = `第 ${index + 1} 題｜正確答案：${question.type === 'choice' ? question.answer : question.displayAnswer}`;
-                    const prompt = document.createElement('p');
-                    prompt.textContent = question.prompt;
-                    const explanation = document.createElement('p');
-                    explanation.textContent = question.explanation;
-                    item.append(heading, prompt, explanation);
-                    list.append(item);
-                });
-                review.replaceChildren(list);
-            }
+            const list = document.createElement('ul');
+            list.className = 'review-list';
+            questions.forEach((question, index) => {
+                const item = document.createElement('li');
+                item.className = 'review-item';
+                const heading = document.createElement('strong');
+                const correctAnswer = question.type === 'choice' ? question.answer : question.displayAnswer;
+                heading.textContent = `第 ${index + 1} 題｜${answers[index].correct ? '答對' : '答錯'}｜正確答案：${correctAnswer}`;
+                const prompt = document.createElement('p');
+                prompt.textContent = question.prompt;
+                const userAnswer = document.createElement('p');
+                userAnswer.textContent = `你的答案：${answers[index].value}`;
+                const explanation = document.createElement('p');
+                explanation.textContent = question.explanation;
+                item.append(heading, prompt, userAnswer, explanation);
+                list.append(item);
+            });
+            review.replaceChildren(list);
+            result.querySelector('.analysis')?.remove();
+            analyzeWeakness(
+                questions.map((question, index) => ({ tense: question.tense, correct: answers[index].correct })),
+                result,
+                (weakTenses) => {
+                    const weakPool = questionPool.filter((question) => weakTenses.includes(question.tense));
+                    startQuiz(weakPool);
+                }
+            );
             progress.setAttribute('aria-valuenow', String(questions.length));
             progressFill.style.width = '100%';
         }
@@ -569,12 +912,15 @@
             renderQuestion();
         });
 
-        document.getElementById('restart-button').addEventListener('click', () => {
-            answers.fill(null);
+        function startQuiz(pool) {
+            questions = shuffle(pool).slice(0, 10);
+            answers = Array(questions.length).fill(null);
             currentIndex = 0;
             renderQuestion();
             document.getElementById('practice').scrollIntoView({ behavior: 'smooth' });
-        });
+        }
+
+        document.getElementById('restart-button').addEventListener('click', () => startQuiz(questionPool));
 
         renderQuestion();
     </script>
