@@ -45,4 +45,4 @@ python -m http.server 8000
 
 ## 部署
 
-將專案檔案發布到 GitHub Pages 的網站根目錄即可；首頁入口為 `index.html`。此專案不需要額外的建置或套件安裝步驟。
+將專案檔案發布到 GitHub Pages 的網站根目錄即可；首頁入口為 `index.html`。`_config.yml` 已設定 GitHub Pages Jekyll 主題為 Merlot。現有 HTML 頁面沿用各自的版面；若要套用 Jekyll 主題版型，頁面需使用主題提供的 layout。此專案不需要額外的建置或套件安裝步驟。
