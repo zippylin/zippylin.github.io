@@ -164,7 +164,7 @@
       <div class="eyebrow">LEARN SOMETHING TODAY</div>
       <h1 id="page-title">今天想學什麼？</h1>
       <p>挑一個主題，從一點點開始。成語和英文時態都整理在這裡。</p>
-      <p class="visit-count" aria-live="polite">本瀏覽器累計造訪 <strong id="visit-count">0</strong> 次</p>
+      <p class="visit-count" aria-live="polite">累計 <strong id="visit-count">…</strong> 人次開啟本頁</p>
     </section>
 
     <nav class="choices" aria-label="選擇學習主題">
@@ -203,14 +203,12 @@
   <div class="milestone-message" id="milestone-message" role="status" aria-live="polite" hidden></div>
   <canvas class="fireworks" id="fireworks" aria-hidden="true"></canvas>
   <script>
-    const visitKey = 'learning-home-visits';
-    const visitCount = Number(localStorage.getItem(visitKey) || 0) + 1;
-    localStorage.setItem(visitKey, String(visitCount));
-    document.getElementById('visit-count').textContent = visitCount.toLocaleString('zh-Hant');
+    const counterUrl = 'https://abacus.jasoncameron.dev/hit/zippylin.github.io/learning-home-visits';
+    const countEl = document.getElementById('visit-count');
 
-    if (visitCount % 1000 === 0) {
+    function celebrate(visitCount) {
       const message = document.getElementById('milestone-message');
-      message.textContent = `🎉 太棒了！本瀏覽器已造訪 ${visitCount.toLocaleString('zh-Hant')} 次！`;
+      message.textContent = `🎉 恭喜！你是第 ${visitCount.toLocaleString('zh-Hant')} 位造訪者！`;
       message.hidden = false;
 
       if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
@@ -259,6 +257,14 @@
         animate();
       }
     }
+
+    fetch(counterUrl)
+      .then((response) => response.json())
+      .then(({ value }) => {
+        countEl.textContent = Number(value).toLocaleString('zh-Hant');
+        if (value > 0 && value % 1000 === 0) celebrate(value);
+      })
+      .catch(() => { countEl.textContent = '—'; });
   </script>
 </body>
 </html>
