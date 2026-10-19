@@ -152,6 +152,10 @@
         .story-results[hidden] { display: none; }
         .story-results h3 { margin: 0 0 6px; color: var(--teal-deep); }
         .story-results p { margin: 4px 0; }
+        .story-translation { margin-top: 14px; padding: 12px 14px; border-left: 3px solid var(--teal); background: rgba(23, 107, 103, .07); }
+        .story-translation h4 { margin: 0 0 6px; color: var(--teal-deep); font-size: 15px; }
+        .story-translation p { margin: 0 0 8px; font-size: 14px; }
+        .story-translation p[lang="en"] { font-family: Georgia, 'Times New Roman', serif; }
         .story-result-item { padding: 10px 12px; border-bottom: 1px solid var(--line); font-size: 13px; }
         .story-result-item.is-wrong { color: var(--wrong); }
         footer { padding: 22px 0 34px; border-top: 1px solid var(--line); color: var(--muted); font-size: 12px; }
@@ -599,11 +603,11 @@
         let questions = shuffle(questionPool).slice(0, 10);
 
         const storyVariants = [
-            { name: 'Mia', place: 'town library', subject: 'her classmates' },
-            { name: 'Lily', place: 'science museum', subject: 'her cousins' },
-            { name: 'Ava', place: 'riverside park', subject: 'her neighbors' },
-            { name: 'Nora', place: 'school garden', subject: 'her teammates' },
-            { name: 'Emma', place: 'community center', subject: 'her friends' }
+            { name: 'Mia', place: 'town library', subject: 'her classmates', placeZh: '鎮上的圖書館', subjectZh: '她的同學' },
+            { name: 'Lily', place: 'science museum', subject: 'her cousins', placeZh: '科學博物館', subjectZh: '她的表兄弟姊妹' },
+            { name: 'Ava', place: 'riverside park', subject: 'her neighbors', placeZh: '河濱公園', subjectZh: '她的鄰居' },
+            { name: 'Nora', place: 'school garden', subject: 'her teammates', placeZh: '學校花園', subjectZh: '她的隊友' },
+            { name: 'Emma', place: 'community center', subject: 'her friends', placeZh: '社區活動中心', subjectZh: '她的朋友' }
         ];
         const articleTemplates = [
             {
@@ -767,6 +771,28 @@
                 answers: ['runs', 'has been training', 'was recovering', 'had skipped', 'will have completed']
             }
         ];
+        const storyTranslations = {
+            'A Saturday at the Library': (v) => `每個星期六，${v.name}都會去${v.placeZh}。今天，她正帶著一本筆記本和一本關於鳥類的書。上週，她讀了一個關於走失小狗的故事。她非常喜歡，所以星期一就把這件事告訴了${v.subjectZh}。下週，她會再讀另一個故事。`,
+            'A Garden Project': (v) => `每年春天，${v.name}都會在${v.placeZh}附近種花。現在，她正和朋友們一起整理土壤。昨天，他們種了三棵小樹。明天他們會再去花園，到下個月時，他們將已經種出許多新的植物。`,
+            'The Missing Camera': (v) => `${v.name}平常都在${v.placeZh}拍照。昨天，她把相機忘在長椅上。她正在找相機時，一位熱心的遊客撿到了它。${v.name}現在已經拿回相機，下次她會更小心地旅行。`,
+            'Preparing for the School Fair': (v) => `${v.name}和${v.subjectZh}整個星期都在為校慶園遊會做準備。昨天老師到達時，他們正在製作海報。在開始搭建攤位之前，他們已經討論過計畫。到星期五，他們將完成所有事情，明天下午他們會在園遊會上工作。`,
+            'A Journey to the Coast': (v) => `明年夏天，${v.name}將和${v.subjectZh}一起去海邊。他們已經訂好火車票。出發前，他們讀過旅遊指南。明天這個時候，他們將正沿著海岸散步，到傍晚時，他們將已經參觀完那座古老的燈塔。`,
+            'Learning to Cook': (v) => `${v.name}每個月都會嘗試一道新食譜。從一月以來，她已經和家人學會了許多菜餚。昨天電話響起時，她正在煮湯。客人到達之前，她已經準備好晚餐，而現在她正在做新鮮的沙拉。`,
+            'The Community Newsletter': (v) => `${v.name}負責社區通訊已經兩年了。她每個星期三都會寫文章。上週，編輯打電話來之前，她已經完成了一場訪談。到下一期時，她將已經寫完五篇報導，明天早上她會和設計團隊一起工作。`,
+            'The Research Expedition': (v) => `等研究團隊抵達小島時，${v.name}將已經研究氣候紀錄長達六個月。自從計畫開始以來，她已經蒐集了類似的資料。昨天黎明時，天氣轉變，團隊正在旅行。風暴來臨之前，他們已經改變了路線，到下週，他們將已經完成最終報告。`,
+            'An Unfinished Invention': (v) => `幾個月來，${v.name}一直在研發一種節能裝置。到目前為止，她已經修改了三次設計。去年評審來訪時，她已經測試原型好幾週了。在他們下次來訪之前，她將完成最後的測試，到那時，她將已經持續投入這個計畫整整一年。`,
+            'The History of a Neighborhood': (v) => `自從檔案館開放以來，當地歷史學家一直在記錄這個社區的歷史。到明年秋天，他們將已經在那裡工作了十年。舊車站關閉之前，居民們已經發起保護它的行動。會議開始時，市議會正在考慮這項提案，而明年社區將會慶祝修復後的車站。`,
+            'A Rainy Day': (v) => `下雨天，${v.name}會待在家裡。現在，她正和弟弟一起拼拼圖。昨天午餐後，她開始拼一幅新的拼圖。明天，她會為${v.subjectZh}畫一幅畫，並在星期一送給他們。`,
+            'The School Bus': (v) => `${v.name}通常搭七點的校車。今天早上，她因為睡過頭而錯過了校車。她正跑向車站時，下一班車到了。她現在正坐在車上，會在上課鈴響前到達學校。`,
+            'A Birthday Surprise': (v) => `明天是${v.name}媽媽的生日。${v.name}已經買好禮物，現在正在包裝。去年，她送給媽媽一張卡片。今年，媽媽會在早餐時拆開禮物，而${v.subjectZh}會唱生日快樂歌。`,
+            'The Science Club': (v) => `從九月以來，${v.name}一直參加科學社。每個星期四，社團都在實驗室聚會。上週鐘聲響起時，成員們正在測試模型火箭。會議開始前他們已經把它組裝好，下週他們會在戶外發射。`,
+            'A Long Bike Ride': (v) => `${v.name}已經騎腳踏車去${v.placeZh}很多次。現在，她又騎車前往那裡。上週她抵達時，那裡已經關門了。明天下午五點，她將正騎車回家，到日落時，她將已經歸還所有的書。`,
+            'The Photo Contest': (v) => `${v.name}整個月都在為比賽拍照。她每個星期五都會挑出最好的照片。上星期五停電時，她正在編輯一張照片。她先前已經存檔，所以沒有任何損失。到下星期五，她將已經交出最後的參賽作品。`,
+            'A New Neighbor': (v) => `一位新鄰居已經搬進${v.name}隔壁的房子。此刻，新鄰居正在拆箱整理。鄰居到來之前，${v.name}已經打掃好前院。明天，她會帶一些水果過去，到週末時，她將已經認識整家人。`,
+            'The Debate Team': (v) => `${v.name}為辯論決賽準備了三個星期。到星期五，她將已經練習演講整整一個月。昨天教練到達時，她已經排練了兩個小時。那時她正在修改結辯，下週一她將面對區域內最強的隊伍。`,
+            'A Restored Painting': (v) => `自春天以來，專家們一直在修復${v.name}在${v.placeZh}附近發現的那幅舊畫。他們已經清除了大部分灰塵。開始之前，博物館已經把它存放在地下室幾十年。明天中午，他們將正在塗上最後一層，到下個月，這幅畫將已經回到展廳。`,
+            'The Marathon Plan': (v) => `${v.name}每天早上跑五公里。從一月以來，她一直為城市馬拉松訓練。去年春天，她正在從傷病中恢復，所以整整一年都沒有參加任何比賽。等到馬拉松開跑時，她將已經完成超過六百公里的訓練。`
+        };
         const storyTenses = {
             'A Saturday at the Library': ['一般現在時', '現在進行時', '一般過去時', '一般過去時', '一般未來時'],
             'A Garden Project': ['一般現在時', '現在進行時', '一般過去時', '一般未來時', '將來完成時'],
@@ -816,6 +842,7 @@
             tenses: storyTenses[template.title],
             distractors: storyDistractors[template.title],
             title: `${template.title} · ${variant.name}`,
+            translation: storyTranslations[template.title](variant),
             paragraphs: template.build(variant, index),
             answers: typeof template.answers === 'function' ? template.answers(variant) : template.answers
         })));
@@ -883,6 +910,18 @@
                 review.append(item);
                 selects[index].disabled = true;
             });
+            const fullText = currentStory.paragraphs.map((chunks) => chunks.map((chunk) => typeof chunk === 'string' ? chunk : currentStory.answers[chunk.gap]).join('').replace(/\s+/g, ' ')).join(' ');
+            const translation = document.createElement('div');
+            translation.className = 'story-translation';
+            const translationTitle = document.createElement('h4');
+            translationTitle.textContent = '完整文章與繁體中文翻譯';
+            const englishText = document.createElement('p');
+            englishText.lang = 'en';
+            englishText.textContent = fullText;
+            const chineseText = document.createElement('p');
+            chineseText.textContent = currentStory.translation;
+            translation.append(translationTitle, englishText, chineseText);
+            review.append(translation);
             storyResults.querySelector('.analysis')?.remove();
             analyzeWeakness(
                 currentStory.answers.map((answer, index) => ({ tense: currentStory.tenses[index], correct: answers[index] === answer })),
