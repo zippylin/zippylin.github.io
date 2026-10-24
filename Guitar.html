@@ -338,6 +338,7 @@
           <p class="chord-type" id="chord-type"></p>
           <button type="button" class="play" id="play-chord" aria-label="播放目前和弦">▶ 播放和弦</button>
           <p class="audio-status" id="audio-status" aria-live="polite"></p>
+          <p class="audio-status">若沒有聲音，請調高媒體音量並確認輸出裝置；較舊的 iPhone／iPad 請先關閉靜音模式。</p>
           <svg class="diagram" id="diagram" viewBox="0 0 300 270" role="img"></svg>
           <p class="note-list" id="note-list"></p>
         </section>
@@ -749,31 +750,66 @@
       source.stop(startTime + duration);
     }
 
+    async function prepareAudio() {
+      const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+      if (!AudioContextClass) throw new Error("這個瀏覽器不支援 Web Audio。");
+      if (navigator.audioSession) navigator.audioSession.type = "playback";
+      if (!audioContext || audioContext.state === "closed") {
+        audioContext = new AudioContextClass();
+      }
+      const context = audioContext;
+      if (context.state !== "running") {
+        // Keep resume and the silent unlock inside the original iOS tap gesture.
+        const resumed = context.resume();
+        const unlock = context.createBufferSource();
+        unlock.buffer = context.createBuffer(1, 1, context.sampleRate);
+        unlock.connect(context.destination);
+        unlock.onended = () => unlock.disconnect();
+        unlock.start(0);
+
+        let timeout;
+        try {
+          await Promise.race([
+            resumed,
+            new Promise((resolve, reject) => {
+              timeout = window.setTimeout(() => {
+                reject(new Error("音訊啟動逾時，請回到此頁後再按一次播放。"));
+              }, 4000);
+            })
+          ]);
+        } finally {
+          window.clearTimeout(timeout);
+        }
+      }
+      if (context.state !== "running") {
+        throw new Error("音訊尚未啟動，請回到此頁後再按一次播放。");
+      }
+      return context;
+    }
+
     async function playChord(
       chord = chords[Number(numberSelect.value)],
       button = document.getElementById("play-chord"),
       status = document.getElementById("audio-status")
     ) {
       button.disabled = true;
-      status.textContent = "正在播放和弦…";
+      status.textContent = "正在啟動音訊…";
 
       try {
-        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-        if (!AudioContextClass) throw new Error("這個瀏覽器不支援 Web Audio。");
-        audioContext ??= new AudioContextClass();
-        if (audioContext.state === "suspended") await audioContext.resume();
+        const context = await prepareAudio();
 
         const openStringMidi = [40, 45, 50, 55, 59, 64];
-        const startTime = audioContext.currentTime + 0.04;
+        const startTime = context.currentTime + 0.04;
         let strumIndex = 0;
         chord.positions.forEach((position, string) => {
           if (position === "x") return;
           const fret = position;
           const midi = openStringMidi[string] + fret;
           const frequency = 440 * Math.pow(2, (midi - 69) / 12);
-          createPluckedString(audioContext, frequency, startTime + strumIndex * 0.035);
+          createPluckedString(context, frequency, startTime + strumIndex * 0.035);
           strumIndex++;
         });
+        status.textContent = "正在播放和弦…";
         window.setTimeout(() => {
           status.textContent = "";
           button.disabled = false;
