@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f4f0e8">
+  <title>古典吉他和弦練習</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #26352d;
+      --muted: #758078;
+      --paper: #f4f0e8;
+      --card: #fffdf8;
+      --green: #315c45;
+      --green-dark: #244633;
+      --line: #dedbd1;
+      --accent: #e5a94b;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      min-width: 320px;
+      min-height: 100vh;
+      margin: 0;
+      padding: 32px 18px;
+      background:
+        radial-gradient(ellipse at 10% 0%, #e8e3d7 0, transparent 38%),
+        var(--paper);
+      color: var(--ink);
+      font-family: "Segoe UI", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+    }
+
+    .page { width: min(1080px, 100%); margin: 0 auto; }
+    .eyebrow {
+      margin: 0 0 9px;
+      color: var(--green);
+      font-size: .75rem;
+      font-weight: 800;
+      letter-spacing: .17em;
+      text-transform: uppercase;
+    }
+
+    header { position: relative; margin: 0 0 25px; padding-right: 260px; }
+    .credit {
+      position: absolute;
+      top: 3px;
+      right: 0;
+      color: var(--muted);
+      font-size: .78rem;
+      text-align: right;
+    }
+    h1 { margin: 0; font-size: clamp(1.8rem, 5vw, 2.55rem); letter-spacing: .04em; }
+    .subtitle { margin: 8px 0 0; color: var(--muted); line-height: 1.7; }
+
+    .practice-card {
+      overflow: hidden;
+      border: 1px solid #e7e2d8;
+      border-radius: 22px;
+      background: var(--card);
+      box-shadow: 0 18px 50px #34433212;
+    }
+
+    .toolbar {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1.5fr;
+      gap: 16px;
+      padding: 22px 25px;
+      background: #faf8f2;
+      border-bottom: 1px solid var(--line);
+    }
+
+    label { display: block; margin-bottom: 7px; font-size: .83rem; font-weight: 700; }
+    select {
+      width: 100%;
+      min-height: 46px;
+      padding: 0 40px 0 13px;
+      border: 1px solid #d8d7cd;
+      border-radius: 10px;
+      background: white;
+      color: var(--ink);
+      font: inherit;
+      font-weight: 650;
+    }
+
+    select:focus-visible, button:focus-visible {
+      outline: 3px solid #e5a94b88;
+      outline-offset: 2px;
+    }
+
+    .content {
+      display: grid;
+      grid-template-columns: minmax(270px, .92fr) 1.08fr;
+      gap: 34px;
+      align-items: center;
+      padding: 30px clamp(20px, 5vw, 48px) 34px;
+    }
+
+    .diagram-panel { text-align: center; }
+    .chord-number { margin: 0 0 3px; color: var(--muted); font-size: .88rem; font-weight: 700; }
+    .chord-name { margin: 0; color: var(--green-dark); font-size: clamp(2.6rem, 7vw, 4rem); line-height: 1.1; }
+    .chord-type { margin: 5px 0 18px; color: var(--muted); font-size: .95rem; }
+
+    .diagram {
+      display: block;
+      width: min(100%, 310px);
+      height: auto;
+      margin: 0 auto;
+    }
+
+    .string-label, .finger-label, .fret-label {
+      fill: var(--muted);
+      font-family: inherit;
+      font-size: 14px;
+    }
+    .finger-label { fill: white; font-size: 12px; font-weight: 800; }
+    .fret-label { font-size: 12px; }
+    .string-line { stroke: #989c90; stroke-width: 1.7; }
+    .fret-line { stroke: #9da196; stroke-width: 1.6; }
+    .nut-line { stroke: #35453b; stroke-width: 5; }
+
+    .note-list {
+      margin: 18px auto 0;
+      padding: 8px 12px;
+      width: fit-content;
+      border-radius: 99px;
+      background: #f3f2eb;
+      color: #5e695f;
+      font-size: .82rem;
+    }
+
+    .details { align-self: stretch; display: flex; flex-direction: column; justify-content: center; }
+    .details h3 { margin: 0 0 13px; font-size: 1.1rem; }
+    .finger-list { display: grid; gap: 9px; margin: 0; padding: 0; list-style: none; }
+    .finger-list li {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      min-height: 42px;
+      padding: 8px 11px;
+      border-radius: 10px;
+      background: #f8f7f1;
+      font-size: .92rem;
+    }
+
+    .finger-badge {
+      display: grid;
+      flex: 0 0 25px;
+      width: 25px;
+      height: 25px;
+      place-items: center;
+      border-radius: 50%;
+      background: var(--green);
+      color: white;
+      font-size: .78rem;
+      font-weight: 800;
+    }
+
+    .finger-badge.open { background: #e8eee7; color: var(--green); }
+    .finger-badge.mute { background: #efebe4; color: #77756e; font-size: .9rem; }
+    .tip {
+      margin-top: 18px;
+      padding: 14px 15px;
+      border-left: 3px solid var(--accent);
+      border-radius: 0 10px 10px 0;
+      background: #fbf5e9;
+      color: #62543e;
+      font-size: .88rem;
+      line-height: 1.65;
+    }
+    .tip strong { display: block; margin-bottom: 2px; color: #57482e; }
+
+    .controls {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 17px 25px;
+      border-top: 1px solid var(--line);
+      background: #faf8f2;
+    }
+
+    button {
+      min-height: 42px;
+      padding: 0 17px;
+      border: 1px solid #d8d7cd;
+      border-radius: 10px;
+      background: white;
+      color: var(--ink);
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    button:hover { border-color: var(--green); color: var(--green); }
+    .next { border-color: var(--green); background: var(--green); color: white; }
+    .next:hover { background: var(--green-dark); color: white; }
+    .play { border-color: var(--green); color: var(--green); }
+    .play:disabled { cursor: wait; opacity: .65; }
+    .audio-status { min-height: 1.3em; margin: 10px 0 0; color: var(--muted); font-size: .82rem; text-align: center; }
+
+    .extra-section { margin-top: 28px; }
+    .section-heading { margin: 0 0 7px; font-size: 1.35rem; }
+    .section-description { margin: 0 0 16px; color: var(--muted); font-size: .9rem; line-height: 1.6; }
+    .progression-card, .music-card {
+      padding: 22px;
+      border: 1px solid #e7e2d8;
+      border-radius: 18px;
+      background: var(--card);
+      box-shadow: 0 12px 35px #3443320a;
+    }
+    .progression-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 13px;
+    }
+    .progression-item {
+      min-width: 0;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      background: #fffefa;
+      text-align: center;
+    }
+    .storage-note { margin: 0 0 15px; color: var(--muted); font-size: .84rem; line-height: 1.6; }
+    .progression-status { min-height: 1.3em; margin: 12px 0 0; color: var(--muted); font-size: .82rem; }
+    .progression-item label { text-align: left; }
+    .progression-item select { min-height: 40px; padding-left: 10px; }
+    .progression-chord-name { margin: 12px 0 0; color: var(--green-dark); font-size: 1.15rem; font-weight: 800; }
+    .progression-diagram { display: block; width: min(100%, 205px); height: auto; margin: 0 auto; }
+    .progression-play { min-height: 34px; margin-top: 9px; padding: 0 12px; font-size: .83rem; }
+    .music-form {
+      display: grid;
+      grid-template-columns: 1fr 1.3fr auto auto;
+      gap: 10px;
+      align-items: end;
+    }
+    .music-form input {
+      width: 100%;
+      min-height: 44px;
+      padding: 0 12px;
+      border: 1px solid #d8d7cd;
+      border-radius: 10px;
+      background: white;
+      color: var(--ink);
+      font: inherit;
+    }
+    .music-form input:focus-visible {
+      outline: 3px solid #e5a94b88;
+      outline-offset: 2px;
+    }
+    .saved-songs { display: grid; gap: 9px; margin: 18px 0 0; padding: 0; list-style: none; }
+    .saved-song {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 11px 13px;
+      border-radius: 10px;
+      background: #f8f7f1;
+    }
+    .saved-song a { color: var(--green); font-weight: 700; overflow-wrap: anywhere; }
+    .saved-song-main { display: flex; flex: 1 1 230px; align-items: center; gap: 10px; min-width: 0; }
+    .saved-song-actions { display: flex; gap: 7px; }
+    .saved-song-actions button { min-height: 34px; padding: 0 10px; font-size: .8rem; }
+    .song-notes { display: grid; flex: 1 0 100%; grid-template-columns: 1fr auto; gap: 8px; }
+    .song-notes textarea {
+      width: 100%;
+      min-height: 58px;
+      padding: 9px 11px;
+      border: 1px solid #d8d7cd;
+      border-radius: 9px;
+      background: white;
+      color: var(--ink);
+      font: inherit;
+      font-size: .86rem;
+      resize: vertical;
+    }
+    .song-notes button { align-self: end; min-height: 38px; padding: 0 12px; font-size: .82rem; }
+    .music-status { min-height: 1.3em; margin: 10px 0 0; color: var(--muted); font-size: .84rem; }
+    .copyright-note { margin: 13px 0 0; color: var(--muted); font-size: .8rem; line-height: 1.6; }
+    input:focus-visible { outline: 3px solid #e5a94b88; outline-offset: 2px; }
+
+    .legend { margin: 16px 0 0; color: var(--muted); font-size: .82rem; text-align: center; line-height: 1.7; }
+    footer { margin-top: 18px; color: var(--muted); font-size: .8rem; text-align: center; }
+
+    @media (max-width: 680px) {
+      body { padding: 24px 13px; }
+      header { padding-right: 0; padding-top: 32px; }
+      .credit { top: 0; left: 0; right: auto; text-align: left; }
+      .toolbar { grid-template-columns: 1fr; gap: 12px; padding: 17px; }
+      .content { grid-template-columns: 1fr; gap: 23px; padding: 25px 20px; }
+      .diagram { width: min(100%, 270px); }
+      .details { width: min(100%, 430px); margin: 0 auto; }
+      .controls { padding: 14px 17px; }
+      .progression-card, .music-card { padding: 15px; }
+      .progression-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; }
+      .music-form { grid-template-columns: 1fr 1fr; }
+      .music-form button { width: 100%; }
+    }
+    @media (max-width: 390px) {
+      .progression-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header>
+      <div class="credit">© JCLin · AI assistant using Copilot SDK in VS Code</div>
+      <p class="eyebrow">Classical Guitar · Chord Practice</p>
+      <h1>和弦指法練習</h1>
+      <p class="subtitle">選一個和弦編號，看看左手怎麼按。慢慢來，讓每一條弦都清楚響起來。</p>
+    </header>
+
+    <section class="practice-card" aria-label="和弦練習卡">
+      <div class="toolbar">
+        <div>
+          <label for="mode-select">練習模式</label>
+          <select id="mode-select" aria-label="選擇練習模式">
+            <option value="basic">初學模式</option>
+            <option value="advanced">進階模式</option>
+          </select>
+        </div>
+        <div>
+          <label for="number-select">和弦編號</label>
+          <select id="number-select" aria-label="選擇和弦編號"></select>
+        </div>
+        <div>
+          <label for="chord-select">和弦名稱</label>
+          <select id="chord-select" aria-label="選擇和弦名稱"></select>
+        </div>
+      </div>
+
+      <div class="content">
+        <section class="diagram-panel" aria-live="polite">
+          <p class="chord-number" id="chord-number"></p>
+          <h2 class="chord-name" id="chord-name"></h2>
+          <p class="chord-type" id="chord-type"></p>
+          <button type="button" class="play" id="play-chord" aria-label="播放目前和弦">▶ 播放和弦</button>
+          <p class="audio-status" id="audio-status" aria-live="polite"></p>
+          <svg class="diagram" id="diagram" viewBox="0 0 300 270" role="img"></svg>
+          <p class="note-list" id="note-list"></p>
+        </section>
+
+        <section class="details" aria-label="按弦說明">
+          <h3>左手按法</h3>
+          <ul class="finger-list" id="finger-list"></ul>
+          <div class="tip"><strong>練習小提醒</strong><span id="tip"></span></div>
+        </section>
+      </div>
+
+      <div class="controls">
+        <button type="button" id="previous">← 上一個</button>
+        <button type="button" class="next" id="next">下一個 →</button>
+      </div>
+    </section>
+
+    <section class="extra-section" aria-labelledby="progression-heading">
+      <h2 class="section-heading" id="progression-heading">和弦進行練習</h2>
+      <p class="section-description">排好最多六個和弦，一頁看完整段進行；每格都能單獨播放。</p>
+      <div class="progression-card">
+        <div class="progression-grid" id="progression-grid"></div>
+        <p class="progression-status" id="progression-status" role="status" aria-live="polite"></p>
+      </div>
+    </section>
+
+    <section class="extra-section" aria-labelledby="music-heading">
+      <h2 class="section-heading" id="music-heading">吉他譜搜尋與收藏</h2>
+      <p class="section-description">搜尋 kanpu8 的公開頁面，或貼上找到的譜頁網址；收藏會保存在這個瀏覽器，下次開啟仍可查看。</p>
+      <div class="music-card">
+        <p class="storage-note">收藏曲目、個人筆記及和弦進行會自動保存在此瀏覽器的本機儲存空間。關閉頁面後再用同一瀏覽器開啟此 HTML 檔即可恢復；請勿清除瀏覽器網站資料或更換瀏覽器／檔案位置。</p>
+        <form class="music-form" id="music-form">
+          <div>
+            <label for="song-title">曲名</label>
+            <input id="song-title" name="title" type="text" placeholder="例如：紅色高跟鞋" required>
+          </div>
+          <div>
+            <label for="song-url">譜頁網址（可選）</label>
+            <input id="song-url" name="url" type="url" placeholder="貼上找到的譜頁網址">
+          </div>
+          <button type="button" id="search-song">搜尋 kanpu8</button>
+          <button type="submit" class="next">收藏曲目</button>
+        </form>
+        <p class="music-status" id="music-status" role="status" aria-live="polite"></p>
+        <ul class="saved-songs" id="saved-songs" aria-label="已收藏曲目"></ul>
+        <p class="copyright-note">收藏只保存曲名與連結，不會下載或複製樂譜內容。請依原網站的使用條款與著作權規定閱覽及使用譜面。</p>
+      </div>
+    </section>
+
+    <p class="legend">圖上最左邊是第 6 弦（最粗），最右邊是第 1 弦（最細）。● 是按弦，○ 是空弦，× 是不彈。</p>
+    <footer>標準調弦：第 6 弦到第 1 弦為 E – A – D – G – B – E</footer>
+  </main>
+
+  <script>
+    const basicChords = [
+      {
+        name: "C", fullName: "C 大調", type: "C Major", notes: "C・E・G",
+        positions: ["x", 3, 2, 0, 1, 0],
+        fingers: ["x", 3, 2, 0, 1, 0],
+        tip: "手指尖立起來按弦，盡量不要碰到旁邊的弦。"
+      },
+      {
+        name: "G", fullName: "G 大調", type: "G Major", notes: "G・B・D",
+        positions: [3, 2, 0, 0, 0, 3],
+        fingers: [2, 1, 0, 0, 0, 3],
+        tip: "第 6 弦和第 1 弦都要按第 3 格，手指放鬆、手腕自然。"
+      },
+      {
+        name: "D", fullName: "D 大調", type: "D Major", notes: "D・F♯・A",
+        positions: ["x", "x", 0, 2, 3, 2],
+        fingers: ["x", "x", 0, 1, 3, 2],
+        tip: "只刷最細的四條弦；手指集中在第 2、3 格。"
+      },
+      {
+        name: "A", fullName: "A 大調", type: "A Major", notes: "A・C♯・E",
+        positions: ["x", 0, 2, 2, 2, 0],
+        fingers: ["x", 0, 1, 2, 3, 0],
+        tip: "三根手指並排按在第 2 格，注意不要悶到第 1 弦。"
+      },
+      {
+        name: "E", fullName: "E 大調", type: "E Major", notes: "E・G♯・B",
+        positions: [0, 2, 2, 1, 0, 0],
+        fingers: [0, 2, 3, 1, 0, 0],
+        tip: "第 3 弦按第 1 格，另外兩根手指按第 2 格。"
+      },
+      {
+        name: "Am", fullName: "A 小調", type: "A minor", notes: "A・C・E",
+        positions: ["x", 0, 2, 2, 1, 0],
+        fingers: ["x", 0, 2, 3, 1, 0],
+        tip: "手型和 E 大調相似，往細弦方向移一條弦。"
+      },
+      {
+        name: "Em", fullName: "E 小調", type: "E minor", notes: "E・G・B",
+        positions: [0, 2, 2, 0, 0, 0],
+        fingers: [0, 2, 3, 0, 0, 0],
+        tip: "這是很適合入門的和弦，輕輕刷過六條弦聽聽看。"
+      },
+      {
+        name: "Dm", fullName: "D 小調", type: "D minor", notes: "D・F・A",
+        positions: ["x", "x", 0, 2, 3, 1],
+        fingers: ["x", "x", 0, 2, 3, 1],
+        tip: "只彈最細的四條弦，食指按住第 1 弦第 1 格。"
+      }
+    ];
+
+    const advancedChords = [
+      {
+        name: "C7", fullName: "C 屬七和弦", type: "C dominant seventh", notes: "C・E・G・B♭",
+        positions: ["x", 3, 2, 3, 1, 0], fingers: ["x", 3, 2, 4, 1, 0],
+        tip: "比 C 大調多了降 B 音，彈奏時留意第 3 弦第 3 格。"
+      },
+      {
+        name: "Cm", fullName: "C 小調", type: "C minor", notes: "C・E♭・G",
+        positions: ["x", 3, 5, 5, 4, 3], fingers: ["x", 1, 3, 4, 2, 1],
+        tip: "食指橫按第 3 格，再用其他手指按出小調形狀。"
+      },
+      {
+        name: "Cm7", fullName: "C 小七和弦", type: "C minor seventh", notes: "C・E♭・G・B♭",
+        positions: ["x", 3, 5, 3, 4, 3], fingers: ["x", 1, 3, 1, 2, 1],
+        tip: "食指橫按第 3 格；中指與無名指補上第 4、5 格。"
+      },
+      {
+        name: "Cmaj7", fullName: "C 大七和弦", type: "C major seventh", notes: "C・E・G・B",
+        positions: ["x", 3, 2, 0, 0, 0], fingers: ["x", 3, 2, 0, 0, 0],
+        tip: "和 C 大調相比，讓第 2 弦保持空弦，聽聽大七度的色彩。"
+      },
+      {
+        name: "D7", fullName: "D 屬七和弦", type: "D dominant seventh", notes: "D・F♯・A・C",
+        positions: ["x", "x", 0, 2, 1, 2], fingers: ["x", "x", 0, 2, 1, 3],
+        tip: "和 D 大調相似，第 2 弦改按第 1 格，並且只彈四條細弦。"
+      },
+      {
+        name: "Dm7", fullName: "D 小七和弦", type: "D minor seventh", notes: "D・F・A・C",
+        positions: ["x", "x", 0, 2, 1, 1], fingers: ["x", "x", 0, 2, 1, 1],
+        tip: "食指可輕輕橫按第 1、2 弦第 1 格，注意不要碰到第 3 弦。"
+      },
+      {
+        name: "Dmaj7", fullName: "D 大七和弦", type: "D major seventh", notes: "D・F♯・A・C♯",
+        positions: ["x", "x", 0, 2, 2, 2], fingers: ["x", "x", 0, 1, 2, 3],
+        tip: "第 4 弦空弦，其餘三條細弦都按第 2 格。"
+      },
+      {
+        name: "Dsus2", fullName: "D 掛二和弦", type: "D suspended second", notes: "D・E・A",
+        positions: ["x", "x", 0, 2, 3, 0], fingers: ["x", "x", 0, 1, 3, 0],
+        tip: "空弦帶出明亮、開闊的聲音，只彈最細的四條弦。"
+      },
+      {
+        name: "Dsus4", fullName: "D 掛四和弦", type: "D suspended fourth", notes: "D・G・A",
+        positions: ["x", "x", 0, 2, 3, 3], fingers: ["x", "x", 0, 1, 2, 3],
+        tip: "第 1 弦改按第 3 格，從 D 大調轉換時感受音色變化。"
+      },
+      {
+        name: "E7", fullName: "E 屬七和弦", type: "E dominant seventh", notes: "E・G♯・B・D",
+        positions: [0, 2, 0, 1, 0, 0], fingers: [0, 2, 0, 1, 0, 0],
+        tip: "這個和弦只需要兩根手指，六條弦都可以彈。"
+      },
+      {
+        name: "Em7", fullName: "E 小七和弦", type: "E minor seventh", notes: "E・G・B・D",
+        positions: [0, 2, 0, 0, 0, 0], fingers: [0, 2, 0, 0, 0, 0],
+        tip: "只需按住第 5 弦第 2 格，其餘弦都是空弦。"
+      },
+      {
+        name: "E7sus4", fullName: "E 七掛四和弦", type: "E dominant seventh suspended fourth", notes: "E・A・B・D",
+        positions: [0, 2, 0, 2, 0, 0], fingers: [0, 1, 0, 2, 0, 0],
+        tip: "兩根手指分別按第 5、3 弦第 2 格，六條弦都可以彈。"
+      },
+      {
+        name: "A7", fullName: "A 屬七和弦", type: "A dominant seventh", notes: "A・C♯・E・G",
+        positions: ["x", 0, 2, 0, 2, 0], fingers: ["x", 0, 1, 0, 2, 0],
+        tip: "在 A 大調形狀中放開第 3 弦，讓 G 音自然響起。"
+      },
+      {
+        name: "Am7", fullName: "A 小七和弦", type: "A minor seventh", notes: "A・C・E・G",
+        positions: ["x", 0, 2, 0, 1, 0], fingers: ["x", 0, 2, 0, 1, 0],
+        tip: "從 A 小調放開第 3 弦，讓空弦 G 音響起。"
+      },
+      {
+        name: "Asus2", fullName: "A 掛二和弦", type: "A suspended second", notes: "A・B・E",
+        positions: ["x", 0, 2, 2, 0, 0], fingers: ["x", 0, 1, 2, 0, 0],
+        tip: "第 2 弦保持空弦，讓 B 音取代 A 和弦中的 C♯。"
+      },
+      {
+        name: "Asus4", fullName: "A 掛四和弦", type: "A suspended fourth", notes: "A・D・E",
+        positions: ["x", 0, 2, 2, 3, 0], fingers: ["x", 0, 1, 2, 3, 0],
+        tip: "第 2 弦按第 3 格，注意手指不要碰到第 1 弦。"
+      },
+      {
+        name: "B7", fullName: "B 屬七和弦", type: "B dominant seventh", notes: "B・D♯・F♯・A",
+        positions: ["x", 2, 1, 2, 0, 2], fingers: ["x", 2, 1, 3, 0, 4],
+        tip: "手指交錯排列，先慢慢逐弦檢查有沒有被悶住的空弦。"
+      },
+      {
+        name: "F", fullName: "F 大調（小橫按）", type: "F Major", notes: "F・A・C",
+        positions: ["x", "x", 3, 2, 1, 1], fingers: ["x", "x", 3, 2, 1, 1],
+        tip: "食指同時按住第 1、2 弦第 1 格；先練習讓兩條弦都清楚發聲。"
+      },
+      {
+        name: "Fm", fullName: "F 小調（封閉和弦）", type: "F minor", notes: "F・A♭・C",
+        positions: [1, 3, 3, 1, 1, 1], fingers: [1, 3, 4, 1, 1, 1],
+        tip: "食指橫按第 1 格，再用無名指與小指按第 3 格。"
+      },
+      {
+        name: "Fmaj7", fullName: "F 大七和弦", type: "F major seventh", notes: "F・A・C・E",
+        positions: ["x", "x", 3, 2, 1, 0], fingers: ["x", "x", 3, 2, 1, 0],
+        tip: "比 F 大調容易一些；第 1 弦保持空弦，不必橫按。"
+      },
+      {
+        name: "F#m", fullName: "F♯ 小調（封閉和弦）", type: "F-sharp minor", notes: "F♯・A・C♯",
+        positions: [2, 4, 4, 2, 2, 2], fingers: [1, 3, 4, 1, 1, 1],
+        tip: "食指橫按第 2 格，其他手指補出第 4 格；手腕保持放鬆。"
+      },
+      {
+        name: "G7", fullName: "G 屬七和弦", type: "G dominant seventh", notes: "G・B・D・F",
+        positions: [3, 2, 0, 0, 0, 1], fingers: [3, 2, 0, 0, 0, 1],
+        tip: "第 1 弦按第 1 格，其他按法與 G 大調相近。"
+      },
+      {
+        name: "Gm", fullName: "G 小調（封閉和弦）", type: "G minor", notes: "G・B♭・D",
+        positions: [3, 5, 5, 3, 3, 3], fingers: [1, 3, 4, 1, 1, 1],
+        tip: "食指橫按第 3 格，先確保第 1、2 弦能清楚響起。"
+      },
+      {
+        name: "Gm7", fullName: "G 小七和弦", type: "G minor seventh", notes: "G・B♭・D・F",
+        positions: [3, 5, 3, 3, 3, 3], fingers: [1, 3, 1, 1, 1, 1],
+        tip: "食指橫按第 3 格，無名指按第 5 弦第 5 格。"
+      },
+      {
+        name: "Cadd9", fullName: "C 加九和弦", type: "C add nine", notes: "C・E・G・D",
+        positions: ["x", 3, 2, 0, 3, 3], fingers: ["x", 2, 1, 0, 3, 4],
+        tip: "在 C 大調上加入 D 音，常用於流行與民謠伴奏。"
+      },
+      {
+        name: "Gadd9", fullName: "G 加九和弦", type: "G add nine", notes: "G・B・D・A",
+        positions: [3, 2, 0, 2, 0, 3], fingers: [3, 2, 0, 1, 0, 4],
+        tip: "在 G 大調和弦中加入 A 音，留意第 3 弦第 2 格。"
+      },
+      {
+        name: "Bm", fullName: "B 小調（封閉和弦）", type: "B minor", notes: "B・D・F♯",
+        positions: ["x", 2, 4, 4, 3, 2], fingers: ["x", 1, 3, 4, 2, 1],
+        tip: "食指橫按第 2 格；先只彈第 5 到第 1 弦，熟練後再加強音量。"
+      }
+    ];
+
+    let chords = basicChords;
+    let audioContext;
+    const numberSelect = document.getElementById("number-select");
+    const chordSelect = document.getElementById("chord-select");
+    const stringNames = ["6弦 E", "5弦 A", "4弦 D", "3弦 G", "2弦 B", "1弦 E"];
+    const svgNS = "http://www.w3.org/2000/svg";
+    const allChords = [...basicChords, ...advancedChords];
+    const progressionDefaults = ["F", "G", "Am", "C", "D", "Fm"];
+    const progressionStorageKey = "guitar-chord-practice-progression";
+    const savedSongsKey = "guitar-chord-practice-saved-songs";
+
+    function populateChordOptions(selectedName = chords[0].name) {
+      numberSelect.replaceChildren();
+      chordSelect.replaceChildren();
+      chords.forEach((chord, index) => {
+      const numberOption = document.createElement("option");
+      numberOption.value = index;
+      numberOption.textContent = `${String(index + 1).padStart(2, "0")}. ${chord.name}`;
+      numberSelect.append(numberOption);
+
+      const chordOption = document.createElement("option");
+      chordOption.value = index;
+      chordOption.textContent = `${chord.name} — ${chord.fullName}`;
+      chordSelect.append(chordOption);
+      });
+      const selectedIndex = Math.max(0, chords.findIndex((chord) => chord.name === selectedName));
+      showChord(selectedIndex);
+    }
+
+    function svgElement(tag, attributes = {}, text = "") {
+      const element = document.createElementNS(svgNS, tag);
+      Object.entries(attributes).forEach(([key, value]) => element.setAttribute(key, value));
+      if (text) element.textContent = text;
+      return element;
+    }
+
+    function drawDiagram(chord, svg = document.getElementById("diagram")) {
+      svg.replaceChildren();
+      svg.setAttribute("aria-label", `${chord.name} 和弦指法圖，左側為第六弦`);
+
+      const left = 62;
+      const right = 238;
+      const top = 54;
+      const fretHeight = 38;
+      const stringGap = (right - left) / 5;
+      const visibleFrets = 4;
+      const frettedPositions = chord.positions.filter((position) => typeof position === "number" && position > 0);
+      const lastFrettedPosition = frettedPositions.length ? Math.max(...frettedPositions) : 0;
+      const firstVisibleFret = Math.max(0, lastFrettedPosition - visibleFrets);
+
+      for (let string = 0; string < 6; string++) {
+        const x = left + string * stringGap;
+        svg.append(svgElement("line", {
+          x1: x, y1: top, x2: x, y2: top + fretHeight * visibleFrets, class: "string-line"
+        }));
+        svg.append(svgElement("text", {
+          x, y: top - 27, "text-anchor": "middle", class: "string-label"
+        }, ["E", "A", "D", "G", "B", "E"][string]));
+      }
+
+      for (let fret = 0; fret <= visibleFrets; fret++) {
+        const y = top + fret * fretHeight;
+        svg.append(svgElement("line", {
+          x1: left, y1: y, x2: right, y2: y,
+          class: fret === 0 && firstVisibleFret === 0 ? "nut-line" : "fret-line"
+        }));
+        if (fret < visibleFrets) {
+          svg.append(svgElement("text", {
+            x: left - 21, y: y + fretHeight / 2 + 4,
+            "text-anchor": "middle", class: "fret-label"
+          }, String(firstVisibleFret + fret + 1)));
+        }
+      }
+
+      chord.positions.forEach((position, string) => {
+        const x = left + string * stringGap;
+        if (position === "x" || position === 0) {
+          svg.append(svgElement("text", {
+            x, y: top - 7, "text-anchor": "middle", class: "string-label"
+          }, position === "x" ? "×" : "○"));
+          return;
+        }
+
+        const y = top + (position - firstVisibleFret - 0.5) * fretHeight;
+        svg.append(svgElement("circle", {
+          cx: x, cy: y, r: 12, fill: "#315c45"
+        }));
+        const finger = chord.fingers[string];
+        if (finger) {
+          svg.append(svgElement("text", {
+            x, y: y + 4, "text-anchor": "middle", class: "finger-label"
+          }, String(finger)));
+        }
+      });
+    }
+
+    function renderFingerList(chord) {
+      const list = document.getElementById("finger-list");
+      list.replaceChildren();
+      chord.positions.forEach((position, string) => {
+        const item = document.createElement("li");
+        const badge = document.createElement("span");
+        badge.className = "finger-badge";
+
+        let description;
+        if (position === "x") {
+          badge.classList.add("mute", "open");
+          badge.textContent = "×";
+          description = `${stringNames[string]}：不彈`;
+        } else if (position === 0) {
+          badge.classList.add("open");
+          badge.textContent = "○";
+          description = `${stringNames[string]}：空弦`;
+        } else {
+          badge.textContent = String(chord.fingers[string]);
+          description = `${stringNames[string]}：第 ${position} 格`;
+        }
+
+        item.append(badge, document.createTextNode(description));
+        list.append(item);
+      });
+    }
+
+    function showChord(index) {
+      const chord = chords[index];
+      numberSelect.value = String(index);
+      chordSelect.value = String(index);
+      document.getElementById("chord-number").textContent = `和弦 ${index + 1} / ${chords.length}`;
+      document.getElementById("chord-name").textContent = chord.name;
+      document.getElementById("chord-type").textContent = chord.fullName;
+      document.getElementById("note-list").textContent = `組成音：${chord.notes}`;
+      document.getElementById("tip").textContent = chord.tip;
+      drawDiagram(chord);
+      renderFingerList(chord);
+    }
+
+    function createPluckedString(context, frequency, startTime) {
+      const sampleRate = context.sampleRate;
+      const period = Math.max(2, Math.round(sampleRate / frequency));
+      const duration = 2.2;
+      const sampleCount = Math.floor(sampleRate * duration);
+      const audioBuffer = context.createBuffer(1, sampleCount, sampleRate);
+      const output = audioBuffer.getChannelData(0);
+      const ring = new Float32Array(period);
+      for (let i = 0; i < period; i++) ring[i] = Math.random() * 2 - 1;
+
+      let cursor = 0;
+      for (let i = 0; i < sampleCount; i++) {
+        const next = (cursor + 1) % period;
+        const value = (ring[cursor] + ring[next]) * 0.5;
+        ring[cursor] = value;
+        output[i] = value;
+        cursor = next;
+      }
+
+      const source = context.createBufferSource();
+      const filter = context.createBiquadFilter();
+      const gain = context.createGain();
+      source.buffer = audioBuffer;
+      filter.type = "lowpass";
+      filter.frequency.value = 4200;
+      gain.gain.setValueAtTime(0.52, startTime);
+      gain.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
+      source.connect(filter).connect(gain).connect(context.destination);
+      source.start(startTime);
+      source.stop(startTime + duration);
+    }
+
+    async function playChord(
+      chord = chords[Number(numberSelect.value)],
+      button = document.getElementById("play-chord"),
+      status = document.getElementById("audio-status")
+    ) {
+      button.disabled = true;
+      status.textContent = "正在播放和弦…";
+
+      try {
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContextClass) throw new Error("這個瀏覽器不支援 Web Audio。");
+        audioContext ??= new AudioContextClass();
+        if (audioContext.state === "suspended") await audioContext.resume();
+
+        const openStringMidi = [40, 45, 50, 55, 59, 64];
+        const startTime = audioContext.currentTime + 0.04;
+        let strumIndex = 0;
+        chord.positions.forEach((position, string) => {
+          if (position === "x") return;
+          const fret = position;
+          const midi = openStringMidi[string] + fret;
+          const frequency = 440 * Math.pow(2, (midi - 69) / 12);
+          createPluckedString(audioContext, frequency, startTime + strumIndex * 0.035);
+          strumIndex++;
+        });
+        window.setTimeout(() => {
+          status.textContent = "";
+          button.disabled = false;
+        }, 2300);
+      } catch (error) {
+        status.textContent = `無法播放：${error.message}`;
+        button.disabled = false;
+      }
+    }
+
+    document.getElementById("mode-select").addEventListener("change", (event) => {
+      const selectedName = chords[Number(numberSelect.value)].name;
+      chords = event.target.value === "advanced"
+        ? [...basicChords, ...advancedChords]
+        : basicChords;
+      populateChordOptions(selectedName);
+    });
+    numberSelect.addEventListener("change", () => showChord(Number(numberSelect.value)));
+    chordSelect.addEventListener("change", () => showChord(Number(chordSelect.value)));
+    document.getElementById("previous").addEventListener("click", () => {
+      showChord((Number(numberSelect.value) + chords.length - 1) % chords.length);
+    });
+    document.getElementById("next").addEventListener("click", () => {
+      showChord((Number(numberSelect.value) + 1) % chords.length);
+    });
+    document.getElementById("play-chord").addEventListener("click", () => playChord());
+
+    function renderProgression() {
+      const grid = document.getElementById("progression-grid");
+      grid.replaceChildren();
+      let savedProgression = progressionDefaults;
+      const progressionStatus = document.getElementById("progression-status");
+      try {
+        const rawProgression = localStorage.getItem(progressionStorageKey);
+        if (rawProgression) {
+          const parsedProgression = JSON.parse(rawProgression);
+          if (!Array.isArray(parsedProgression) ||
+              parsedProgression.length !== progressionDefaults.length ||
+              parsedProgression.some((name) => !allChords.some((chord) => chord.name === name))) {
+            throw new Error("和弦進行資料格式不正確。");
+          }
+          savedProgression = parsedProgression;
+        }
+        progressionStatus.textContent = "和弦進行會在每次選擇後自動儲存到本機。";
+      } catch (error) {
+        progressionStatus.textContent = `無法讀取和弦進行：${error.message}`;
+      }
+
+      progressionDefaults.forEach((defaultName, slotIndex) => {
+        const item = document.createElement("div");
+        item.className = "progression-item";
+
+        const label = document.createElement("label");
+        label.htmlFor = `progression-${slotIndex}`;
+        label.textContent = `和弦 ${slotIndex + 1}`;
+
+        const select = document.createElement("select");
+        select.id = `progression-${slotIndex}`;
+        select.setAttribute("aria-label", `選擇第 ${slotIndex + 1} 個和弦`);
+        allChords.forEach((chord) => {
+          const option = document.createElement("option");
+          option.value = chord.name;
+          option.textContent = `${chord.name} — ${chord.fullName}`;
+          select.append(option);
+        });
+        select.value = allChords.some((chord) => chord.name === savedProgression[slotIndex])
+          ? savedProgression[slotIndex]
+          : defaultName;
+
+        const name = document.createElement("p");
+        name.className = "progression-chord-name";
+        const diagram = svgElement("svg", {
+          viewBox: "0 0 300 270",
+          class: "progression-diagram",
+          role: "img"
+        });
+        const playButton = document.createElement("button");
+        playButton.type = "button";
+        playButton.className = "progression-play";
+        playButton.textContent = "▶ 播放";
+        const status = document.createElement("p");
+        status.className = "audio-status";
+        status.setAttribute("aria-live", "polite");
+
+        function updateItem() {
+          const chord = allChords.find((entry) => entry.name === select.value);
+          name.textContent = chord.name;
+          drawDiagram(chord, diagram);
+        }
+
+        select.addEventListener("change", updateItem);
+        select.addEventListener("change", () => {
+          try {
+            const selection = Array.from(grid.querySelectorAll("select"), (entry) => entry.value);
+            localStorage.setItem(progressionStorageKey, JSON.stringify(selection));
+            progressionStatus.textContent = "和弦進行已自動儲存到本機。";
+          } catch (error) {
+            progressionStatus.textContent = `無法儲存和弦進行：${error.message}`;
+          }
+        });
+        playButton.addEventListener("click", () => {
+          const chord = allChords.find((entry) => entry.name === select.value);
+          playChord(chord, playButton, status);
+        });
+        updateItem();
+        item.append(label, select, name, diagram, playButton, status);
+        grid.append(item);
+      });
+    }
+
+    function searchUrlFor(title) {
+      return `https://www.google.com/search?q=${encodeURIComponent(`site:kanpu8.com ${title} 吉他譜`)}`;
+    }
+
+    function readSavedSongs() {
+      const raw = localStorage.getItem(savedSongsKey);
+      if (!raw) return [];
+      const songs = JSON.parse(raw);
+      if (!Array.isArray(songs) || songs.some((song) =>
+        !song || typeof song.title !== "string" || typeof song.url !== "string"
+      )) {
+        throw new Error("收藏資料格式不正確，請清除損壞的收藏資料後再試。");
+      }
+      return songs;
+    }
+
+    function renderSavedSongs() {
+      const list = document.getElementById("saved-songs");
+      list.replaceChildren();
+      const songs = readSavedSongs();
+      songs.forEach((song, index) => {
+        const item = document.createElement("li");
+        item.className = "saved-song";
+        const main = document.createElement("div");
+        main.className = "saved-song-main";
+        const link = document.createElement("a");
+        link.href = song.url;
+        link.target = "_blank";
+        link.rel = "noopener noreferrer";
+        link.textContent = song.title;
+        const actions = document.createElement("div");
+        actions.className = "saved-song-actions";
+        const removeButton = document.createElement("button");
+        removeButton.type = "button";
+        removeButton.textContent = "移除";
+        removeButton.setAttribute("aria-label", `移除收藏：${song.title}`);
+        removeButton.addEventListener("click", () => {
+          try {
+            const updatedSongs = readSavedSongs();
+            updatedSongs.splice(index, 1);
+            localStorage.setItem(savedSongsKey, JSON.stringify(updatedSongs));
+            renderSavedSongs();
+            document.getElementById("music-status").textContent = "已移除收藏。";
+          } catch (error) {
+            document.getElementById("music-status").textContent = `無法更新收藏：${error.message}`;
+          }
+        });
+        actions.append(removeButton);
+        main.append(link, actions);
+
+        const notes = document.createElement("div");
+        notes.className = "song-notes";
+        const notesInput = document.createElement("textarea");
+        notesInput.value = typeof song.notes === "string" ? song.notes : "";
+        notesInput.setAttribute("aria-label", `${song.title} 的個人練習筆記`);
+        notesInput.placeholder = "記錄自己的和弦進行、練習重點或備註…";
+        const saveNotesButton = document.createElement("button");
+        saveNotesButton.type = "button";
+        saveNotesButton.textContent = "儲存筆記";
+        saveNotesButton.addEventListener("click", () => {
+          try {
+            const updatedSongs = readSavedSongs();
+            updatedSongs[index] = {
+              ...updatedSongs[index],
+              notes: notesInput.value.trim()
+            };
+            localStorage.setItem(savedSongsKey, JSON.stringify(updatedSongs));
+            document.getElementById("music-status").textContent = `已儲存「${song.title}」的個人筆記。`;
+          } catch (error) {
+            document.getElementById("music-status").textContent = `無法儲存筆記：${error.message}`;
+          }
+        });
+        notes.append(notesInput, saveNotesButton);
+        item.append(main, notes);
+        list.append(item);
+      });
+    }
+
+    document.getElementById("search-song").addEventListener("click", () => {
+      const title = document.getElementById("song-title").value.trim();
+      const status = document.getElementById("music-status");
+      if (!title) {
+        status.textContent = "請先輸入曲名再搜尋。";
+        document.getElementById("song-title").focus();
+        return;
+      }
+      const searchUrl = searchUrlFor(title);
+      const searchWindow = window.open(searchUrl, "_blank");
+      if (searchWindow) searchWindow.opener = null;
+      status.textContent = searchWindow ? "已開啟 kanpu8 樂譜搜尋結果。" : "瀏覽器封鎖了新視窗，請允許開啟搜尋結果。";
+    });
+
+    document.getElementById("music-form").addEventListener("submit", (event) => {
+      event.preventDefault();
+      const title = document.getElementById("song-title").value.trim();
+      const enteredUrl = document.getElementById("song-url").value.trim();
+      const status = document.getElementById("music-status");
+      if (!title) {
+        status.textContent = "請輸入曲名後再收藏。";
+        return;
+      }
+
+      let url = searchUrlFor(title);
+      if (enteredUrl) {
+        try {
+          const parsedUrl = new URL(enteredUrl);
+          if (parsedUrl.protocol !== "https:") throw new Error("請使用 https 開頭的譜頁網址。");
+          url = parsedUrl.href;
+        } catch (error) {
+          status.textContent = `網址無效：${error.message}`;
+          return;
+        }
+      }
+
+      try {
+        const songs = readSavedSongs();
+        if (songs.some((song) => song.title.toLocaleLowerCase() === title.toLocaleLowerCase())) {
+          status.textContent = "這首曲目已收藏；如要更新連結，請先移除舊項目。";
+          return;
+        }
+        songs.push({ title, url, notes: "" });
+        localStorage.setItem(savedSongsKey, JSON.stringify(songs));
+        renderSavedSongs();
+        status.textContent = "已收藏；下次使用此瀏覽器開啟頁面仍可查看。";
+        document.getElementById("song-title").value = "";
+        document.getElementById("song-url").value = "";
+      } catch (error) {
+        status.textContent = `無法儲存收藏：${error.message}`;
+      }
+    });
+
+    renderProgression();
+    try {
+      renderSavedSongs();
+    } catch (error) {
+      document.getElementById("music-status").textContent = `無法讀取收藏：${error.message}`;
+    }
+    populateChordOptions();
+  </script>
+</body>
+</html>

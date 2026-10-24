@@ -69,7 +69,7 @@
     .milestone-message[hidden] { display: none; }
     .fireworks { position: fixed; z-index: 1; inset: 0; width: 100%; height: 100%; pointer-events: none; }
 
-    .choices { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+    .choices { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
     .choice {
       position: relative;
       display: flex;
@@ -85,6 +85,7 @@
       animation: rise .65s ease both;
     }
     .choice:nth-child(2) { animation-delay: .12s; }
+    .choice:nth-child(3) { animation-delay: .24s; }
     .choice:hover, .choice:focus-visible {
       transform: translateY(-4px);
       border-color: var(--teal);
@@ -93,6 +94,7 @@
     }
     .choice-idiom { border-top: 5px solid var(--coral); }
     .choice-english { border-top: 5px solid var(--teal); }
+    .choice-guitar { border-top: 5px solid var(--gold); }
     .choice-label { color: var(--muted); font-size: 12px; letter-spacing: .12em; }
     .choice-art {
       display: grid;
@@ -126,6 +128,7 @@
       font-weight: 700;
     }
     .tense-art span:nth-child(2n) { color: var(--coral); background: rgba(220, 118, 94, .08); }
+    .chord-art { color: var(--teal-deep); font-family: Georgia, serif; font-size: clamp(24px, 3vw, 34px); font-weight: 700; letter-spacing: .04em; }
     .choice-bottom { display: flex; align-items: end; justify-content: space-between; gap: 16px; }
     .choice h2 { margin: 0; color: var(--teal-deep); font-family: 'Noto Serif TC', 'PMingLiU', serif; font-size: 28px; }
     .choice-english h2 { color: var(--ink); }
@@ -163,7 +166,7 @@
     <section class="intro" aria-labelledby="page-title">
       <div class="eyebrow">LEARN SOMETHING TODAY</div>
       <h1 id="page-title">今天想學什麼？</h1>
-      <p>挑一個主題，從一點點開始。成語和英文時態都整理在這裡。</p>
+      <p>挑一個主題，從一點點開始。成語、英文時態和吉他和弦練習都整理在這裡。</p>
       <p class="visit-count" aria-live="polite">累計 <strong id="visit-count">…</strong> 人次開啟本頁</p>
     </section>
 
@@ -189,6 +192,18 @@
           <span>
             <h2>英文時態</h2>
             <p>掌握英文 12 種基本時態與句型。</p>
+          </span>
+          <span class="arrow" aria-hidden="true">→</span>
+        </span>
+      </a>
+
+      <a class="choice choice-guitar" href="Guitar.html">
+        <span class="choice-label">BEGINNER · GUITAR CHORDS</span>
+        <span class="choice-art chord-art" aria-hidden="true">C · G · Am · F</span>
+        <span class="choice-bottom">
+          <span>
+            <h2>吉他和弦</h2>
+            <p>練習入門和弦指法、和弦進行與吉他譜。</p>
           </span>
           <span class="arrow" aria-hidden="true">→</span>
         </span>
