@@ -14,6 +14,7 @@ function setup({ state = "suspended", resumeState = "running", resumeError, pend
   supported = true, prefixed = false, audioSession = true } = {}) {
   const calls = [];
   const contexts = [];
+  const buffers = [];
   const timers = new Map();
   const button = { disabled: false };
   const status = { textContent: "" };
@@ -35,6 +36,7 @@ function setup({ state = "suspended", resumeState = "running", resumeError, pend
       return Promise.resolve();
     }
     createBuffer(channels, length) {
+      buffers.push({ channels, length });
       return { length, getChannelData: () => new Float32Array(length) };
     }
     createBufferSource() {
@@ -70,8 +72,9 @@ function setup({ state = "suspended", resumeState = "running", resumeError, pend
   });
   vm.runInContext(`let audioContext;\n${audioCode}`, sandbox);
   return {
-    calls, contexts, timers, button, status, navigator, chord,
+    calls, contexts, buffers, timers, button, status, navigator, chord,
     play: (...args) => sandbox.playChord(...args),
+    stringOrder: (...args) => sandbox.getRhythmStringOrder(...args),
     tick(delay) {
       for (const [id, timer] of timers) {
         if (timer.delay === delay) {
@@ -82,6 +85,13 @@ function setup({ state = "suspended", resumeState = "running", resumeError, pend
     }
   };
 }
+
+test("upstroke runs from string 1 to 6 and downstroke from 6 to 1", () => {
+  const env = setup();
+  const openChord = { positions: [0, 0, 0, 0, 0, 0] };
+  assert.deepEqual(Array.from(env.stringOrder(openChord, "up", 0), ({ string }) => string), [5, 4, 3, 2, 1, 0]);
+  assert.deepEqual(Array.from(env.stringOrder(openChord, "down", 0), ({ string }) => string), [0, 1, 2, 3, 4, 5]);
+});
 
 test("iOS tap resumes and unlocks audio before awaiting, then strums audible strings", async () => {
   const env = setup();
@@ -116,6 +126,7 @@ test("running contexts are reused without extra resume or unlock", async () => {
   assert.equal(env.contexts.length, 1);
   assert.equal(env.calls.includes("resume"), false);
   assert.equal(env.calls.filter((call) => typeof call === "object" && call.length > 1).length, 10);
+  assert.equal(env.buffers.filter((buffer) => buffer.length > 1).length, 5);
 });
 
 test("closed contexts are recreated and legacy webkitAudioContext remains supported", async () => {

@@ -228,6 +228,40 @@
     .progression-chord-name { margin: 12px 0 0; color: var(--green-dark); font-size: 1.15rem; font-weight: 800; }
     .progression-diagram { display: block; width: min(100%, 205px); height: auto; margin: 0 auto; }
     .progression-play { min-height: 34px; margin-top: 9px; padding: 0 12px; font-size: .83rem; }
+    .rhythm-card { padding: 22px; border: 1px solid #e7e2d8; background: var(--card); }
+    .rhythm-settings { display: grid; grid-template-columns: 1.6fr repeat(4, minmax(105px, 1fr)); gap: 12px; margin-bottom: 16px; }
+    .rhythm-settings input, .rhythm-settings select {
+      width: 100%; min-height: 42px; padding: 0 10px; border: 1px solid #d8d7cd;
+      border-radius: 9px; background: white; color: var(--ink); font: inherit;
+    }
+    .rhythm-toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 9px; margin-bottom: 18px; }
+    .rhythm-lines { display: grid; gap: 14px; }
+    .rhythm-line { padding: 12px 0 0; border-top: 1px solid var(--line); }
+    .rhythm-line-header { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+    .rhythm-line-title { flex: 1; font-size: .9rem; font-weight: 800; }
+    .rhythm-line-header button { min-height: 34px; padding: 0 10px; font-size: .8rem; }
+    .rhythm-grid-wrap { overflow-x: auto; padding-bottom: 8px; }
+    .measure-grid { display: grid; grid-template-columns: repeat(16, minmax(56px, 1fr));
+      min-width: 896px; gap: 7px 0; align-items: stretch; }
+    .sixteenth-label { grid-row: 1; color: var(--muted); font-size: .72rem; text-align: center; }
+    .sixteenth-label.beat-start { border-left: 1px solid var(--line); }
+    .strum-slot, .chord-cell-select { min-width: 0; grid-column: auto; }
+    .strum-slot {
+      display: grid; min-height: 40px; place-items: center; margin: 0 2px;
+      border-radius: 7px; background: #e8eee7; color: var(--green-dark); font-weight: 800;
+    }
+    .strum-slot:nth-of-type(4n + 2) { background: #f3eee3; }
+    .chord-cell-select { width: calc(100% - 4px); min-height: 40px; margin: 0 2px; padding: 0 3px;
+      border: 1px solid #d8d7cd; border-radius: 8px; background: white; color: var(--ink); font: inherit; font-size: .78rem; }
+    .rhythm-help, .rhythm-status { margin: 12px 0 0; color: var(--muted); font-size: .84rem; line-height: 1.6; }
+    .rhythm-status { min-height: 1.3em; }
+    .file-button {
+      position: relative; display: inline-flex; min-height: 42px; align-items: center; padding: 0 15px;
+      overflow: hidden; border: 1px solid #d8d7cd; border-radius: 10px; background: white;
+      color: var(--ink); font: inherit; font-weight: 700; cursor: pointer;
+    }
+    .file-button:hover { border-color: var(--green); color: var(--green); }
+    .file-button input { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
     .music-form {
       display: grid;
       grid-template-columns: 1fr 1.3fr auto auto;
@@ -294,6 +328,9 @@
       .details { width: min(100%, 430px); margin: 0 auto; }
       .controls { padding: 14px 17px; }
       .progression-card, .music-card { padding: 15px; }
+      .rhythm-card { padding: 15px; }
+      .rhythm-settings { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .rhythm-settings > :first-child { grid-column: 1 / -1; }
       .progression-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; }
       .music-form { grid-template-columns: 1fr 1fr; }
       .music-form button { width: 100%; }
@@ -362,6 +399,48 @@
       <div class="progression-card">
         <div class="progression-grid" id="progression-grid"></div>
         <p class="progression-status" id="progression-status" role="status" aria-live="polite"></p>
+      </div>
+    </section>
+
+    <section class="extra-section" aria-labelledby="rhythm-heading">
+      <h2 class="section-heading" id="rhythm-heading">節奏範例演奏</h2>
+      <p class="section-description">以一行一小節編排整首歌。撥法固定為八個八分音符位置，橫軸標示完整 4/4 十六分拍。</p>
+      <div class="rhythm-card">
+        <div class="rhythm-settings">
+          <div>
+            <label for="rhythm-title">演奏稿名稱</label>
+            <input id="rhythm-title" type="text" value="我的演奏稿" maxlength="80">
+          </div>
+          <div>
+            <label for="rhythm-key">歌曲調性 Key</label>
+            <select id="rhythm-key"><option>C</option><option>C#</option><option>D</option><option>Eb</option><option>E</option><option>F</option><option>F#</option><option>G</option><option>Ab</option><option>A</option><option>Bb</option><option>B</option></select>
+          </div>
+          <div>
+            <label for="rhythm-play-key">指法調 Play</label>
+            <select id="rhythm-play-key"><option>C</option><option>C#</option><option>D</option><option>Eb</option><option>E</option><option>F</option><option>F#</option><option>G</option><option>Ab</option><option>A</option><option>Bb</option><option>B</option></select>
+          </div>
+          <div>
+            <label for="rhythm-capo">移調夾 Capo</label>
+            <input id="rhythm-capo" type="number" min="0" max="11" value="2">
+          </div>
+          <div>
+            <label for="rhythm-tempo">速度 BPM</label>
+            <input id="rhythm-tempo" type="number" min="40" max="220" value="96">
+          </div>
+        </div>
+        <p class="rhythm-status" id="rhythm-key-status" role="status" aria-live="polite"></p>
+        <div class="rhythm-toolbar">
+          <button type="button" class="next" id="play-rhythm">▶ 播放範例</button>
+          <button type="button" id="stop-rhythm" disabled>■ 停止</button>
+          <button type="button" id="add-rhythm-line">＋ 新增一行</button>
+          <label class="file-button">↑ 匯入 JSON<input id="import-rhythm" type="file" accept=".json,application/json"></label>
+          <button type="button" id="download-rhythm">↓ 下載 JSON</button>
+        </div>
+        <div class="rhythm-grid-wrap">
+          <div class="rhythm-lines" id="rhythm-lines"></div>
+        </div>
+        <p class="rhythm-help">每行是 4/4 一小節，共 16 個十六分格；每格可分別選和弦與休、x、up、down、^ 或 .。x 從根音最低弦下撥；^ 與 . 不重新撥弦，讓前音延續。Capo 會改變實際發聲音高。演奏稿會自動保存在此瀏覽器，也可匯入或下載 JSON。</p>
+        <p class="rhythm-status" id="rhythm-status" role="status" aria-live="polite"></p>
       </div>
     </section>
 
@@ -722,19 +801,30 @@
       const sampleRate = context.sampleRate;
       const period = Math.max(2, Math.round(sampleRate / frequency));
       const duration = 2.2;
-      const sampleCount = Math.floor(sampleRate * duration);
-      const audioBuffer = context.createBuffer(1, sampleCount, sampleRate);
-      const output = audioBuffer.getChannelData(0);
-      const ring = new Float32Array(period);
-      for (let i = 0; i < period; i++) ring[i] = Math.random() * 2 - 1;
+      const cache = createPluckedString.cache || (createPluckedString.cache = new WeakMap());
+      let contextCache = cache.get(context);
+      if (!contextCache) {
+        contextCache = new Map();
+        cache.set(context, contextCache);
+      }
+      const bufferKey = `${sampleRate}:${period}`;
+      let audioBuffer = contextCache.get(bufferKey);
+      if (!audioBuffer) {
+        const sampleCount = Math.floor(sampleRate * duration);
+        audioBuffer = context.createBuffer(1, sampleCount, sampleRate);
+        const output = audioBuffer.getChannelData(0);
+        const ring = new Float32Array(period);
+        for (let i = 0; i < period; i++) ring[i] = Math.random() * 2 - 1;
 
-      let cursor = 0;
-      for (let i = 0; i < sampleCount; i++) {
-        const next = (cursor + 1) % period;
-        const value = (ring[cursor] + ring[next]) * 0.5;
-        ring[cursor] = value;
-        output[i] = value;
-        cursor = next;
+        let cursor = 0;
+        for (let i = 0; i < sampleCount; i++) {
+          const next = (cursor + 1) % period;
+          const value = (ring[cursor] + ring[next]) * 0.5;
+          ring[cursor] = value;
+          output[i] = value;
+          cursor = next;
+        }
+        contextCache.set(bufferKey, audioBuffer);
       }
 
       const source = context.createBufferSource();
@@ -748,6 +838,7 @@
       source.connect(filter).connect(gain).connect(context.destination);
       source.start(startTime);
       source.stop(startTime + duration);
+      return source;
     }
 
     async function prepareAudio() {
@@ -818,6 +909,291 @@
         status.textContent = `無法播放：${error.message}`;
         button.disabled = false;
       }
+    }
+
+    const rhythmStorageKey = "guitar-chord-practice-arrangement";
+    const rhythmLegacyPattern = ["x", "x", "up", "updown", "x", "x", "up", "updown"];
+    const rhythmDefaultRows = [[
+      { chord: "F", stroke: "x" }, { chord: "F", stroke: "" },
+      { chord: "G", stroke: "x" }, { chord: "G", stroke: "" },
+      { chord: "Am", stroke: "up" }, { chord: "Am", stroke: "" },
+      { chord: "Am", stroke: "up" }, { chord: "Am", stroke: "down" },
+      { chord: "F", stroke: "x" }, { chord: "F", stroke: "" },
+      { chord: "G", stroke: "x" }, { chord: "G", stroke: "" },
+      { chord: "Am", stroke: "up" }, { chord: "Am", stroke: "" },
+      { chord: "Am", stroke: "up" }, { chord: "Am", stroke: "down" }
+    ]];
+    const rhythmStrokeOptions = [
+      ["", "休"], ["x", "x"], ["up", "up"], ["down", "down"], ["^", "^"], [".", "."]
+    ];
+    const rhythmNoteNames = ["C", "C#", "D", "Eb", "E", "F", "F#", "G", "Ab", "A", "Bb", "B"];
+    let rhythmTitle = "我的演奏稿";
+    let rhythmKey = "D";
+    let rhythmPlayKey = "C";
+    let rhythmCapo = 2;
+    let rhythmTempo = 96;
+    let rhythmRows = rhythmDefaultRows.map((row) => row.map((cell) => ({ ...cell })));
+    let rhythmSources = [];
+    let rhythmEndTimer;
+
+    function pitchClass(noteName) {
+      const match = noteName.match(/^([A-G])(#|b)?$/);
+      const naturalPitch = { C: 0, D: 2, E: 4, F: 5, G: 7, A: 9, B: 11 };
+      if (!match) return 0;
+      return (naturalPitch[match[1]] + (match[2] === "#" ? 1 : match[2] === "b" ? 11 : 0)) % 12;
+    }
+
+    function transposedChordName(chordName, semitones) {
+      const match = chordName.match(/^([A-G](?:#|b)?)(.*)$/);
+      if (!match) return chordName;
+      const pitch = (pitchClass(match[1]) + semitones + 12) % 12;
+      return `${rhythmNoteNames[pitch]}${match[2]}`;
+    }
+
+    function rhythmPitchOffset() {
+      return pitchClass(rhythmPlayKey);
+    }
+
+    function rhythmKeySummary() {
+      const actualPitch = (rhythmPitchOffset() + rhythmCapo) % 12;
+      const actualKey = rhythmNoteNames[actualPitch];
+      const keyMatches = actualPitch === pitchClass(rhythmKey);
+      const suffix = keyMatches ? "符合歌曲原調" : `與歌曲原調差 ${Math.min(
+        (actualPitch - pitchClass(rhythmKey) + 12) % 12,
+        (pitchClass(rhythmKey) - actualPitch + 12) % 12
+      )} 半音`;
+      return `Key ${rhythmKey} · Play ${rhythmPlayKey} + Capo ${rhythmCapo} = 實音 ${actualKey}（${suffix}）`;
+    }
+
+    function saveRhythmSheet() {
+      localStorage.setItem(rhythmStorageKey, JSON.stringify({
+        version: 3,
+        title: rhythmTitle,
+        key: rhythmKey,
+        playKey: rhythmPlayKey,
+        capo: rhythmCapo,
+        tempo: rhythmTempo,
+        rows: rhythmRows
+      }));
+    }
+
+    function persistRhythmSheet(message = "演奏稿已自動儲存。") {
+      try {
+        saveRhythmSheet();
+        document.getElementById("rhythm-status").textContent = message;
+      } catch (error) {
+        document.getElementById("rhythm-status").textContent = `無法儲存演奏稿：${error.message}`;
+      }
+    }
+
+    function normalizeRhythmRow(row) {
+      const validChord = (name) => allChords.some((chord) => chord.name === name);
+      const validStroke = (stroke) => rhythmStrokeOptions.some(([value]) => value === stroke);
+      if (!Array.isArray(row)) return null;
+      if (row.length === 16 && row.every((cell) => cell &&
+          validChord(cell.chord) && validStroke(cell.stroke))) {
+        return row.map((cell) => ({ chord: cell.chord, stroke: cell.stroke }));
+      }
+      if (row.length === 8 && row.every(validChord)) {
+        return row.flatMap((chord, index) => {
+          const oldStroke = rhythmLegacyPattern[index];
+          return [
+            { chord, stroke: oldStroke === "updown" ? "up" : oldStroke },
+            { chord, stroke: oldStroke === "updown" ? "down" : "" }
+          ];
+        });
+      }
+      return null;
+    }
+
+    function renderRhythmGrid() {
+      const lines = document.getElementById("rhythm-lines");
+      lines.replaceChildren();
+      const subdivisionNames = ["1", "e", "&", "a", "2", "e", "&", "a", "3", "e", "&", "a", "4", "e", "&", "a"];
+
+      rhythmRows.forEach((row, rowIndex) => {
+        const line = document.createElement("section");
+        line.className = "rhythm-line";
+        const header = document.createElement("div");
+        header.className = "rhythm-line-header";
+        const title = document.createElement("span");
+        title.className = "rhythm-line-title";
+        title.textContent = `第 ${rowIndex + 1} 小節`;
+
+        const copyButton = document.createElement("button");
+        copyButton.type = "button";
+        copyButton.textContent = "複製到下一行";
+        copyButton.setAttribute("aria-label", `複製第 ${rowIndex + 1} 小節到下一行`);
+        copyButton.addEventListener("click", () => {
+          rhythmRows.splice(rowIndex + 1, 0, rhythmRows[rowIndex].map((cell) => ({ ...cell })));
+          renderRhythmGrid();
+          persistRhythmSheet("已將整行複製到下一小節。");
+        });
+
+        const removeButton = document.createElement("button");
+        removeButton.type = "button";
+        removeButton.textContent = "刪除";
+        removeButton.setAttribute("aria-label", `刪除第 ${rowIndex + 1} 小節`);
+        removeButton.disabled = rhythmRows.length === 1;
+        removeButton.addEventListener("click", () => {
+          if (rhythmRows.length <= 1) return;
+          rhythmRows.splice(rowIndex, 1);
+          renderRhythmGrid();
+          persistRhythmSheet("已刪除整個小節。");
+        });
+        header.append(title, copyButton, removeButton);
+
+        const grid = document.createElement("div");
+        grid.className = "measure-grid";
+        subdivisionNames.forEach((subdivision, index) => {
+          const label = document.createElement("div");
+          label.className = `sixteenth-label${index % 4 === 0 ? " beat-start" : ""}`;
+          label.style.gridColumn = String(index + 1);
+          label.style.gridRow = "1";
+          label.textContent = subdivision;
+          grid.append(label);
+        });
+
+        row.forEach((cell, index) => {
+          const strum = document.createElement("div");
+          strum.className = "strum-slot";
+          strum.style.gridColumn = String(index + 1);
+          strum.style.gridRow = "2";
+          strum.textContent = cell.stroke || "休";
+          grid.append(strum);
+
+          const select = document.createElement("select");
+          select.className = "chord-cell-select";
+          select.style.gridColumn = String(index + 1);
+          select.style.gridRow = "3";
+          select.setAttribute("aria-label", `第 ${rowIndex + 1} 小節第 ${subdivisionNames[index]} 拍和弦`);
+          allChords.forEach((chord) => {
+            const option = document.createElement("option");
+            option.value = chord.name;
+            option.textContent = transposedChordName(chord.name, rhythmPitchOffset());
+            select.append(option);
+          });
+          select.value = cell.chord;
+          select.addEventListener("change", () => {
+            rhythmRows[rowIndex][index].chord = select.value;
+            persistRhythmSheet("和弦已更新並儲存。");
+          });
+          grid.append(select);
+
+          const strokeSelect = document.createElement("select");
+          strokeSelect.className = "chord-cell-select";
+          strokeSelect.style.gridColumn = String(index + 1);
+          strokeSelect.style.gridRow = "4";
+          strokeSelect.setAttribute("aria-label", `第 ${rowIndex + 1} 小節第 ${subdivisionNames[index]} 拍撥法`);
+          rhythmStrokeOptions.forEach(([value, label]) => {
+            const option = document.createElement("option");
+            option.value = value;
+            option.textContent = label;
+            strokeSelect.append(option);
+          });
+          strokeSelect.value = cell.stroke;
+          strokeSelect.addEventListener("change", () => {
+            cell.stroke = strokeSelect.value;
+            strum.textContent = cell.stroke || "休";
+            persistRhythmSheet("撥法已更新並儲存。");
+          });
+          grid.append(strokeSelect);
+        });
+
+        line.append(header, grid);
+        lines.append(line);
+      });
+    }
+
+    function getBassString(chord, semitoneOffset) {
+      const openStringMidi = [40, 45, 50, 55, 59, 64];
+      const root = chord.name.match(/^([A-G](?:#|b)?)/);
+      const rootPitch = root ? (pitchClass(root[1]) + semitoneOffset) % 12 : null;
+      const playableStrings = chord.positions
+        .map((position, string) => ({ position, string }))
+        .filter(({ position }) => position !== "x");
+      return playableStrings.find(({ position, string }) =>
+        rootPitch !== null && (openStringMidi[string] + position + semitoneOffset) % 12 === rootPitch
+      )?.string ?? playableStrings[0]?.string;
+    }
+
+    function getRhythmStringOrder(chord, direction, semitoneOffset) {
+      const playableStrings = chord.positions
+        .map((position, string) => ({ position, string }))
+        .filter(({ position }) => position !== "x");
+      if (direction === "x") {
+        const bassString = getBassString(chord, semitoneOffset);
+        return playableStrings.filter(({ string }) => string === bassString);
+      }
+      return playableStrings.sort((first, second) =>
+        direction === "up" ? second.string - first.string : first.string - second.string
+      );
+    }
+
+    function playRhythmStroke(context, chord, direction, startTime, sources, semitoneOffset) {
+      const openStringMidi = [40, 45, 50, 55, 59, 64];
+      const orderedStrings = getRhythmStringOrder(chord, direction, semitoneOffset);
+      const stringSpacing = 0.04;
+      orderedStrings.forEach(({ position, string }, index) => {
+        const midi = openStringMidi[string] + position + semitoneOffset;
+        const frequency = 440 * Math.pow(2, (midi - 69) / 12);
+        sources.push(createPluckedString(context, frequency, startTime + index * stringSpacing));
+      });
+    }
+
+    async function playRhythm() {
+      const playButton = document.getElementById("play-rhythm");
+      const stopButton = document.getElementById("stop-rhythm");
+      const status = document.getElementById("rhythm-status");
+      const tempo = rhythmTempo;
+      playButton.disabled = true;
+      status.textContent = "正在啟動音訊…";
+
+      try {
+        const context = await prepareAudio();
+        window.clearTimeout(rhythmEndTimer);
+        rhythmSources.forEach((source) => {
+          if (source) source.stop();
+        });
+        rhythmSources = [];
+        const sixteenthNote = 15 / tempo;
+        const startTime = context.currentTime + 0.06;
+        const semitoneOffset = rhythmPitchOffset() + rhythmCapo;
+        rhythmRows.forEach((row, rowIndex) => {
+          row.forEach((cell, index) => {
+            if (!cell.stroke || cell.stroke === "^" || cell.stroke === ".") return;
+            const chord = allChords.find((entry) => entry.name === cell.chord);
+            const eventTime = startTime + (rowIndex * 16 + index) * sixteenthNote;
+            playRhythmStroke(context, chord, cell.stroke, eventTime, rhythmSources, semitoneOffset);
+          });
+        });
+        const totalDuration = rhythmRows.length * 16 * sixteenthNote;
+        status.textContent = `播放中 · ${rhythmRows.length} 小節 · ${rhythmKeySummary()}`;
+        stopButton.disabled = false;
+        rhythmEndTimer = window.setTimeout(() => {
+          rhythmSources = [];
+          playButton.disabled = false;
+          stopButton.disabled = true;
+          status.textContent = "播放完成。";
+        }, (totalDuration + 2.3) * 1000);
+      } catch (error) {
+        status.textContent = `無法播放：${error.message}`;
+        playButton.disabled = false;
+        stopButton.disabled = true;
+      }
+    }
+
+    function stopRhythm() {
+      window.clearTimeout(rhythmEndTimer);
+      rhythmSources.forEach((source) => {
+        if (source) {
+          try { source.stop(); } catch {}
+        }
+      });
+      rhythmSources = [];
+      document.getElementById("play-rhythm").disabled = false;
+      document.getElementById("stop-rhythm").disabled = true;
+      document.getElementById("rhythm-status").textContent = "已停止。";
     }
 
     document.getElementById("mode-select").addEventListener("change", (event) => {
@@ -1051,6 +1427,126 @@
       }
     });
 
+    const rhythmTitleInput = document.getElementById("rhythm-title");
+    const rhythmKeyInput = document.getElementById("rhythm-key");
+    const rhythmPlayKeyInput = document.getElementById("rhythm-play-key");
+    const rhythmCapoInput = document.getElementById("rhythm-capo");
+    const rhythmTempoInput = document.getElementById("rhythm-tempo");
+
+    function updateRhythmSettings(transposeDisplay = false) {
+      rhythmTitle = rhythmTitleInput.value.trim() || "我的演奏稿";
+      rhythmTitleInput.value = rhythmTitle;
+      rhythmKey = rhythmKeyInput.value;
+      rhythmPlayKey = rhythmPlayKeyInput.value;
+      rhythmCapo = Math.min(11, Math.max(0, Number(rhythmCapoInput.value) || 0));
+      rhythmCapoInput.value = String(rhythmCapo);
+      rhythmTempo = Math.min(220, Math.max(40, Number(rhythmTempoInput.value) || 96));
+      rhythmTempoInput.value = String(rhythmTempo);
+      document.getElementById("rhythm-key-status").textContent = rhythmKeySummary();
+      if (transposeDisplay) renderRhythmGrid();
+      persistRhythmSheet("設定已更新並自動儲存。");
+    }
+
+    rhythmTitleInput.addEventListener("change", () => updateRhythmSettings());
+    rhythmKeyInput.addEventListener("change", () => updateRhythmSettings());
+    rhythmPlayKeyInput.addEventListener("change", () => updateRhythmSettings(true));
+    rhythmCapoInput.addEventListener("change", () => updateRhythmSettings());
+    rhythmTempoInput.addEventListener("change", () => updateRhythmSettings());
+    document.getElementById("add-rhythm-line").addEventListener("click", () => {
+      rhythmRows.push(rhythmDefaultRows[0].map((cell) => ({ ...cell })));
+      renderRhythmGrid();
+      persistRhythmSheet("已新增一個小節。");
+    });
+    document.getElementById("import-rhythm").addEventListener("change", async (event) => {
+      const file = event.target.files[0];
+      if (!file) return;
+      try {
+        const imported = JSON.parse(await file.text());
+        const importedRows = imported?.rows?.map(normalizeRhythmRow);
+        if (!Array.isArray(importedRows) || importedRows.length === 0 || importedRows.some((row) => !row)) {
+          throw new Error("JSON 必須包含有效小節；每行需有 16 格，或舊格式的 8 個和弦。");
+        }
+        rhythmRows = importedRows;
+        rhythmTitle = typeof imported.title === "string" && imported.title.trim()
+          ? imported.title.trim()
+          : "我的演奏稿";
+        if (rhythmNoteNames.includes(imported.key)) rhythmKey = imported.key;
+        if (rhythmNoteNames.includes(imported.playKey)) rhythmPlayKey = imported.playKey;
+        if (Number.isInteger(imported.capo)) rhythmCapo = Math.min(11, Math.max(0, imported.capo));
+        if (Number.isFinite(imported.tempo)) rhythmTempo = Math.min(220, Math.max(40, imported.tempo));
+        rhythmTitleInput.value = rhythmTitle;
+        rhythmKeyInput.value = rhythmKey;
+        rhythmPlayKeyInput.value = rhythmPlayKey;
+        rhythmCapoInput.value = String(rhythmCapo);
+        rhythmTempoInput.value = String(rhythmTempo);
+        renderRhythmGrid();
+        document.getElementById("rhythm-key-status").textContent = rhythmKeySummary();
+        persistRhythmSheet(`已載入「${rhythmTitle}」並儲存到本機。`);
+      } catch (error) {
+        document.getElementById("rhythm-status").textContent = `無法載入 JSON：${error.message}`;
+      } finally {
+        event.target.value = "";
+      }
+    });
+    document.getElementById("play-rhythm").addEventListener("click", playRhythm);
+    document.getElementById("stop-rhythm").addEventListener("click", stopRhythm);
+    document.getElementById("download-rhythm").addEventListener("click", () => {
+      try {
+        saveRhythmSheet();
+        const file = new Blob([JSON.stringify({
+          version: 3,
+          title: rhythmTitle,
+          key: rhythmKey,
+          playKey: rhythmPlayKey,
+          capo: rhythmCapo,
+          tempo: rhythmTempo,
+          rows: rhythmRows
+        }, null, 2)], { type: "application/json" });
+        const downloadUrl = URL.createObjectURL(file);
+        const link = document.createElement("a");
+        link.href = downloadUrl;
+        link.download = `${rhythmTitle.replace(/[\\/:*?"<>|]/g, "-")}.json`;
+        link.click();
+        window.setTimeout(() => URL.revokeObjectURL(downloadUrl), 1000);
+        document.getElementById("rhythm-status").textContent = "已下載本機 JSON 備份。";
+      } catch (error) {
+        document.getElementById("rhythm-status").textContent = `無法下載演奏稿：${error.message}`;
+      }
+    });
+    try {
+      const savedRhythmSheet = JSON.parse(
+        localStorage.getItem(rhythmStorageKey) ||
+        localStorage.getItem("guitar-chord-practice-rhythm-chords") || "null"
+      );
+      if (Array.isArray(savedRhythmSheet)) {
+        rhythmRows = [];
+        for (let index = 0; index < savedRhythmSheet.length; index += 8) {
+          const row = savedRhythmSheet.slice(index, index + 8);
+          while (row.length < 8) row.push(row[row.length - 1] || "F");
+          const normalizedRow = normalizeRhythmRow(row);
+          if (normalizedRow) rhythmRows.push(normalizedRow);
+        }
+        if (!rhythmRows.length) rhythmRows = rhythmDefaultRows.map((row) => row.map((cell) => ({ ...cell })));
+      } else if (savedRhythmSheet && Array.isArray(savedRhythmSheet.rows) && savedRhythmSheet.rows.length) {
+        const validRows = savedRhythmSheet.rows.map(normalizeRhythmRow).filter(Boolean);
+        if (validRows.length) rhythmRows = validRows;
+        if (typeof savedRhythmSheet.title === "string") rhythmTitle = savedRhythmSheet.title;
+        if (rhythmNoteNames.includes(savedRhythmSheet.key)) rhythmKey = savedRhythmSheet.key;
+        if (rhythmNoteNames.includes(savedRhythmSheet.playKey)) rhythmPlayKey = savedRhythmSheet.playKey;
+        if (Number.isInteger(savedRhythmSheet.capo)) rhythmCapo = Math.min(11, Math.max(0, savedRhythmSheet.capo));
+        if (Number.isFinite(savedRhythmSheet.tempo)) rhythmTempo = Math.min(220, Math.max(40, savedRhythmSheet.tempo));
+      }
+    } catch {
+      document.getElementById("rhythm-status").textContent = "無法讀取演奏稿，已載入預設內容。";
+    }
+    rhythmTitleInput.value = rhythmTitle;
+    rhythmKeyInput.value = rhythmKey;
+    rhythmPlayKeyInput.value = rhythmPlayKey;
+    rhythmCapoInput.value = String(rhythmCapo);
+    rhythmTempoInput.value = String(rhythmTempo);
+    renderRhythmGrid();
+    document.getElementById("rhythm-key-status").textContent = rhythmKeySummary();
+    persistRhythmSheet();
     renderProgression();
     try {
       renderSavedSongs();
