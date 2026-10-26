@@ -21,7 +21,7 @@
 
 ### 學習首頁
 
-首頁提供兩個主題入口，並顯示網站累計造訪人次；達到特定里程碑時會顯示提示與動畫。造訪人次由外部計數服務提供，需連上網路。
+首頁提供兩種版型：Style 1 卡片入口，以及以自製無文字虛擬地圖為底圖、標示現有學習入口並保留七個未來單元的 Style 2 群島地圖。首頁也會顯示網站累計造訪人次；達到特定里程碑時會顯示提示與動畫。造訪人次由外部計數服務提供，需連上網路。
 
 ### 吉他和弦播放
 
@@ -43,6 +43,7 @@ python -m http.server 8000
 ## 專案檔案
 
 - [`index.html`](./index.html)：學習首頁。
+- [`learning-island.svg`](./learning-island.svg)：首頁 Style 2 使用的自製虛擬群島地圖。
 - [`4words_index.html`](./4words_index.html)：每日成語、配對、索引、收藏與歷史。
 - [`English_tenses.html`](./English_tenses.html)：英文時態教學、練習與分級短文。
 - [`idioms-index.js`](./idioms-index.js)：成語索引資料。
