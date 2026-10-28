@@ -18,7 +18,7 @@ footer{position:absolute;bottom:25px;right:26px;text-align:right;font-size:11px;
 @media(max-width:600px){header{left:18px;top:17px}h1{font-size:29px}header p{font-size:11px}.tools{right:14px;top:19px;gap:4px;max-width:142px;flex-wrap:wrap;justify-content:flex-end}.tool{width:36px;height:36px}.panel{left:14px;bottom:16px;width:calc(100% - 28px);padding:12px 14px}.panel h2{margin-bottom:5px;font-size:12px}.places{grid-template-columns:repeat(4,1fr);gap:0}.places button{padding:9px 2px;font-size:11px}.dot{margin-right:4px;width:5px;height:5px}footer{bottom:147px;right:16px;font-size:10px}footer strong{display:none}.label{font-size:10px;padding:4px 7px}#status{top:119px;left:18px;max-width:calc(100% - 36px)}#reference{top:108px;right:14px;width:calc(100vw - 28px);max-height:calc(100dvh - 260px)}}
 </style>
 <style>
-.time-controls{position:absolute;left:28px;top:115px;display:flex;align-items:center;gap:3px;padding:5px;background:#f6faf3ef;border:1px solid #ffffff99;border-radius:6px}.time-controls .tool{width:32px;height:32px;border:0;box-shadow:none;background:transparent}.time-controls .tool[aria-pressed=true]{background:#cde7d8}.time-controls output{min-width:76px;padding:0 6px;font-size:12px;font-variant-numeric:tabular-nums;color:#163c3b}.time-controls output small{display:block;font-size:10px;color:#57746a}#status{top:174px}body[data-night=true] header,body[data-night=true] footer{color:#e4edf4}body[data-night=true] header p{color:#c3d6e2}@media(max-width:600px){.time-controls{left:18px;top:114px;gap:2px}.time-controls .tool{width:30px;height:30px}.time-controls output{min-width:69px;padding:0 4px}#status{top:171px}}
+.time-controls{position:absolute;left:28px;top:115px;display:flex;align-items:center;gap:3px;padding:5px;background:#f6faf3ef;border:1px solid #ffffff99;border-radius:6px}.time-controls .tool{width:32px;height:32px;border:0;box-shadow:none;background:transparent}.time-controls .tool[aria-pressed=true]{background:#cde7d8}.time-controls output{min-width:76px;padding:0 6px;font-size:12px;font-variant-numeric:tabular-nums;color:#163c3b}.time-controls output small{display:block;font-size:10px;color:#57746a}.weather-state{padding:0 5px;color:#315b5b;font-size:11px;white-space:nowrap}#status{top:174px}body[data-night=true] header,body[data-night=true] footer{color:#e4edf4}body[data-night=true] header p{color:#c3d6e2}@media(max-width:600px){.time-controls{left:18px;top:114px;gap:2px}.time-controls .tool{width:30px;height:30px}.time-controls output{min-width:69px;padding:0 4px}.weather-state{padding:0 2px;font-size:10px}#status{top:171px}}
 </style>
 <style>
 .compass{position:absolute;right:26px;bottom:86px;width:86px;color:#254c47;pointer-events:none;text-align:center}.compass-dial{position:relative;width:86px;height:86px;border:1px solid #fff9;border-radius:50%;background:#f6faf3eb;box-shadow:0 3px 14px #163c3b18}.compass-rose{position:absolute;inset:0}.compass-rose span{position:absolute;font-size:10px;line-height:12px}.compass-rose .north{top:4px;left:calc(50% - 5px);color:#bf4939;font-weight:700}.compass-rose .south{bottom:4px;left:calc(50% - 5px)}.compass-rose .east{right:4px;top:calc(50% - 6px)}.compass-rose .west{left:4px;top:calc(50% - 6px)}.compass-rose>svg{position:absolute;left:calc(50% - 10px);top:calc(50% - 10px);width:20px;height:20px;color:#bf4939;fill:#bf4939}.compass-body{position:absolute;transform:translate(-50%,-50%);line-height:0}.compass-body svg{width:12px;height:12px;stroke-width:2.2}.compass-sun{color:#bb8019}.compass-moon{color:#456b9f}.compass-body[hidden]{display:none}.compass-heading{display:block;margin-top:5px;font-size:11px;font-variant-numeric:tabular-nums}body[data-night=true] .compass-heading{color:#e4edf4}@media(max-width:600px){.compass{right:16px;bottom:174px;width:78px}.compass-dial{width:78px;height:78px}}
@@ -42,6 +42,8 @@ footer{position:absolute;bottom:25px;right:26px;text-align:right;font-size:11px;
 <button class="tool" data-hour="18" title="傍晚" aria-label="傍晚" aria-pressed="false"><i data-lucide="sunset"></i></button>
 <button class="tool" data-hour="0" title="夜晚" aria-label="夜晚" aria-pressed="false"><i data-lucide="moon"></i></button>
 <button class="tool" id="time-auto" title="自動日夜循環" aria-label="自動日夜循環" aria-pressed="true"><i data-lucide="clock-3"></i></button>
+<button class="tool" id="weather-toggle" title="切換天氣示範" aria-label="天氣：晴朗，按此開始下雨" aria-pressed="false"><i data-lucide="cloud-rain"></i></button>
+<span class="weather-state" id="weather-state" role="status" aria-live="polite">晴朗</span>
 </div>
 <img id="reference" src="reference.png" alt="島嶼原始參考地圖" hidden>
 <div class="compass" id="compass" role="img" aria-label="地圖指北針">
@@ -163,9 +165,23 @@ function house(x,z,size=1,roof='#b95437',tower=false) {
  mesh('box','#e3c36d',x+size*.38,ground+rise*.7,z+size*.583,size*.24,size*.26,.04);
  occupied.push([x,z,size*2]);
 }
+function rainShelter(x,z,name){
+ const group=new THREE.Group();group.name=name;group.position.set(x,height(x,z),z);island.add(group);
+ mesh('box','#b99b6c',0,.12,0,6.8,.24,5.2,group);
+ for(const sideX of [-2.9,2.9])for(const sideZ of [-2.1,2.1])mesh('box','#795d3e',sideX,1.7,sideZ,.22,3.2,.22,group);
+ mesh('box','#a45a3d',0,3.35,0,7.5,.3,5.9,group);
+ mesh('box','#d7bd8a',0,2.05,0,5.8,.12,4.2,group);
+ occupied.push([x,z,4.5]);
+ return {group,x,z,ground:group.position.y};
+}
 const plaza=mesh('cylinder','#d8c6a3',0,height(0,5)+.07,5,4.4,.15,4.4);plaza.name='Village Square';
 house(0,0,2.3);house(-2,0,1,'#bd4e35',true);house(2,0,1,'#bd4e35',true);
 for(let index=0;index<11;index++){const angle=index/11*Math.PI*2;house(Math.cos(angle)*5.5,5+Math.sin(angle)*5.5,.75+random()*.3);}
+const shelters=[
+ rainShelter(-22,20,'South trail rain shelter'),
+ rainShelter(-6,6,'Village rain shelter'),
+ rainShelter(4,31,'North trail rain shelter')
+];
 const fountainY=height(0,5)+.2;
 mesh('cylinder','#a4b8af',0,fountainY,5,1.1,.3,1.1);mesh('cylinder','#55bfcd',0,fountainY+.18,5,.9,.07,.9);mesh('cylinder','#d1d9cb',0,fountainY+.75,5,.14,1.3,.14);mesh('cylinder','#b9d1c9',0,fountainY+1.25,5,.58,.14,.58);
 house(-17,0,.95,'#795738');house(-18,10,.8,'#795738');house(-10,-8,.9,'#795738');house(-7,-17,1,'#b84938');house(4,-19,1,'#65798c');
@@ -182,21 +198,50 @@ for(let index=0;index<1250;index++){
  if(Math.abs(z-2)<1.9||z< -14&&random()>.3)continue;
  tree(x,z,.6+random()*.65,z< -13, x>21&&z>8&&z<17);
 }
-function bridge(x,z,length=3,angle=0,y=height(x,z)+.3){
+function bridge(x,z,length=3,angle=0,y=height(x,z)+.3,width=1.1){
  const group=new THREE.Group();group.position.set(x,y,z);group.rotation.y=angle;island.add(group);
- mesh('box','#ab794b',0,0,0,length,.18,1.1,group);
- for(const side of [-.6,.6]){
-  mesh('box','#8b603c',0,.6,side,length,.12,.1,group);
-  for(let index=0;index<=4;index++)mesh('box','#8b603c',-length/2+index*length/4,.25,side,.12,1.1,.12,group);
+ mesh('box','#ab794b',0,0,0,length,.18,width,group);
+ for(const side of [-1,1]){
+  const edge=side*(width/2+.05);
+  mesh('box','#8b603c',0,.6,edge,length,.12,.1,group);
+  for(let index=0;index<=4;index++)mesh('box','#8b603c',-length/2+index*length/4,.25,edge,.12,1.1,.12,group);
  }
 }
 bridge(-9,6,3.6);bridge(-12,23,3.5);bridge(16,12,3.8);
+function suspensionBridge(x,z,length,width=1.5){
+ const group=new THREE.Group();group.name='Reserved 05 suspension bridge';group.position.set(x,2,z);island.add(group);
+ mesh('box','#9a6a43',0,0,0,length,.18,width,group);
+ for(let offset=-length/2+.3;offset<length/2;offset+=.48)mesh('box','#bd8a58',offset,.1,0,.4,.06,width-.08,group);
+ const cableY=offset=>.85+1.15*(Math.abs(offset)/(length/2))**2;
+ for(const side of [-1,1]){
+  const railZ=side*(width/2-.08);
+  const cable=new THREE.CatmullRomCurve3([
+   new THREE.Vector3(-length/2,2.05,railZ),
+   new THREE.Vector3(-length*.34,1.85,railZ),
+   new THREE.Vector3(0,.85,railZ),
+   new THREE.Vector3(length*.34,1.85,railZ),
+   new THREE.Vector3(length/2,2.05,railZ)
+  ]);
+  group.add(new THREE.Mesh(new THREE.TubeGeometry(cable,64,.055,6,false),material('#594632')));
+  for(let offset=-length*.4;offset<=length*.4;offset+=.9){
+   const top=cableY(offset);
+   mesh('cylinder','#795a3a',offset,(top+.12)/2,railZ,.025,top-.12,.025,group);
+  }
+  for(const offset of [-length*.34,length*.34]){
+   mesh('box','#795a3a',offset,.92,railZ,.2,1.85,.2,group);
+  }
+ }
+ for(const offset of [-length/2,length/2])mesh('box','#795a3a',offset,.82,0,.2,1.65,width+.15,group);
+}
+suspensionBridge(15,2,14);
+bridge(24,18,8,-Math.PI/4,height(24,18)+.3);
+bridge(-21.5,19,5,Math.PI/2,height(-21.5,19)+.3);
 function satellite(x,z,radius,top){
  mesh('cylinder','#929f98',x,(top-1)/2,z,radius,top+1,radius);
  mesh('cylinder','#94b65c',x,top,z,radius*1.02,.18,radius*1.02);
 }
 satellite(25,31,4.2,2);satellite(-28,29,2.2,1);satellite(-32,-12,1.7,1.2);
-bridge(22,27,9,-.65,2.1);
+bridge(22.5,26,11.2,-1.107,2.1,1.6);
 for(const x of [23,26]){
  mesh('box','#c2c6af',x,3.6,31,.65,3,.75);
  mesh('box','#939f91',x,2.5,31,1,.65,1.1);
@@ -211,7 +256,7 @@ mesh('cone','#bf5540',lighthouseX,lighthouseY+5.4,lighthouseZ,1,.6,1);
 function palm(x,z){const ground=height(x,z);mesh('cylinder','#96734c',x,ground+1.2,z,.13,2.4,.13);for(let index=0;index<6;index++){const angle=index*Math.PI/3;const leaf=mesh('sphere','#528647',x+Math.cos(angle)*.65,ground+2.5,z+Math.sin(angle)*.65,1,.12,.28);leaf.rotation.y=-angle;}}
 for(const [x,z] of [[-6,26],[8,26],[-7,29],[6,30],[2,25],[-3,30]])palm(x,z);
 house(7,28,.8,'#9b7447');house(-5,27,.7,'#9b7447');
-bridge(-22,25,8,Math.PI/2,1);bridge(-25,29,6,0,1);bridge(3,34,8,Math.PI/2,.8);
+bridge(-22,25,8,Math.PI/2,1);bridge(-25,29,6,0,1);bridge(3,34,11,Math.PI/2,.8);
 function boat(x,z,angle=0){const group=new THREE.Group();group.position.set(x,0,z);group.rotation.y=angle;island.add(group);mesh('sphere','#8d543a',0,.1,0,.55,.3,1.5,group);mesh('box','#f3e7ce',0,.4,0,.7,.25,1.1,group);mesh('cylinder','#775e42',0,1.5,0,.04,2.5,.04,group);const sail=new THREE.Mesh(new THREE.PlaneGeometry(1,1.8),new THREE.MeshStandardMaterial({color:'#f9f4da',side:THREE.DoubleSide}));sail.position.set(.5,1.8,0);group.add(sail);}
 boat(-26,28,.2);boat(-31,34,-.6);boat(12,37,.4);boat(21,5,.7);
 const windmill=new THREE.Group();const windmillY=height(11,17);windmill.position.set(11,windmillY,17);island.add(windmill);
@@ -266,13 +311,17 @@ function createWalker(name,shirt,index){
  return {group,limbs};
 }
 const schoolRoutePoints=[
- [-22,29],[-22,25],[-22,21],[-21,16],[-21,10],[-21,4],
- [-20,-2],[-17,-3],[-15,-2],[-15,2],[-14,4.2],[-11,5.5],
- [-10,6],[-9,6],[-8,6],[-6.5,7.8],[-4.5,7.8],[-2.2,7.3],
- [0,7.4],[.8,9],[.8,11],[0,13],[-1,17],[.4,21],[2,24],
- [2,28],[3,30],[3,34],[3,37]
+ [-22,29],[-22,25],[-22,21],[-21,16],[-21,10],[-21,4],[-20,-2],[-17,-3],
+ [-15,-2],[-15,2],[-14,4.2],[-11,5.5],[-10,6],[-9,6],[-8,6],[-6.5,7.8],
+ [-4.5,7.8],[-2.2,7.3],[0,7.4],[.8,9],[.8,11],[0,13],[-1,10],[1.5,5],
+ [-2,0],[-4,-5],[-5,-11],[-5,-16],[-3,-20],[0,-15],[4,-10],[8,-5],
+ [8,2],[12,2],[15,2],[18,2],[22,2],[22,5],[22,10],[24,15],[24,18],[25,19.6],[22,16],
+ [20,21],[25,31],[20,21],[16,21],[12,21],[8,23],[5,26],
+ [2,28],[3,29],[3,34],[3,37]
 ];
-ribbon(schoolRoutePoints.slice(4,26),.95,'#e4ca8b',.1);
+for(const [start,end] of [[0,18],[18,28],[28,32],[34,38],[38,41],[43,48]]){
+ ribbon(schoolRoutePoints.slice(start,end+1),.95,'#e4ca8b',.1);
+}
 const schoolRoute=new THREE.CatmullRomCurve3(schoolRoutePoints.map(([x,z])=>new THREE.Vector3(x,0,z)));
 const ferryRoute=new THREE.CatmullRomCurve3([
  [6,38],[6,42],[0,44],[-13,43],[-24,39],[-27,36],[-26,33],[-24,32],[-22,32]
@@ -281,6 +330,9 @@ const ferry=new THREE.Group();ferry.name='School excursion ferry';island.add(fer
 mesh('sphere','#256e86',0,.12,0,2.1,.78,4,ferry);
 mesh('box','#ebd7a5',0,.85,0,3.55,.18,6.8,ferry);
 mesh('box','#f3eee1',0,.55,0,3.8,.18,6,ferry);
+const ferryCanopy=new THREE.Group();ferryCanopy.name='Ferry rain canopy';ferryCanopy.visible=false;ferry.add(ferryCanopy);
+mesh('box','#9e5541',0,3.1,0,4.5,.2,4.8,ferryCanopy);
+for(const sideX of [-2,2])for(const sideZ of [-2.1,2.1])mesh('box','#f1e4c6',sideX,2.05,sideZ,.12,2.1,.12,ferryCanopy);
 for(const side of [-1,1]){
  mesh('box','#f7f1dc',side*1.72,1.52,0,.07,.07,6.2,ferry);
  for(const offset of [-2.7,-1.3,1.3,2.7])mesh('cylinder','#f7f1dc',side*1.72,1.2,offset,.035,.65,.035,ferry);
@@ -290,14 +342,19 @@ for(const side of [-1,1]){
 mesh('box','#457789',0,1.12,-2.8,.85,.45,.6,ferry);
 const boardingRamp=mesh('box','#c39c68',0,0,0,.95,.1,1);
 boardingRamp.name='Ferry boarding gangway';
-const schoolTrip={members:[],route:schoolRoute,length:schoolRoute.getLength(),distance:6.75,time:0,spacing:1.35,speed:1.15,phase:'walk',phaseTime:0,ferry,ferryRoute};
+const schoolTrip={members:[],route:schoolRoute,routePoints:schoolRoutePoints,length:schoolRoute.getLength(),distance:6.75,time:0,spacing:1.35,speed:1.5,phase:'walk',phaseTime:0,ferry,ferryRoute};
 const tripPhases=['walk','boarding','sailing','landing'];
 const phaseDurations={walk:(schoolTrip.length-6.75)/schoolTrip.speed,boarding:8.5,sailing:ferryRoute.getLength()/2.3,landing:8.5};
 const passengerSlots=[[0,2],[-.65,.8],[.65,.8],[-.65,-.65],[.65,-.65],[0,-1.9]];
 function schoolGroundPoint(distance){
  const point=schoolTrip.route.getPointAt(THREE.MathUtils.clamp(distance/schoolTrip.length,0,1));
  let ground=height(point.x,point.z)+.12;
- for(const [centerX,centerZ,halfX,halfZ,deck] of [[-22,25,.65,4,1.09],[-9,6,1.8,.65,height(-9,6)+.39],[3,34,.65,4,.89]]){
+ for(const [centerX,centerZ,halfX,halfZ,deck] of [
+  [-22,25,.65,4,1.09],[-21.5,19,.65,2.5,height(-21.5,19)+.39],
+  [-9,6,1.8,.65,height(-9,6)+.39],[3,34,.65,5.5,.89],
+  [15,2,7,.9,2],[24,18,4.2,3.5,height(24,18)+.39],
+  [22.5,26,4,6,2.19],[25,31,4,4,2.84],[3,34,.65,5,.89]
+ ]){
   if(Math.abs(point.x-centerX)<=halfX&&Math.abs(point.z-centerZ)<=halfZ)ground=deck;
  }
  return point.setY(ground+.09);
@@ -409,11 +466,39 @@ const skyFrames=[
 ].map(([hour,sky,water,light,intensity,ambient,cloud])=>({hour,sky:new THREE.Color(sky),water:new THREE.Color(water).convertSRGBToLinear(),light:new THREE.Color(light),intensity,ambient,cloud:new THREE.Color(cloud).convertSRGBToLinear()}));
 const celestial=new THREE.Group();camera.add(celestial);scene.add(camera);
 const sunDisk=new THREE.Mesh(new THREE.IcosahedronGeometry(1,3),new THREE.MeshBasicMaterial({color:'#ffe5a0',fog:false,toneMapped:false}));
-const moonDisk=new THREE.Mesh(new THREE.IcosahedronGeometry(1,3),new THREE.MeshBasicMaterial({color:'#edf3df',fog:false,toneMapped:false}));
-celestial.add(sunDisk,moonDisk);environment.sun=sunDisk;environment.moon=moonDisk;
-for(const [x,y,size] of [[-.35,.25,.19],[.32,-.3,.24],[.2,.43,.12]]){
- const crater=new THREE.Mesh(new THREE.CircleGeometry(size,10),new THREE.MeshBasicMaterial({color:'#c4d2c8',fog:false,toneMapped:false}));crater.position.set(x,y,Math.sqrt(Math.max(.1,1-x*x-y*y))+.01);moonDisk.add(crater);
+const moonCanvas=document.createElement('canvas');moonCanvas.width=moonCanvas.height=128;
+const moonContext=moonCanvas.getContext('2d'),moonTexture=new THREE.CanvasTexture(moonCanvas);
+moonTexture.encoding=THREE.sRGBEncoding;
+let lastMoonPhase=-1;
+function updateMoonPhase(){
+ const lunarCycle=29.53058867;
+ const daysSinceNewMoon=(Date.now()-Date.UTC(2000,0,6,18,14))/86400000+environment.time/240;
+ const age=((daysSinceNewMoon%lunarCycle)+lunarCycle)%lunarCycle;
+ const angle=age/lunarCycle*Math.PI*2;
+ if(lastMoonPhase>=0&&Math.abs(Math.atan2(Math.sin(angle-lastMoonPhase),Math.cos(angle-lastMoonPhase)))<.02)return;
+ lastMoonPhase=angle;
+ const center=64,radius=58,terminator=Math.cos(angle),waxing=Math.sin(angle)>=0;
+ moonContext.clearRect(0,0,128,128);
+ moonContext.beginPath();moonContext.arc(center,center,radius,0,Math.PI*2);moonContext.fillStyle='#283649';moonContext.fill();
+ moonContext.save();
+ if(!waxing){moonContext.translate(128,0);moonContext.scale(-1,1);}
+ moonContext.beginPath();
+ moonContext.arc(center,center,radius,-Math.PI/2,Math.PI/2,false);
+ moonContext.ellipse(center,center,Math.max(.01,Math.abs(terminator)*radius),radius,0,Math.PI/2,Math.PI*1.5,terminator>0);
+ moonContext.closePath();moonContext.clip();
+ moonContext.fillStyle='#eee9d0';moonContext.fill();
+ moonContext.fillStyle='rgba(117, 126, 116, .32)';
+ for(const [x,y,size] of [[78,42,7],[49,67,5],[74,87,4],[42,48,3]]){moonContext.beginPath();moonContext.arc(x,y,size,0,Math.PI*2);moonContext.fill();}
+ moonContext.restore();
+ moonContext.beginPath();moonContext.arc(center,center,radius,0,Math.PI*2);moonContext.strokeStyle='rgba(227, 235, 222, .75)';moonContext.lineWidth=2;moonContext.stroke();
+ moonTexture.needsUpdate=true;
+ const phases=['新月','眉月','上弦月','盈凸月','滿月','虧凸月','下弦月','殘月'];
+ environment.moonPhase=age/lunarCycle;
+ compassMoon.title='月亮方位：'+phases[Math.round(environment.moonPhase*8)%8];
 }
+const moonDisk=new THREE.Mesh(new THREE.CircleGeometry(1,64),new THREE.MeshBasicMaterial({map:moonTexture,transparent:true,fog:false,toneMapped:false,side:THREE.DoubleSide}));
+celestial.add(sunDisk,moonDisk);environment.sun=sunDisk;environment.moon=moonDisk;
+updateMoonPhase();
 const starPositions=[];
 for(let index=0;index<100;index++)starPositions.push((random()-.5)*1.9,.15+random()*.8,-110);
 const starGeometry=new THREE.BufferGeometry();starGeometry.setAttribute('position',new THREE.Float32BufferAttribute(starPositions,3));
@@ -439,9 +524,144 @@ for(let index=0;index<7;index++){
  }
  environment.birds.push({group,wings,phase:index*.87,radius:23+index*2,speed:.12+index*.009,height:17+(index%3)*3});
 }
+const weatherButton=document.getElementById('weather-toggle'),weatherState=document.getElementById('weather-state');
+const rainCount=180,rainPositions=new Float32Array(rainCount*6);
+function resetRaindrop(index){
+ const offset=index*6,x=(random()-.5)*68,z=(random()-.5)*68,y=8+random()*32;
+ rainPositions[offset]=x;rainPositions[offset+1]=y;rainPositions[offset+2]=z;
+ rainPositions[offset+3]=x-.12;rainPositions[offset+4]=y-.75;rainPositions[offset+5]=z;
+}
+for(let index=0;index<rainCount;index++)resetRaindrop(index);
+const rainGeometry=new THREE.BufferGeometry();rainGeometry.setAttribute('position',new THREE.BufferAttribute(rainPositions,3));
+const rainMaterial=new THREE.LineBasicMaterial({color:'#c8e9f4',transparent:true,opacity:.58,depthWrite:false});
+const rain=new THREE.LineSegments(rainGeometry,rainMaterial);rain.name='Rainfall';rain.visible=false;scene.add(rain);
+const lightningBolt=new THREE.Line(new THREE.BufferGeometry(),new THREE.LineBasicMaterial({color:'#f4fbff',transparent:true,opacity:.95}));
+lightningBolt.name='Lightning';lightningBolt.visible=false;scene.add(lightningBolt);
+const lightningLight=new THREE.PointLight('#d7efff',0,140,1);lightningLight.name='Lightning flash';scene.add(lightningLight);
+const shelterSlots=[[-1.65,-.9],[0,-.9],[1.65,-.9],[-1.65,1],[0,1],[1.65,1]];
+const weather={phase:'sunny',raining:false,nextChange:55+Math.random()*35,stormDuration:0,stormElapsed:0,phaseElapsed:0,lightningIn:0,flashTime:0,evacuations:[],clearRequested:false};
+function updateWeatherLabel(){
+ const labels={sunny:'晴朗',seeking:'下雨，前往避雨',sheltering:'下雨，亭中避雨',returning:'放晴，返回路線'};
+ const label='天氣：'+labels[weather.phase];
+ weatherState.textContent=labels[weather.phase];
+ weatherButton.setAttribute('aria-label',label+'；按此切換天氣');
+ weatherButton.title=label+'；按此切換天氣';
+ weatherButton.setAttribute('aria-pressed',String(weather.raining));
+ document.body.dataset.weather=weather.raining?'rain':'clear';
+}
+function setEvacuationTargets(returning){
+ weather.phaseElapsed=0;
+ weather.evacuations=schoolTrip.members.map((member,index)=>{
+  const from=member.group.position.clone();
+  let target;
+  if(returning)target=weather.evacuations[index].origin.clone();
+  else if(schoolTrip.phase==='sailing'){
+   ferry.updateMatrixWorld(true);
+   target=ferry.localToWorld(new THREE.Vector3(passengerSlots[index][0],1.02,passengerSlots[index][1]));
+  }else{
+   const position=member.group.position;
+   const shelter=shelters.reduce((nearest,candidate)=>
+    Math.hypot(candidate.x-position.x,candidate.z-position.z)<Math.hypot(nearest.x-position.x,nearest.z-position.z)?candidate:nearest
+   );
+   const [offsetX,offsetZ]=shelterSlots[index];
+   target=new THREE.Vector3(shelter.x+offsetX,shelter.ground+.11,shelter.z+offsetZ);
+  }
+  const origin=returning?weather.evacuations[index].origin.clone():from.clone();
+  const distance=from.distanceTo(target);
+  return {origin,from,target,duration:Math.max(.7,distance/(returning?3.5:2.8)),delay:index*.22};
+ });
+}
+function startRain(manual=false){
+ if(weather.phase!=='sunny')return;
+ weather.raining=true;weather.phase='seeking';weather.stormElapsed=0;weather.stormDuration=manual?18:24+Math.random()*12;
+ weather.lightningIn=2+Math.random()*4;weather.flashTime=0;weather.clearRequested=false;
+ setEvacuationTargets(false);
+ if(!motionEnabled){
+  schoolTrip.members.forEach((member,index)=>member.group.position.copy(weather.evacuations[index].target));
+  weather.phase='sheltering';
+ }
+ schoolTrip.flag.visible=false;ferryCanopy.visible=schoolTrip.phase==='sailing';rain.visible=true;
+ environment.birds.forEach(bird=>{bird.group.visible=false;});
+ updateWeatherLabel();
+}
+function clearRain(){
+ if(!weather.raining)return;
+ weather.raining=false;weather.phase='returning';weather.phaseElapsed=0;weather.flashTime=0;
+ setEvacuationTargets(true);
+ rain.visible=false;lightningBolt.visible=false;lightningLight.intensity=0;ferryCanopy.visible=false;
+ environment.birds.forEach(bird=>{bird.group.visible=true;});
+ if(!motionEnabled){
+  schoolTrip.members.forEach((member,index)=>member.group.position.copy(weather.evacuations[index].target));
+  weather.phase='sunny';weather.phaseElapsed=0;weather.nextChange=55+Math.random()*55;schoolTrip.flag.visible=true;
+ }
+ updateWeatherLabel();
+}
+function updateShelterMovement(delta){
+ weather.phaseElapsed+=delta;schoolTrip.time+=delta;
+ let allArrived=true;
+ for(let index=0;index<schoolTrip.members.length;index++){
+  const member=schoolTrip.members[index],step=weather.evacuations[index];
+  const progress=THREE.MathUtils.clamp((weather.phaseElapsed-step.delay)/step.duration,0,1);
+  const eased=progress*progress*(3-2*progress);
+  member.group.position.lerpVectors(step.from,step.target,eased);
+  const difference=Math.atan2(step.target.x-step.from.x,step.target.z-step.from.z);
+  member.group.rotation.y=difference;
+  const moving=progress>0&&progress<1;
+  const stride=schoolTrip.time*7-index*.8;
+  for(const limb of member.limbs){
+   limb.leg.rotation.x=moving?Math.sin(stride)*.42*limb.side:0;
+   limb.arm.rotation.x=index===0&&limb.side===1?-2.1:moving?-Math.sin(stride)*.35*limb.side:0;
+  }
+  if(progress<1)allArrived=false;
+ }
+ return allArrived;
+}
+function updateWeather(delta){
+ if(weather.phase==='seeking'){
+  if(updateShelterMovement(delta)){weather.phase='sheltering';weather.phaseElapsed=0;updateWeatherLabel();}
+ }else if(weather.phase==='sheltering'){
+  weather.stormElapsed+=delta;weather.lightningIn-=delta;weather.flashTime=Math.max(0,weather.flashTime-delta);
+  if(weather.lightningIn<=0){
+   const x=(Math.random()-.5)*48,z=(Math.random()-.5)*48;
+   const points=[];let boltX=x,boltZ=z;
+   for(let index=0;index<9;index++){
+    points.push(new THREE.Vector3(boltX,27-index*2.8,boltZ));
+    boltX+=(Math.random()-.5)*3;boltZ+=(Math.random()-.5)*3;
+   }
+   points.push(new THREE.Vector3(boltX,height(boltX,boltZ)+.5,boltZ));
+   lightningBolt.geometry.dispose();lightningBolt.geometry=new THREE.BufferGeometry().setFromPoints(points);
+   lightningBolt.visible=true;weather.flashTime=.18;weather.lightningIn=4+Math.random()*7;
+   lightningLight.position.set(boltX,10,boltZ);lightningLight.intensity=7;
+  }
+  if(weather.flashTime<=0){lightningBolt.visible=false;lightningLight.intensity=0;}
+  if(weather.stormElapsed>=weather.stormDuration||weather.clearRequested)clearRain();
+ }else if(weather.phase==='returning'){
+  if(updateShelterMovement(delta)){
+   weather.phase='sunny';weather.phaseElapsed=0;weather.nextChange=55+Math.random()*55;
+   schoolTrip.flag.visible=true;updateWeatherLabel();
+  }
+ }
+ const positions=rainGeometry.attributes.position;
+ if(weather.raining){
+  for(let index=0;index<rainCount;index++){
+   const offset=index*6;rainPositions[offset+1]-=delta*32;rainPositions[offset+4]=rainPositions[offset+1]-.75;
+   rainPositions[offset]-=delta*4;rainPositions[offset+3]=rainPositions[offset]-.12;
+   if(rainPositions[offset+1]<0)resetRaindrop(index);
+  }
+  positions.needsUpdate=true;
+  environment.birds.forEach(bird=>{bird.group.visible=false;});
+ }
+}
+weatherButton.onclick=()=>{
+ if(weather.phase==='sunny')startRain(true);
+ else if(motionEnabled)weather.clearRequested=true;
+ else clearRain();
+};
+updateWeatherLabel();
 const timeOutput=document.getElementById('island-time');let displayedMinute=-1;
 function updateEnvironment(delta){
  environment.time+=delta;
+ updateMoonPhase();
  if(environment.auto)environment.hour=(environment.hour+delta*.1)%24;
  const hour=environment.hour,nextIndex=skyFrames.findIndex(frame=>frame.hour>hour);
  const before=skyFrames[nextIndex-1],after=skyFrames[nextIndex],blend=THREE.MathUtils.smoothstep(hour,before.hour,after.hour);
@@ -451,7 +671,8 @@ function updateEnvironment(delta){
  cloudMaterial.color.copy(before.cloud).lerp(after.cloud,blend);
  const angle=(hour-6)/12*Math.PI,daylight=Math.max(0,Math.sin(angle)),night=1-THREE.MathUtils.smoothstep(daylight,0,.4);
  environment.sunDirection.set(Math.cos(angle),Math.sin(angle)*.85,Math.sin(angle)*.45).normalize();
- environment.moonDirection.copy(environment.sunDirection).negate();
+ const moonAngle=angle+environment.moonPhase*Math.PI*2;
+ environment.moonDirection.set(Math.cos(moonAngle),Math.sin(moonAngle)*.85,Math.sin(moonAngle)*.45).normalize();
  sun.position.copy(Math.sin(angle)>=0?environment.sunDirection:environment.moonDirection).multiplyScalar(80);sun.position.y=Math.max(14,sun.position.y);
  materials['#e3c36d'].emissive.set('#ffc468');materials['#e3c36d'].emissiveIntensity=night*1.3;
  birdMaterial.color.copy(dayBirdColor).lerp(nightBirdColor,night);
@@ -489,6 +710,16 @@ function updateEnvironment(delta){
   timeOutput.replaceChildren(document.createTextNode(String(Math.floor(hour)).padStart(2,'0')+':'+String(minute%60).padStart(2,'0')));
   const label=document.createElement('small');label.textContent=period;timeOutput.appendChild(label);document.body.dataset.night=String(hour<5||hour>=17);
  }
+}
+function updateWeatherVisuals(delta){
+ if(weather.raining){
+  const blend=delta===0?1:Math.min(delta*2.2,1);
+  scene.background.lerp(new THREE.Color('#536b7d'),blend);scene.fog.color.copy(scene.background);
+  sea.material.color.lerp(new THREE.Color('#294b62').convertSRGBToLinear(),blend);
+  cloudMaterial.color.lerp(new THREE.Color('#75818c').convertSRGBToLinear(),blend);
+  sun.intensity*=.48;hemisphere.intensity*=.72;
+ }
+ if(weather.flashTime>0)scene.background.lerp(new THREE.Color('#f0f7ff'),.55);
 }
 for(const button of document.querySelectorAll('[data-hour]'))button.onclick=()=>{
  environment.hour=Number(button.dataset.hour);environment.auto=false;document.getElementById('time-auto').setAttribute('aria-pressed','false');
@@ -534,15 +765,22 @@ const projected=new THREE.Vector3();let lastTime=performance.now();
 function animate(now){
  requestAnimationFrame(animate);
  const delta=Math.max(0,Math.min((now-lastTime)/1000,.1));lastTime=now;blades.rotation.z-=delta*.38;
- if(motionEnabled)updateSchoolTrip(delta);
+ if(motionEnabled){
+  if(weather.phase==='sunny'){
+   updateSchoolTrip(delta);
+   weather.nextChange-=delta;
+   if(weather.nextChange<=0)startRain();
+  }else updateWeather(delta);
+ }
  if(flight){const progress=Math.min((now-flight.start)/950,1),ease=1-(1-progress)**3;camera.position.lerpVectors(flight.from,flight.to,ease);controls.target.lerpVectors(flight.targetFrom,flight.targetTo,ease);if(progress===1)flight=null;}
  controls.update();
  updateEnvironment(motionEnabled?delta:0);
+ updateWeatherVisuals(motionEnabled?delta:0);
  for(const place of landmarks){projected.set(place.x,height(place.x,place.z)+3,place.z).project(camera);place.label.style.left=(projected.x*.5+.5)*innerWidth+'px';place.label.style.top=(-projected.y*.5+.5)*innerHeight+'px';place.label.hidden=projected.z>1||projected.z< -1;}
  renderer.render(scene,camera);
 }
 status.textContent='';requestAnimationFrame(animate);
-window.islandApp={scene,camera,renderer,controls,island,landmarks,schoolTrip,phaseDurations,environment};
+window.islandApp={scene,camera,renderer,controls,island,landmarks,schoolTrip,phaseDurations,environment,weather,shelters};
 })();
 </script>
 </body>
