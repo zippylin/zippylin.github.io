@@ -228,11 +228,11 @@
 
     <div class="style-picker" role="group" aria-label="選擇首頁風格">
       <span class="style-picker-label">首頁風格</span>
-      <button class="style-button" type="button" data-style="cards" aria-pressed="true">Style 1 · 卡片</button>
-      <button class="style-button" type="button" data-style="island" aria-pressed="false">Style 2 · 學習島</button>
+      <button class="style-button" type="button" data-style="cards" aria-pressed="false">Style 1 · 卡片</button>
+      <button class="style-button" type="button" data-style="island" aria-pressed="true">Style 2 · 學習島</button>
     </div>
 
-    <nav class="choices style-view" data-style-view="cards" aria-label="選擇學習主題">
+    <nav class="choices style-view" data-style-view="cards" aria-label="選擇學習主題" hidden>
       <a class="choice choice-idiom" href="4words_index.html">
         <span class="choice-label">中文 · 每日練習</span>
         <span class="choice-art idiom-art" aria-hidden="true">成語典故</span>
@@ -272,9 +272,9 @@
       </a>
     </nav>
 
-    <section class="style-view" data-style-view="island" aria-label="學習島 3D 地圖，含三個開放單元與五個預留位置" hidden>
+    <section class="style-view" data-style-view="island" aria-label="學習島 3D 地圖，含三個開放單元與五個預留位置">
       <div class="island-map">
-        <iframe class="island-frame" title="學習島互動 3D 地圖" data-src="reference-3d.html"></iframe>
+        <iframe class="island-frame" title="學習島互動 3D 地圖" src="reference-3d.html"></iframe>
       </div>
     </section>
   </main>
@@ -298,10 +298,6 @@
         document.querySelectorAll('[data-style-view]').forEach((view) => {
           view.hidden = view.dataset.styleView !== selectedStyle;
         });
-        if (selectedStyle === 'island') {
-          const frame = document.querySelector('.island-frame');
-          if (!frame.hasAttribute('src')) frame.src = frame.dataset.src;
-        }
       });
     });
 
