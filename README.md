@@ -21,7 +21,7 @@
 
 ### 學習首頁
 
-首頁提供兩種版型：Style 1 卡片入口，以及以自製無文字虛擬地圖為底圖、標示現有學習入口並保留七個未來單元的 Style 2 群島地圖。首頁也會顯示網站累計造訪人次；達到特定里程碑時會顯示提示與動畫。造訪人次由外部計數服務提供，需連上網路。
+首頁提供兩種版型：Style 1 卡片入口，以及 Style 2「學習島」互動 3D 地圖。學習島提供四字成語、英文時態、吉他和弦三個入口，另外保留五個未開放座標；支援旋轉、縮放、原圖對照與 GLB 匯出。首頁也會顯示網站累計造訪人次；達到特定里程碑時會顯示提示與動畫。3D 引擎與造訪計數由外部服務提供，需連上網路。
 
 ### 吉他和弦播放
 
@@ -43,7 +43,9 @@ python -m http.server 8000
 ## 專案檔案
 
 - [`index.html`](./index.html)：學習首頁。
-- [`learning-island.svg`](./learning-island.svg)：首頁 Style 2 使用的自製虛擬群島地圖。
+- [`reference-3d.html`](./reference-3d.html)：首頁 Style 2 共用的「學習島」3D 場景，也可獨立開啟。
+- [`reference.png`](./reference.png)：島嶼建模參考圖。
+- [`star-island.glb`](./star-island.glb)：島嶼 3D 模型，可在 Blender 透過「檔案 > 匯入 > glTF 2.0」開啟；網頁場景由程式產生，不依賴這份模型檔載入。
 - [`4words_index.html`](./4words_index.html)：每日成語、配對、索引、收藏與歷史。
 - [`English_tenses.html`](./English_tenses.html)：英文時態教學、練習與分級短文。
 - [`idioms-index.js`](./idioms-index.js)：成語索引資料。

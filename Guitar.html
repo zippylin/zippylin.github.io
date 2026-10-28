@@ -229,7 +229,7 @@
     .progression-diagram { display: block; width: min(100%, 205px); height: auto; margin: 0 auto; }
     .progression-play { min-height: 34px; margin-top: 9px; padding: 0 12px; font-size: .83rem; }
     .rhythm-card { padding: 22px; border: 1px solid #e7e2d8; background: var(--card); }
-    .rhythm-settings { display: grid; grid-template-columns: 1.6fr repeat(4, minmax(105px, 1fr)); gap: 12px; margin-bottom: 16px; }
+      .rhythm-settings { display: grid; grid-template-columns: 1.35fr repeat(5, minmax(92px, 1fr)); gap: 12px; margin-bottom: 16px; }
     .rhythm-settings input, .rhythm-settings select {
       width: 100%; min-height: 42px; padding: 0 10px; border: 1px solid #d8d7cd;
       border-radius: 9px; background: white; color: var(--ink); font: inherit;
@@ -255,6 +255,75 @@
       border: 1px solid #d8d7cd; border-radius: 8px; background: white; color: var(--ink); font: inherit; font-size: .78rem; }
     .rhythm-help, .rhythm-status { margin: 12px 0 0; color: var(--muted); font-size: .84rem; line-height: 1.6; }
     .rhythm-status { min-height: 1.3em; }
+      .rhythm-playback-options { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; margin: 0 0 16px; }
+      .rhythm-playback-options label { display: inline-flex; align-items: center; gap: 7px; margin: 0; font-size: .86rem; }
+      .rhythm-playback-options input[type="checkbox"] { width: 17px; height: 17px; accent-color: var(--green); }
+      .rhythm-loop-range { display: flex; align-items: center; gap: 7px; }
+      .rhythm-loop-range input { width: 68px; min-height: 38px; padding: 0 8px; border: 1px solid #d8d7cd; border-radius: 8px; font: inherit; }
+      .metronome-indicator { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; max-width: 460px; margin: 0 0 8px; }
+      .metronome-beat { display: grid; min-height: 42px; place-items: center; border: 1px solid var(--line); border-radius: 8px; background: #f8f7f1; color: var(--muted); font-weight: 800; }
+      .metronome-beat.is-active { border-color: var(--green); background: var(--green); color: white; }
+      .metronome-beat.is-pulsing { animation: beat-pulse 150ms ease-out; }
+      .metronome-position { min-height: 1.2em; margin: 0 0 12px; color: var(--muted); font-size: .82rem; }
+      @keyframes beat-pulse { 50% { transform: scale(1.08); } }
+    .right-hand-card {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(280px, .9fr);
+      gap: 24px;
+      align-items: center;
+      padding: 22px;
+      border: 1px solid #e7e2d8;
+      border-radius: 18px;
+      background: var(--card);
+      box-shadow: 0 12px 35px #3443320a;
+    }
+    .right-hand-controls { max-width: 430px; }
+    .right-hand-select { max-width: 310px; }
+    .right-hand-name { margin: 18px 0 7px; color: var(--green-dark); font-size: 1.25rem; }
+    .right-hand-description { margin: 0; color: #526057; line-height: 1.75; }
+    .right-hand-pattern {
+      display: inline-block;
+      margin: 15px 0 0;
+      padding: 8px 12px;
+      border-radius: 8px;
+      background: #f3f2eb;
+      color: var(--green-dark);
+      font-size: 1rem;
+      font-weight: 800;
+      letter-spacing: .04em;
+    }
+    .right-hand-key { margin: 11px 0 0; color: var(--muted); font-size: .84rem; line-height: 1.6; }
+    .right-hand-diagram { display: block; width: 100%; height: auto; }
+    .right-hand-string { stroke: #989c90; stroke-width: 2; }
+    .right-hand-string:nth-of-type(2n) { stroke-width: 1.4; }
+    .right-hand-label { fill: var(--muted); font-family: inherit; font-size: 13px; }
+    .right-hand-arrow { stroke: var(--green); stroke-width: 3; stroke-linecap: round; }
+    .right-hand-arrowhead { fill: var(--green); }
+    .right-hand-finger { fill: var(--green-dark); font-family: inherit; font-size: 13px; font-weight: 800; }
+    .right-hand-pick { fill: #e5a94b; stroke: #fffdf8; stroke-width: 2; }
+    .video-strum-guide { margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--line); }
+    .video-strum-heading { margin: 0 0 7px; font-size: 1.1rem; }
+    .video-strum-intro { max-width: 760px; margin: 0; color: #526057; font-size: .9rem; line-height: 1.7; }
+    .strum-symbol-key { display: flex; flex-wrap: wrap; gap: 8px 18px; margin: 13px 0 20px; padding: 0; list-style: none; }
+    .strum-symbol-key li { color: var(--muted); font-size: .84rem; }
+    .strum-symbol-key strong { color: var(--green-dark); font-size: 1.05rem; }
+    .strum-example { padding: 14px 0; border-top: 1px solid var(--line); }
+    .strum-example h4 { margin: 0 0 10px; font-size: .95rem; }
+    .strum-count-row { display: grid; width: min(100%, 416px); grid-template-columns: repeat(8, minmax(0, 1fr)); gap: 0; margin-bottom: 5px; color: var(--muted); font-size: .72rem; text-align: center; }
+    .strum-count-row.is-four { width: min(100%, 220px); grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .strum-count-row.is-three { width: min(100%, 164px); grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .strum-bean-sprout { display: block; width: min(100%, 416px); height: auto; overflow: visible; }
+    .strum-bean-sprout.is-four { width: min(100%, 220px); }
+    .strum-bean-sprout.is-three { width: min(100%, 164px); }
+    .strum-beam, .strum-stem { fill: none; stroke: var(--green-dark); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+      .strum-beam, .strum-stem, .strum-flag { fill: none; stroke: var(--green-dark); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+    .strum-arrow { fill: none; stroke: var(--green); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+    .strum-note.is-ghost .strum-stem, .strum-note.is-ghost .strum-arrow,
+    .strum-motion.is-ghost .strum-stem, .strum-motion.is-ghost .strum-arrow {
+      stroke: #8d8a7f;
+      stroke-dasharray: 4 4;
+    }
+    .strum-practice-tip { margin: 13px 0 0; color: #62543e; font-size: .88rem; line-height: 1.7; }
     .file-button {
       position: relative; display: inline-flex; min-height: 42px; align-items: center; padding: 0 15px;
       overflow: hidden; border: 1px solid #d8d7cd; border-radius: 10px; background: white;
@@ -333,6 +402,8 @@
       .rhythm-settings > :first-child { grid-column: 1 / -1; }
       .progression-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; }
       .music-form { grid-template-columns: 1fr 1fr; }
+        .right-hand-card { grid-template-columns: 1fr; gap: 12px; padding: 17px; }
+        .right-hand-diagram { max-width: 500px; margin: 0 auto; }
       .music-form button { width: 100%; }
     }
     @media (max-width: 390px) {
@@ -404,7 +475,7 @@
 
     <section class="extra-section" aria-labelledby="rhythm-heading">
       <h2 class="section-heading" id="rhythm-heading">節奏範例演奏</h2>
-      <p class="section-description">以一行一小節編排整首歌。撥法固定為八個八分音符位置，橫軸標示完整 4/4 十六分拍。</p>
+      <p class="section-description">以一行一小節編排整首歌。可選節拍細分、預備倒數，並循環播放指定小節。</p>
       <div class="rhythm-card">
         <div class="rhythm-settings">
           <div>
@@ -427,20 +498,135 @@
             <label for="rhythm-tempo">速度 BPM</label>
             <input id="rhythm-tempo" type="number" min="40" max="220" value="96">
           </div>
+          <div>
+            <label for="metronome-subdivision">節拍細分</label>
+            <select id="metronome-subdivision">
+              <option value="1">四分音符</option>
+              <option value="2">八分音符</option>
+              <option value="3">三連音</option>
+              <option value="4">十六分音符</option>
+            </select>
+          </div>
         </div>
         <p class="rhythm-status" id="rhythm-key-status" role="status" aria-live="polite"></p>
+        <div class="rhythm-playback-options">
+          <label><input id="rhythm-count-in" type="checkbox" checked> 預備倒數一小節</label>
+          <label><input id="rhythm-loop" type="checkbox"> 循環播放</label>
+          <div class="rhythm-loop-range">
+            <label for="rhythm-loop-start">小節</label>
+            <input id="rhythm-loop-start" type="number" min="1" max="1" value="1">
+            <span>至</span>
+            <input id="rhythm-loop-end" type="number" min="1" max="1" value="1" aria-label="播放至第幾小節">
+          </div>
+        </div>
         <div class="rhythm-toolbar">
           <button type="button" class="next" id="play-rhythm">▶ 播放範例</button>
           <button type="button" id="stop-rhythm" disabled>■ 停止</button>
+          <button type="button" class="next" id="start-metronome">▶ 節拍器</button>
+          <button type="button" id="stop-metronome" disabled>■ 停止節拍器</button>
           <button type="button" id="add-rhythm-line">＋ 新增一行</button>
           <label class="file-button">↑ 匯入 JSON<input id="import-rhythm" type="file" accept=".json,application/json"></label>
           <button type="button" id="download-rhythm">↓ 下載 JSON</button>
         </div>
+        <div class="metronome-indicator" id="metronome-indicator" aria-hidden="true">
+          <span class="metronome-beat" data-beat="0">1</span>
+          <span class="metronome-beat" data-beat="1">2</span>
+          <span class="metronome-beat" data-beat="2">3</span>
+          <span class="metronome-beat" data-beat="3">4</span>
+        </div>
+        <p class="metronome-position" id="metronome-position">等待開始</p>
         <div class="rhythm-grid-wrap">
           <div class="rhythm-lines" id="rhythm-lines"></div>
         </div>
         <p class="rhythm-help">每行是 4/4 一小節，共 16 個十六分格；每格可分別選和弦與休、x、up、down、^ 或 .。x 從根音最低弦下撥；^ 與 . 不重新撥弦，讓前音延續。Capo 會改變實際發聲音高。演奏稿會自動保存在此瀏覽器，也可匯入或下載 JSON。</p>
+        <p class="rhythm-status" id="metronome-status" role="status" aria-live="polite">4/4 拍點 · 第一拍重音 · 沿用上方 BPM</p>
         <p class="rhythm-status" id="rhythm-status" role="status" aria-live="polite"></p>
+      </div>
+    </section>
+
+    <section class="extra-section" aria-labelledby="right-hand-heading">
+      <h2 class="section-heading" id="right-hand-heading">右手撥法介紹</h2>
+      <p class="section-description">選擇一種基本撥法，搭配弦線圖和記號練習右手動作。</p>
+      <div class="right-hand-card">
+        <div class="right-hand-controls">
+          <label for="right-hand-technique">撥法選項</label>
+          <select class="right-hand-select" id="right-hand-technique">
+            <option value="pima">分解和弦 p-i-m-a</option>
+            <option value="alternating">交替指彈 p-i-m-i</option>
+            <option value="down">下掃 Downstroke</option>
+            <option value="up">上掃 Upstroke</option>
+          </select>
+          <h3 class="right-hand-name" id="right-hand-name"></h3>
+          <p class="right-hand-description" id="right-hand-description"></p>
+          <p class="right-hand-pattern" id="right-hand-pattern"></p>
+          <p class="right-hand-key" id="right-hand-key"></p>
+        </div>
+        <svg class="right-hand-diagram" id="right-hand-diagram" viewBox="0 0 560 190" role="img" aria-label="吉他右手撥弦示意圖"></svg>
+      </div>
+      <div class="video-strum-guide" aria-labelledby="video-strum-heading">
+        <h3 class="video-strum-heading" id="video-strum-heading">豆芽菜刷弦記譜</h3>
+        <p class="video-strum-intro">每個豆芽菜代表一個八分音符，也就是半拍；四個一組共兩拍，三個一組共一拍半。箭頭標示刷弦方向，橫梁標示分組；空揮時手仍移動，但不碰弦。</p>
+        <ul class="strum-symbol-key" aria-label="刷弦符號說明">
+          <li><strong>↓</strong> 下刷，碰弦發聲</li>
+          <li><strong>↑</strong> 上刷，碰弦發聲</li>
+          <li><strong>虛線箭頭</strong> 空揮，手移動但不碰弦</li>
+          <li><strong>尾旗</strong> 單獨標示一個八分音符</li>
+          <li><strong>橫梁</strong> 將相連的八分音符分組</li>
+        </ul>
+        <div class="strum-example">
+          <h4>四個豆芽菜：四個八分音符，共兩拍</h4>
+          <div class="strum-count-row is-four" aria-hidden="true"><span>1</span><span>&amp;</span><span>2</span><span>&amp;</span></div>
+          <svg class="strum-bean-sprout is-four" viewBox="0 0 220 72" role="img" aria-label="四個豆芽菜連成一條橫梁，下刷、上刷交替四次">
+            <path class="strum-beam" d="M26 58H194" />
+            <g class="strum-note"><path class="strum-stem" d="M26 15V58" /><path class="strum-arrow" d="M21 31L26 40L31 31" /></g>
+            <g class="strum-note"><path class="strum-stem" d="M82 15V58" /><path class="strum-arrow" d="M77 25L82 16L87 25" /></g>
+            <g class="strum-note"><path class="strum-stem" d="M138 15V58" /><path class="strum-arrow" d="M133 31L138 40L143 31" /></g>
+            <g class="strum-note"><path class="strum-stem" d="M194 15V58" /><path class="strum-arrow" d="M189 25L194 16L199 25" /></g>
+          </svg>
+        </div>
+        <div class="strum-example">
+          <h4>三個發聲豆芽菜：1 下刷、&amp; 空揮、2 下刷接 &amp; 上刷</h4>
+          <div class="strum-count-row" aria-hidden="true"><span>1</span><span>&amp;</span><span>2</span><span>&amp;</span></div>
+          <svg class="strum-bean-sprout" viewBox="0 0 220 72" role="img" aria-label="三個發聲八分音符：第一個單獨帶尾旗向下刷，下一個拍點上行空揮，後兩個下刷與上刷共用橫梁">
+            <path class="strum-beam" d="M130 58H194" />
+            <g class="strum-note"><path class="strum-stem" d="M26 15V58" /><path class="strum-arrow" d="M21 31L26 40L31 31" /><path class="strum-flag" d="M26 58Q48 52 33 40" /></g>
+            <g class="strum-motion is-ghost"><path class="strum-stem" d="M82 15V58" /><path class="strum-arrow" d="M77 25L82 16L87 25" /></g>
+            <g class="strum-note"><path class="strum-stem" d="M130 15V58" /><path class="strum-arrow" d="M125 31L130 40L135 31" /></g>
+            <g class="strum-note"><path class="strum-stem" d="M194 15V58" /><path class="strum-arrow" d="M189 25L194 16L199 25" /></g>
+          </svg>
+          <p class="strum-practice-tip">三個豆芽菜是三個發聲八分音符，共一拍半；中間的 &amp; 是回程空揮，不發聲也不算一個豆芽菜。</p>
+        </div>
+        <div class="strum-example">
+          <h4>完整 4/4 小節：八個豆芽菜，四個一組</h4>
+          <div class="strum-count-row" aria-hidden="true"><span>1</span><span>&amp;</span><span>2</span><span>&amp;</span><span>3</span><span>&amp;</span><span>4</span><span>&amp;</span></div>
+          <svg class="strum-bean-sprout" viewBox="0 0 416 72" role="img" aria-label="八個豆芽菜分成兩組，每組四個八分音符">
+            <path class="strum-beam" d="M26 58H182 M234 58H390" />
+            <g class="strum-note"><path class="strum-stem" d="M26 15V58" /><path class="strum-arrow" d="M21 31L26 40L31 31" /></g>
+            <g class="strum-note"><path class="strum-stem" d="M78 15V58" /><path class="strum-arrow" d="M73 25L78 16L83 25" /></g>
+            <g class="strum-note"><path class="strum-stem" d="M130 15V58" /><path class="strum-arrow" d="M125 31L130 40L135 31" /></g>
+            <g class="strum-note"><path class="strum-stem" d="M182 15V58" /><path class="strum-arrow" d="M177 25L182 16L187 25" /></g>
+            <g class="strum-note"><path class="strum-stem" d="M234 15V58" /><path class="strum-arrow" d="M229 31L234 40L239 31" /></g>
+            <g class="strum-note"><path class="strum-stem" d="M286 15V58" /><path class="strum-arrow" d="M281 25L286 16L291 25" /></g>
+            <g class="strum-note"><path class="strum-stem" d="M338 15V58" /><path class="strum-arrow" d="M333 31L338 40L343 31" /></g>
+            <g class="strum-note"><path class="strum-stem" d="M390 15V58" /><path class="strum-arrow" d="M385 25L390 16L395 25" /></g>
+          </svg>
+        </div>
+        <div class="strum-example">
+          <h4>連續下刷：中間回程空揮</h4>
+          <div class="strum-count-row" aria-hidden="true"><span>1</span><span>&amp;</span><span>2</span><span>&amp;</span><span>3</span><span>&amp;</span><span>4</span><span>&amp;</span></div>
+          <svg class="strum-bean-sprout" viewBox="0 0 416 72" role="img" aria-label="豆芽菜記譜：下刷、上刷、下刷、虛線空揮上行、下刷、上刷、下刷、上刷">
+            <path class="strum-beam" d="M26 58H182 M234 58H390" />
+            <g class="strum-note"><path class="strum-stem" d="M26 15V58" /><path class="strum-arrow" d="M21 31L26 40L31 31" /></g>
+            <g class="strum-note"><path class="strum-stem" d="M78 15V58" /><path class="strum-arrow" d="M73 25L78 16L83 25" /></g>
+            <g class="strum-note"><path class="strum-stem" d="M130 15V58" /><path class="strum-arrow" d="M125 31L130 40L135 31" /></g>
+            <g class="strum-note is-ghost"><path class="strum-stem" d="M182 15V58" /><path class="strum-arrow" d="M177 25L182 16L187 25" /></g>
+            <g class="strum-note"><path class="strum-stem" d="M234 15V58" /><path class="strum-arrow" d="M229 31L234 40L239 31" /></g>
+            <g class="strum-note"><path class="strum-stem" d="M286 15V58" /><path class="strum-arrow" d="M281 25L286 16L291 25" /></g>
+            <g class="strum-note"><path class="strum-stem" d="M338 15V58" /><path class="strum-arrow" d="M333 31L338 40L343 31" /></g>
+            <g class="strum-note"><path class="strum-stem" d="M390 15V58" /><path class="strum-arrow" d="M385 25L390 16L395 25" /></g>
+          </svg>
+        </div>
+        <p class="strum-practice-tip"><strong>練習方式：</strong>先跟著腳踩四分拍，慢速念「1 &amp; 2 &amp; 3 &amp; 4 &amp;」並保持手腕像鐘擺一樣連續擺動；拍穩後再逐步加快。</p>
       </div>
     </section>
 
@@ -697,6 +883,92 @@
       return element;
     }
 
+          const rightHandTechniques = {
+            pima: {
+              name: "分解和弦：拇指帶三指",
+              description: "拇指先彈低音弦，再依序用食指、中指、無名指彈高音弦。拇指可依和弦根音選第 4、5 或 6 弦。",
+              pattern: "p - i - m - a - m - i",
+              key: "p 拇指（低音）　i 食指（第 3 弦）　m 中指（第 2 弦）　a 無名指（第 1 弦）",
+              notes: [[0, "p"], [3, "i"], [4, "m"], [5, "a"], [4, "m"], [3, "i"]]
+            },
+            alternating: {
+              name: "交替指彈：低音加高音",
+              description: "拇指穩定彈低音，食指與中指輪流彈高音；先放慢速度，讓低音和旋律音平均清楚。",
+              pattern: "p - i - m - i | p - i - m - i",
+              key: "p 拇指（低音弦）　i 食指（第 3 弦）　m 中指（第 2 弦）",
+              notes: [[0, "p"], [3, "i"], [4, "m"], [3, "i"], [1, "p"], [3, "i"], [4, "m"], [3, "i"]]
+            },
+            down: {
+              name: "下掃：由低音弦掃向高音弦",
+              description: "以食指指甲或拇指，順著弦由第 6 弦方向掃向第 1 弦。手腕放鬆，先輕掃三至四條弦。",
+              pattern: "↓　↓　↓　↓",
+              key: "方向：第 6 弦 → 第 1 弦（由低音到高音）",
+              stroke: "down"
+            },
+            up: {
+              name: "上掃：由高音弦回到低音弦",
+              description: "用食指指腹或指甲由第 1 弦方向輕掃回第 6 弦。上掃通常比下掃輕，先練穩定的短距離動作。",
+              pattern: "↑　↑　↑　↑",
+              key: "方向：第 1 弦 → 第 6 弦（由高音到低音）",
+              stroke: "up"
+            }
+          };
+
+          function renderRightHandTechnique() {
+            const technique = rightHandTechniques[document.getElementById("right-hand-technique").value];
+            const svg = document.getElementById("right-hand-diagram");
+            const stringX = [132, 190, 248, 306, 364, 422];
+            const stringNames = ["6 E", "5 A", "4 D", "3 G", "2 B", "1 E"];
+            svg.replaceChildren();
+            svg.setAttribute("aria-label", `${technique.name}右手撥弦圖`);
+            document.getElementById("right-hand-name").textContent = technique.name;
+            document.getElementById("right-hand-description").textContent = technique.description;
+            document.getElementById("right-hand-pattern").textContent = technique.pattern;
+            document.getElementById("right-hand-key").textContent = technique.key;
+
+            stringX.forEach((x, index) => {
+              svg.append(svgElement("line", {
+                x1: x, y1: 40, x2: x, y2: 145, class: "right-hand-string"
+              }));
+              svg.append(svgElement("text", {
+                x, y: 166, "text-anchor": "middle", class: "right-hand-label"
+              }, stringNames[index]));
+            });
+
+            if (technique.stroke) {
+              const startX = technique.stroke === "down" ? 118 : 436;
+              const endX = technique.stroke === "down" ? 436 : 118;
+              const direction = endX > startX ? 1 : -1;
+              [64, 91, 118].forEach((y) => {
+                svg.append(svgElement("line", {
+                  x1: startX, y1: y, x2: endX - direction * 11, y2: y, class: "right-hand-arrow"
+                }));
+                svg.append(svgElement("path", {
+                  d: `M ${endX - direction * 12} ${y - 7} L ${endX} ${y} L ${endX - direction * 12} ${y + 7} Z`,
+                  class: "right-hand-arrowhead"
+                }));
+              });
+            } else {
+              technique.notes.forEach(([string, finger], index) => {
+                const x = stringX[string];
+                const y = 132 - (index % 2) * 35;
+                svg.append(svgElement("line", {
+                  x1: x, y1: y, x2: x, y2: y - 33, class: "right-hand-arrow"
+                }));
+                svg.append(svgElement("path", {
+                  d: `M ${x - 6} ${y - 28} L ${x} ${y - 38} L ${x + 6} ${y - 28} Z`,
+                  class: "right-hand-arrowhead"
+                }));
+                svg.append(svgElement("circle", { cx: x, cy: y - 46, r: 12, class: "right-hand-pick" }));
+                svg.append(svgElement("text", {
+                  x, y: y - 42, "text-anchor": "middle", class: "right-hand-finger"
+                }, finger));
+              });
+            }
+          }
+
+          document.getElementById("right-hand-technique").addEventListener("change", renderRightHandTechnique);
+
     function drawDiagram(chord, svg = document.getElementById("diagram")) {
       svg.replaceChildren();
       svg.setAttribute("aria-label", `${chord.name} 和弦指法圖，左側為第六弦`);
@@ -932,9 +1204,23 @@
     let rhythmPlayKey = "C";
     let rhythmCapo = 2;
     let rhythmTempo = 96;
+      let metronomeSubdivision = 1;
     let rhythmRows = rhythmDefaultRows.map((row) => row.map((cell) => ({ ...cell })));
     let rhythmSources = [];
     let rhythmEndTimer;
+    let rhythmPlaybackTimer;
+    let rhythmCountInTimer;
+    let rhythmPlaybackRows = [];
+    let rhythmPlaybackIndex = 0;
+    let rhythmPlaybackNextBarTime = 0;
+    let rhythmPlaybackTempo = 96;
+    let rhythmPlaybackSubdivisionCount = 1;
+    let rhythmPlaybackLoops = false;
+    let metronomeTimer;
+    let metronomeNextBeatTime = 0;
+    let metronomeBeat = 0;
+    let metronomeSubdivisionPosition = 0;
+    let metronomeVisualTimers = [];
 
     function pitchClass(noteName) {
       const match = noteName.match(/^([A-G])(#|b)?$/);
@@ -973,6 +1259,7 @@
         playKey: rhythmPlayKey,
         capo: rhythmCapo,
         tempo: rhythmTempo,
+        metronomeSubdivision,
         rows: rhythmRows
       }));
     }
@@ -1103,6 +1390,23 @@
         line.append(header, grid);
         lines.append(line);
       });
+      updateRhythmLoopRange();
+    }
+
+    function updateRhythmLoopRange() {
+      const startInput = document.getElementById("rhythm-loop-start");
+      const endInput = document.getElementById("rhythm-loop-end");
+      if (!startInput || !endInput) return;
+      const barCount = Math.max(1, rhythmRows.length);
+      const previousMax = Number(endInput.max) || barCount;
+      const previousEnd = Number(endInput.value) || barCount;
+      const endWasLastBar = previousEnd === previousMax;
+      const start = Math.min(barCount, Math.max(1, Number(startInput.value) || 1));
+      const end = Math.min(barCount, Math.max(start, endWasLastBar ? barCount : previousEnd));
+      startInput.max = String(barCount);
+      endInput.max = String(barCount);
+      startInput.value = String(start);
+      endInput.value = String(end);
     }
 
     function getBassString(chord, semitoneOffset) {
@@ -1137,54 +1441,234 @@
       orderedStrings.forEach(({ position, string }, index) => {
         const midi = openStringMidi[string] + position + semitoneOffset;
         const frequency = 440 * Math.pow(2, (midi - 69) / 12);
-        sources.push(createPluckedString(context, frequency, startTime + index * stringSpacing));
+        const source = createPluckedString(context, frequency, startTime + index * stringSpacing);
+        sources.push(source);
+        source.onended = () => {
+          const sourceIndex = sources.indexOf(source);
+          if (sourceIndex >= 0) sources.splice(sourceIndex, 1);
+        };
       });
+    }
+
+    function scheduleMetronomeClick(context, time, accent, subdivision = false) {
+      const oscillator = context.createOscillator();
+      const gain = context.createGain();
+      oscillator.type = "sine";
+      oscillator.frequency.setValueAtTime(accent ? 1320 : subdivision ? 660 : 880, time);
+      gain.gain.setValueAtTime(0.0001, time);
+      gain.gain.exponentialRampToValueAtTime(accent ? 0.34 : 0.22, time + 0.004);
+      gain.gain.exponentialRampToValueAtTime(0.0001, time + 0.055);
+      oscillator.connect(gain).connect(context.destination);
+      oscillator.start(time);
+      oscillator.stop(time + 0.06);
+    }
+
+    function clearMetronomeVisualTimers() {
+      metronomeVisualTimers.forEach((timer) => window.clearTimeout(timer));
+      metronomeVisualTimers = [];
+      document.querySelectorAll(".metronome-beat").forEach((beat) => {
+        beat.classList.remove("is-active", "is-pulsing");
+      });
+    }
+
+    function scheduleMetronomeVisual(context, time, beatIndex, subdivisionIndex, subdivisionCount, statusId) {
+      let timer;
+      timer = window.setTimeout(() => {
+        metronomeVisualTimers = metronomeVisualTimers.filter((activeTimer) => activeTimer !== timer);
+        const beatElements = document.querySelectorAll(".metronome-beat");
+        beatElements.forEach((beat) => beat.classList.remove("is-active", "is-pulsing"));
+        const activeBeat = document.querySelector(`.metronome-beat[data-beat="${beatIndex}"]`);
+        if (activeBeat) {
+          activeBeat.classList.add("is-active");
+          void activeBeat.offsetWidth;
+          activeBeat.classList.add("is-pulsing");
+        }
+        document.getElementById("metronome-position").textContent =
+          `第 ${beatIndex + 1} 拍${subdivisionCount > 1 ? ` · 細分 ${subdivisionIndex + 1}/${subdivisionCount}` : ""}`;
+        if (statusId && subdivisionIndex === 0) {
+          document.getElementById(statusId).textContent = `預備倒數 · 第 ${beatIndex + 1} 拍`;
+        }
+      }, Math.max(0, (time - context.currentTime) * 1000));
+      metronomeVisualTimers.push(timer);
+    }
+
+    function metronomeSubdivisionCount() {
+      return Number(document.getElementById("metronome-subdivision").value) || 1;
+    }
+
+    function metronomeStatusText() {
+      const subdivision = document.getElementById("metronome-subdivision");
+      return `節拍器播放中 · ${rhythmTempo} BPM · ${subdivision.selectedOptions[0].textContent} · 4/4`;
+    }
+
+    function scheduleMetronome(context) {
+      const subdivisionCount = metronomeSubdivisionCount();
+      while (metronomeNextBeatTime < context.currentTime + 0.1) {
+        const subdivision = metronomeSubdivisionPosition;
+        const accent = metronomeBeat === 0 && subdivision === 0;
+        scheduleMetronomeClick(context, metronomeNextBeatTime, accent, subdivision > 0);
+        scheduleMetronomeVisual(
+          context, metronomeNextBeatTime, metronomeBeat, subdivision, subdivisionCount
+        );
+        metronomeSubdivisionPosition++;
+        if (metronomeSubdivisionPosition >= subdivisionCount) {
+          metronomeSubdivisionPosition = 0;
+          metronomeBeat = (metronomeBeat + 1) % 4;
+        }
+        metronomeNextBeatTime += 60 / rhythmTempo / subdivisionCount;
+      }
+    }
+
+    async function startMetronome() {
+      const startButton = document.getElementById("start-metronome");
+      const stopButton = document.getElementById("stop-metronome");
+      const status = document.getElementById("metronome-status");
+      if (!document.getElementById("stop-rhythm").disabled) stopRhythm();
+      startButton.disabled = true;
+      status.textContent = "正在啟動音訊…";
+
+      try {
+        const context = await prepareAudio();
+        clearMetronomeVisualTimers();
+        metronomeNextBeatTime = context.currentTime + 0.04;
+        metronomeBeat = 0;
+        metronomeSubdivisionPosition = 0;
+        scheduleMetronome(context);
+        metronomeTimer = window.setInterval(() => scheduleMetronome(context), 25);
+        stopButton.disabled = false;
+        status.textContent = metronomeStatusText();
+      } catch (error) {
+        status.textContent = `無法啟動節拍器：${error.message}`;
+        startButton.disabled = false;
+        stopButton.disabled = true;
+      }
+    }
+
+    function stopMetronome() {
+      window.clearInterval(metronomeTimer);
+      metronomeTimer = undefined;
+      clearMetronomeVisualTimers();
+      document.getElementById("start-metronome").disabled = false;
+      document.getElementById("stop-metronome").disabled = true;
+      document.getElementById("metronome-status").textContent = "節拍器已停止。";
+      document.getElementById("metronome-position").textContent = "等待開始";
+    }
+
+    function scheduleRhythmBar(context, row, startTime) {
+      const semitoneOffset = rhythmPitchOffset() + rhythmCapo;
+      const sixteenthNote = 15 / rhythmPlaybackTempo;
+      row.forEach((cell, index) => {
+        if (!cell.stroke || cell.stroke === "^" || cell.stroke === ".") return;
+        const chord = allChords.find((entry) => entry.name === cell.chord);
+        const eventTime = startTime + index * sixteenthNote;
+        playRhythmStroke(context, chord, cell.stroke, eventTime, rhythmSources, semitoneOffset);
+      });
+
+      const subdivisionDuration = 60 / rhythmPlaybackTempo / rhythmPlaybackSubdivisionCount;
+      for (let tick = 0; tick < 4 * rhythmPlaybackSubdivisionCount; tick++) {
+        scheduleMetronomeVisual(
+          context,
+          startTime + tick * subdivisionDuration,
+          Math.floor(tick / rhythmPlaybackSubdivisionCount),
+          tick % rhythmPlaybackSubdivisionCount,
+          rhythmPlaybackSubdivisionCount
+        );
+      }
+    }
+
+    function finishRhythm() {
+      rhythmSources = [];
+      document.getElementById("play-rhythm").disabled = false;
+      document.getElementById("stop-rhythm").disabled = true;
+      document.getElementById("rhythm-status").textContent = "播放完成。";
+    }
+
+    function scheduleRhythmPlayback(context) {
+      while (rhythmPlaybackNextBarTime < context.currentTime + 0.2) {
+        const row = rhythmPlaybackRows[rhythmPlaybackIndex];
+        scheduleRhythmBar(context, row, rhythmPlaybackNextBarTime);
+        rhythmPlaybackNextBarTime += 240 / rhythmPlaybackTempo;
+        rhythmPlaybackIndex++;
+        if (rhythmPlaybackIndex >= rhythmPlaybackRows.length) {
+          if (rhythmPlaybackLoops) {
+            rhythmPlaybackIndex = 0;
+          } else {
+            window.clearInterval(rhythmPlaybackTimer);
+            rhythmPlaybackTimer = undefined;
+            const finishDelay = Math.max(0, (rhythmPlaybackNextBarTime - context.currentTime + 2.3) * 1000);
+            rhythmEndTimer = window.setTimeout(finishRhythm, finishDelay);
+            return;
+          }
+        }
+      }
     }
 
     async function playRhythm() {
       const playButton = document.getElementById("play-rhythm");
       const stopButton = document.getElementById("stop-rhythm");
       const status = document.getElementById("rhythm-status");
-      const tempo = rhythmTempo;
+      const startBar = Math.min(rhythmRows.length, Math.max(1, Number(document.getElementById("rhythm-loop-start").value) || 1));
+      const endBar = Math.min(rhythmRows.length, Math.max(startBar, Number(document.getElementById("rhythm-loop-end").value) || rhythmRows.length));
+      const countIn = document.getElementById("rhythm-count-in").checked;
       playButton.disabled = true;
       status.textContent = "正在啟動音訊…";
 
       try {
+        if (metronomeTimer !== undefined) stopMetronome();
         const context = await prepareAudio();
         window.clearTimeout(rhythmEndTimer);
+        window.clearTimeout(rhythmCountInTimer);
+        window.clearInterval(rhythmPlaybackTimer);
+        clearMetronomeVisualTimers();
         rhythmSources.forEach((source) => {
-          if (source) source.stop();
+          if (source) {
+            try { source.stop(); } catch {}
+          }
         });
         rhythmSources = [];
-        const sixteenthNote = 15 / tempo;
-        const startTime = context.currentTime + 0.06;
-        const semitoneOffset = rhythmPitchOffset() + rhythmCapo;
-        rhythmRows.forEach((row, rowIndex) => {
-          row.forEach((cell, index) => {
-            if (!cell.stroke || cell.stroke === "^" || cell.stroke === ".") return;
-            const chord = allChords.find((entry) => entry.name === cell.chord);
-            const eventTime = startTime + (rowIndex * 16 + index) * sixteenthNote;
-            playRhythmStroke(context, chord, cell.stroke, eventTime, rhythmSources, semitoneOffset);
-          });
-        });
-        const totalDuration = rhythmRows.length * 16 * sixteenthNote;
-        status.textContent = `播放中 · ${rhythmRows.length} 小節 · ${rhythmKeySummary()}`;
+        rhythmPlaybackRows = rhythmRows.slice(startBar - 1, endBar).map((row) => row.map((cell) => ({ ...cell })));
+        rhythmPlaybackIndex = 0;
+        rhythmPlaybackTempo = rhythmTempo;
+        rhythmPlaybackSubdivisionCount = metronomeSubdivisionCount();
+        rhythmPlaybackLoops = document.getElementById("rhythm-loop").checked;
+        rhythmPlaybackNextBarTime = context.currentTime + 0.06;
+        if (countIn) {
+          const subdivisionDuration = 60 / rhythmPlaybackTempo / rhythmPlaybackSubdivisionCount;
+          for (let tick = 0; tick < 4 * rhythmPlaybackSubdivisionCount; tick++) {
+            const beat = Math.floor(tick / rhythmPlaybackSubdivisionCount);
+            const subdivision = tick % rhythmPlaybackSubdivisionCount;
+            const tickTime = rhythmPlaybackNextBarTime + tick * subdivisionDuration;
+            scheduleMetronomeClick(context, tickTime, beat === 0 && subdivision === 0, subdivision > 0);
+            scheduleMetronomeVisual(
+              context, tickTime, beat, subdivision, rhythmPlaybackSubdivisionCount, "rhythm-status"
+            );
+          }
+          rhythmPlaybackNextBarTime += 240 / rhythmPlaybackTempo;
+          rhythmCountInTimer = window.setTimeout(() => {
+            status.textContent = `播放中 · 第 ${startBar}–${endBar} 小節${rhythmPlaybackLoops ? " · 循環" : ""}`;
+          }, 240 / rhythmPlaybackTempo * 1000);
+          status.textContent = "預備倒數 · 一小節";
+        } else {
+          status.textContent = `播放中 · 第 ${startBar}–${endBar} 小節${rhythmPlaybackLoops ? " · 循環" : ""}`;
+        }
+        rhythmPlaybackTimer = window.setInterval(() => scheduleRhythmPlayback(context), 25);
+        scheduleRhythmPlayback(context);
         stopButton.disabled = false;
-        rhythmEndTimer = window.setTimeout(() => {
-          rhythmSources = [];
-          playButton.disabled = false;
-          stopButton.disabled = true;
-          status.textContent = "播放完成。";
-        }, (totalDuration + 2.3) * 1000);
       } catch (error) {
         status.textContent = `無法播放：${error.message}`;
         playButton.disabled = false;
+        window.clearInterval(rhythmPlaybackTimer);
+        rhythmPlaybackTimer = undefined;
         stopButton.disabled = true;
       }
     }
 
     function stopRhythm() {
       window.clearTimeout(rhythmEndTimer);
+      window.clearTimeout(rhythmCountInTimer);
+      window.clearInterval(rhythmPlaybackTimer);
+      rhythmPlaybackTimer = undefined;
+      clearMetronomeVisualTimers();
       rhythmSources.forEach((source) => {
         if (source) {
           try { source.stop(); } catch {}
@@ -1194,6 +1678,7 @@
       document.getElementById("play-rhythm").disabled = false;
       document.getElementById("stop-rhythm").disabled = true;
       document.getElementById("rhythm-status").textContent = "已停止。";
+      document.getElementById("metronome-position").textContent = "等待開始";
     }
 
     document.getElementById("mode-select").addEventListener("change", (event) => {
@@ -1432,8 +1917,11 @@
     const rhythmPlayKeyInput = document.getElementById("rhythm-play-key");
     const rhythmCapoInput = document.getElementById("rhythm-capo");
     const rhythmTempoInput = document.getElementById("rhythm-tempo");
+    const metronomeSubdivisionInput = document.getElementById("metronome-subdivision");
 
     function updateRhythmSettings(transposeDisplay = false) {
+      const previousTempo = rhythmTempo;
+      const previousSubdivision = metronomeSubdivision;
       rhythmTitle = rhythmTitleInput.value.trim() || "我的演奏稿";
       rhythmTitleInput.value = rhythmTitle;
       rhythmKey = rhythmKeyInput.value;
@@ -1442,6 +1930,17 @@
       rhythmCapoInput.value = String(rhythmCapo);
       rhythmTempo = Math.min(220, Math.max(40, Number(rhythmTempoInput.value) || 96));
       rhythmTempoInput.value = String(rhythmTempo);
+      metronomeSubdivision = Number(metronomeSubdivisionInput.value) || 1;
+      if (metronomeTimer !== undefined) {
+        if (previousTempo !== rhythmTempo || previousSubdivision !== metronomeSubdivision) {
+          clearMetronomeVisualTimers();
+          metronomeNextBeatTime = audioContext.currentTime + 0.04;
+          metronomeBeat = 0;
+          metronomeSubdivisionPosition = 0;
+          scheduleMetronome(audioContext);
+        }
+        document.getElementById("metronome-status").textContent = metronomeStatusText();
+      }
       document.getElementById("rhythm-key-status").textContent = rhythmKeySummary();
       if (transposeDisplay) renderRhythmGrid();
       persistRhythmSheet("設定已更新並自動儲存。");
@@ -1452,6 +1951,9 @@
     rhythmPlayKeyInput.addEventListener("change", () => updateRhythmSettings(true));
     rhythmCapoInput.addEventListener("change", () => updateRhythmSettings());
     rhythmTempoInput.addEventListener("change", () => updateRhythmSettings());
+    metronomeSubdivisionInput.addEventListener("change", () => updateRhythmSettings());
+    document.getElementById("rhythm-loop-start").addEventListener("change", updateRhythmLoopRange);
+    document.getElementById("rhythm-loop-end").addEventListener("change", updateRhythmLoopRange);
     document.getElementById("add-rhythm-line").addEventListener("click", () => {
       rhythmRows.push(rhythmDefaultRows[0].map((cell) => ({ ...cell })));
       renderRhythmGrid();
@@ -1474,6 +1976,10 @@
         if (rhythmNoteNames.includes(imported.playKey)) rhythmPlayKey = imported.playKey;
         if (Number.isInteger(imported.capo)) rhythmCapo = Math.min(11, Math.max(0, imported.capo));
         if (Number.isFinite(imported.tempo)) rhythmTempo = Math.min(220, Math.max(40, imported.tempo));
+        if ([1, 2, 3, 4].includes(imported.metronomeSubdivision)) {
+          metronomeSubdivision = imported.metronomeSubdivision;
+        }
+        metronomeSubdivisionInput.value = String(metronomeSubdivision);
         rhythmTitleInput.value = rhythmTitle;
         rhythmKeyInput.value = rhythmKey;
         rhythmPlayKeyInput.value = rhythmPlayKey;
@@ -1490,6 +1996,8 @@
     });
     document.getElementById("play-rhythm").addEventListener("click", playRhythm);
     document.getElementById("stop-rhythm").addEventListener("click", stopRhythm);
+    document.getElementById("start-metronome").addEventListener("click", startMetronome);
+    document.getElementById("stop-metronome").addEventListener("click", stopMetronome);
     document.getElementById("download-rhythm").addEventListener("click", () => {
       try {
         saveRhythmSheet();
@@ -1500,6 +2008,7 @@
           playKey: rhythmPlayKey,
           capo: rhythmCapo,
           tempo: rhythmTempo,
+          metronomeSubdivision,
           rows: rhythmRows
         }, null, 2)], { type: "application/json" });
         const downloadUrl = URL.createObjectURL(file);
@@ -1535,6 +2044,10 @@
         if (rhythmNoteNames.includes(savedRhythmSheet.playKey)) rhythmPlayKey = savedRhythmSheet.playKey;
         if (Number.isInteger(savedRhythmSheet.capo)) rhythmCapo = Math.min(11, Math.max(0, savedRhythmSheet.capo));
         if (Number.isFinite(savedRhythmSheet.tempo)) rhythmTempo = Math.min(220, Math.max(40, savedRhythmSheet.tempo));
+        if ([1, 2, 3, 4].includes(savedRhythmSheet.metronomeSubdivision)) {
+          metronomeSubdivision = savedRhythmSheet.metronomeSubdivision;
+        }
+        metronomeSubdivisionInput.value = String(metronomeSubdivision);
       }
     } catch {
       document.getElementById("rhythm-status").textContent = "無法讀取演奏稿，已載入預設內容。";
@@ -1545,6 +2058,7 @@
     rhythmCapoInput.value = String(rhythmCapo);
     rhythmTempoInput.value = String(rhythmTempo);
     renderRhythmGrid();
+    renderRightHandTechnique();
     document.getElementById("rhythm-key-status").textContent = rhythmKeySummary();
     persistRhythmSheet();
     renderProgression();

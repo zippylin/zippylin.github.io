@@ -145,16 +145,13 @@
 
     .island-map {
       position: relative;
-      width: min(100%, 760px);
-      margin: 0 auto;
+      width: 100vw;
+      margin-left: calc(50% - 50vw);
       overflow: hidden;
-      aspect-ratio: 1;
-      border: 5px solid var(--white);
-      border-radius: 18px;
-      background: #80d5c9;
-      box-shadow: 0 16px 40px rgba(35, 51, 58, .16);
+      background: #85d4e5;
       isolation: isolate;
     }
+    .island-frame { display: block; width: 100%; height: min(850px, 85svh); min-height: 620px; border: 0; }
     .island-map-image { position: absolute; z-index: -1; inset: 0; width: 100%; height: 100%; object-fit: cover; }
     .map-unit {
       position: absolute;
@@ -232,7 +229,7 @@
     <div class="style-picker" role="group" aria-label="選擇首頁風格">
       <span class="style-picker-label">首頁風格</span>
       <button class="style-button" type="button" data-style="cards" aria-pressed="true">Style 1 · 卡片</button>
-      <button class="style-button" type="button" data-style="island" aria-pressed="false">Style 2 · 群島</button>
+      <button class="style-button" type="button" data-style="island" aria-pressed="false">Style 2 · 學習島</button>
     </div>
 
     <nav class="choices style-view" data-style-view="cards" aria-label="選擇學習主題">
@@ -275,45 +272,11 @@
       </a>
     </nav>
 
-    <nav class="style-view" data-style-view="island" aria-label="學習群島地圖，含三個開放單元與七個預留位置" hidden>
+    <section class="style-view" data-style-view="island" aria-label="學習島 3D 地圖，含三個開放單元與五個預留位置" hidden>
       <div class="island-map">
-        <img class="island-map-image" src="learning-island.svg" alt="">
-        <a class="map-unit" style="--map-x: 24%; --map-y: 34%;" href="4words_index.html">
-          <span class="map-unit-icon" aria-hidden="true">成</span>
-          <span><strong>四字成語</strong><small>典故教室 · 點選進入</small></span>
-        </a>
-        <a class="map-unit" style="--map-x: 75%; --map-y: 31%;" href="English_tenses.html">
-          <span class="map-unit-icon" aria-hidden="true">T</span>
-          <span><strong>英文時態</strong><small>語言教室 · 12 種時態</small></span>
-        </a>
-        <a class="map-unit" style="--map-x: 50%; --map-y: 72%;" href="Guitar.html">
-          <span class="map-unit-icon" aria-hidden="true">♫</span>
-          <span><strong>吉他和弦</strong><small>音樂教室 · 點選進入</small></span>
-        </a>
-        <div class="map-unit map-unit-future" style="--map-x: 22%; --map-y: 14%;" role="note" aria-label="預留學習單元 4，待新增主題">
-          <span class="map-unit-icon" aria-hidden="true">04</span><span><strong>預留單元 04</strong><small>待新增主題</small></span>
-        </div>
-        <div class="map-unit map-unit-future" style="--map-x: 50%; --map-y: 16%;" role="note" aria-label="預留學習單元 5，待新增主題">
-          <span class="map-unit-icon" aria-hidden="true">05</span><span><strong>預留單元 05</strong><small>待新增主題</small></span>
-        </div>
-        <div class="map-unit map-unit-future" style="--map-x: 81%; --map-y: 48%;" role="note" aria-label="預留學習單元 6，待新增主題">
-          <span class="map-unit-icon" aria-hidden="true">06</span><span><strong>預留單元 06</strong><small>待新增主題</small></span>
-        </div>
-        <div class="map-unit map-unit-future" style="--map-x: 20%; --map-y: 55%;" role="note" aria-label="預留學習單元 7，待新增主題">
-          <span class="map-unit-icon" aria-hidden="true">07</span><span><strong>預留單元 07</strong><small>待新增主題</small></span>
-        </div>
-        <div class="map-unit map-unit-future" style="--map-x: 79%; --map-y: 65%;" role="note" aria-label="預留學習單元 8，待新增主題">
-          <span class="map-unit-icon" aria-hidden="true">08</span><span><strong>預留單元 08</strong><small>待新增主題</small></span>
-        </div>
-        <div class="map-unit map-unit-future" style="--map-x: 28%; --map-y: 86%;" role="note" aria-label="預留學習單元 9，待新增主題">
-          <span class="map-unit-icon" aria-hidden="true">09</span><span><strong>預留單元 09</strong><small>待新增主題</small></span>
-        </div>
-        <div class="map-unit map-unit-future" style="--map-x: 72%; --map-y: 86%;" role="note" aria-label="預留學習單元 10，待新增主題">
-          <span class="map-unit-icon" aria-hidden="true">10</span><span><strong>預留單元 10</strong><small>待新增主題</small></span>
-        </div>
+        <iframe class="island-frame" title="學習島互動 3D 地圖" data-src="reference-3d.html"></iframe>
       </div>
-      <p class="map-caption">點選已開放的地圖單元開始學習；其餘七個位置將留待未來新增主題。</p>
-    </nav>
+    </section>
   </main>
 
   <footer class="page">
@@ -335,6 +298,10 @@
         document.querySelectorAll('[data-style-view]').forEach((view) => {
           view.hidden = view.dataset.styleView !== selectedStyle;
         });
+        if (selectedStyle === 'island') {
+          const frame = document.querySelector('.island-frame');
+          if (!frame.hasAttribute('src')) frame.src = frame.dataset.src;
+        }
       });
     });
 
