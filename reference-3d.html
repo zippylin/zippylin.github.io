@@ -31,6 +31,7 @@ footer{position:absolute;bottom:25px;right:26px;text-align:right;font-size:11px;
 <nav class="tools" aria-label="地圖工具">
 <button class="tool" id="home" title="全島視角" aria-label="全島視角"><i data-lucide="house"></i></button>
 <button class="tool" id="rotate" title="自動環繞" aria-label="自動環繞" aria-pressed="false"><i data-lucide="rotate-3d"></i></button>
+<button class="tool" id="motion" title="啟用動畫" aria-label="啟用動畫" aria-pressed="false"><i data-lucide="activity"></i></button>
 <button class="tool" id="image" title="原圖對照" aria-label="原圖對照" aria-pressed="false"><i data-lucide="image"></i></button>
 <button class="tool" id="download" title="下載 GLB 模型 · 可匯入 Blender" aria-label="下載 GLB 模型"><i data-lucide="download"></i></button>
 </nav>
@@ -228,6 +229,22 @@ for(let index=0;index<cablePoints.length-1;index++){
 ribbon([[-10,-19],[-5,-17],[-1,-14],[4,-13]],.18,'#8bbfd0',.13);
 const waterfall=mesh('box','#8bdce1',21,4.1,-10,1.2,6.2,.25);waterfall.rotation.y=.5;
 const reducedMotion=matchMedia('(prefers-reduced-motion: reduce)');
+const motionButton=document.getElementById('motion');
+let motionOverride=null,motionEnabled=!reducedMotion.matches;
+function updateMotionButton(){
+ const label=motionEnabled?'停用動畫':'啟用動畫';
+ motionButton.setAttribute('aria-pressed',String(motionEnabled));
+ motionButton.setAttribute('aria-label',label);
+ motionButton.title=label;
+}
+motionButton.onclick=()=>{motionOverride=!motionEnabled;motionEnabled=motionOverride;updateMotionButton();};
+const syncMotionPreference=event=>{
+ if(motionOverride!==null)return;
+ motionEnabled=!event.matches;updateMotionButton();
+};
+if(reducedMotion.addEventListener)reducedMotion.addEventListener('change',syncMotionPreference);
+else reducedMotion.addListener(syncMotionPreference);
+updateMotionButton();
 const clothing=['#db684a','#3988b3','#e5b442','#9a69aa','#469b78','#df899e','#e78d43','#5c78b4'];
 function createWalker(name,shirt,index){
  const group=new THREE.Group();group.name=name;island.add(group);
@@ -517,10 +534,10 @@ const projected=new THREE.Vector3();let lastTime=performance.now();
 function animate(now){
  requestAnimationFrame(animate);
  const delta=Math.max(0,Math.min((now-lastTime)/1000,.1));lastTime=now;blades.rotation.z-=delta*.38;
- if(!reducedMotion.matches)updateSchoolTrip(delta);
+ if(motionEnabled)updateSchoolTrip(delta);
  if(flight){const progress=Math.min((now-flight.start)/950,1),ease=1-(1-progress)**3;camera.position.lerpVectors(flight.from,flight.to,ease);controls.target.lerpVectors(flight.targetFrom,flight.targetTo,ease);if(progress===1)flight=null;}
  controls.update();
- updateEnvironment(reducedMotion.matches?0:delta);
+ updateEnvironment(motionEnabled?delta:0);
  for(const place of landmarks){projected.set(place.x,height(place.x,place.z)+3,place.z).project(camera);place.label.style.left=(projected.x*.5+.5)*innerWidth+'px';place.label.style.top=(-projected.y*.5+.5)*innerHeight+'px';place.label.hidden=projected.z>1||projected.z< -1;}
  renderer.render(scene,camera);
 }
