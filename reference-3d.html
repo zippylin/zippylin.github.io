@@ -14,6 +14,7 @@ header{position:absolute;left:28px;top:24px;pointer-events:none}h1{font-family:"
 .places a{display:block;color:var(--ink);text-decoration:none;padding:9px 5px;font-size:12px;white-space:nowrap;border-radius:3px;font-weight:700}.places a:hover,.places a:focus-visible{background:#dcebdd}.places button{color:#65776e}.label{text-decoration:none;color:var(--ink)}.label[data-reserved]{color:#65776e;border-style:dashed}
 #labels{position:absolute;inset:0;pointer-events:none;overflow:hidden}.label{position:absolute;transform:translate(-50%,-100%);border:1px solid #ffffffd9;border-radius:5px;background:#f6faf3ed;box-shadow:0 2px 6px #163c3b22;padding:5px 10px;font-size:11px;white-space:nowrap;pointer-events:auto}.label::after{content:"";position:absolute;bottom:-6px;left:50%;height:6px;border-left:1px solid #f6faf3}.label:hover{background:#fff}
 #reference{position:absolute;right:24px;top:80px;width:min(410px,calc(100vw - 48px));max-height:calc(100dvh - 160px);object-fit:contain;object-position:top right;border:5px solid var(--paper);border-radius:5px;box-shadow:0 10px 40px #153d3d44}#reference[hidden]{display:none}
+.battery-icon{position:relative;display:flex;flex-direction:column-reverse;gap:2px;width:19px;height:27px;padding:3px 2px;border:2px solid #31574b;border-radius:4px}.battery-icon::before{content:"";position:absolute;top:-5px;left:5px;width:6px;height:3px;border:1px solid #31574b;border-bottom:0;border-radius:2px 2px 0 0}.battery-segment{display:block;flex:1;min-height:2px;border-radius:1px;background:#d6e0d9}.battery-segment[data-active=true]{background:#39bd58}.battery-indicator[aria-label*="放電中"] .battery-segment[data-active=true]{background:#dfa638}.battery-indicator[aria-label*="電量不足"] .battery-segment[data-active=true]{background:#e46c48}
 footer{position:absolute;bottom:25px;right:26px;text-align:right;font-size:11px;color:#245a61;pointer-events:none}footer strong{display:block;font-size:13px;font-weight:500;margin-bottom:6px}#status{position:absolute;top:88px;left:28px;font-size:12px;max-width:320px;background:var(--paper);padding:10px 14px;border-radius:4px}#status:empty{display:none}
 @media(max-width:600px){header{left:18px;top:17px}h1{font-size:29px}header p{font-size:11px}.tools{right:14px;top:19px;gap:4px;max-width:142px;flex-wrap:wrap;justify-content:flex-end}.tool{width:36px;height:36px}.panel{left:14px;bottom:16px;width:calc(100% - 28px);padding:12px 14px}.panel h2{margin-bottom:5px;font-size:12px}.places{grid-template-columns:repeat(4,1fr);gap:0}.places button{padding:9px 2px;font-size:11px}.dot{margin-right:4px;width:5px;height:5px}footer{bottom:147px;right:16px;font-size:10px}footer strong{display:none}.label{font-size:10px;padding:4px 7px}#status{top:119px;left:18px;max-width:calc(100% - 36px)}#reference{top:108px;right:14px;width:calc(100vw - 28px);max-height:calc(100dvh - 260px)}}
 </style>
@@ -34,6 +35,7 @@ footer{position:absolute;bottom:25px;right:26px;text-align:right;font-size:11px;
 <button class="tool" id="motion" title="啟用動畫" aria-label="啟用動畫" aria-pressed="false"><i data-lucide="activity"></i></button>
 <button class="tool" id="image" title="原圖對照" aria-label="原圖對照" aria-pressed="false"><i data-lucide="image"></i></button>
 <button class="tool" id="download" title="下載 GLB 模型 · 可匯入 Blender" aria-label="下載 GLB 模型"><i data-lucide="download"></i></button>
+<button class="tool battery-indicator" id="battery-indicator" title="電池電量 100%，充電中" aria-label="電池電量 100%，充電中"><span class="battery-icon" aria-hidden="true"><span class="battery-segment" data-active="true"></span><span class="battery-segment" data-active="true"></span><span class="battery-segment" data-active="true"></span><span class="battery-segment" data-active="true"></span><span class="battery-segment" data-active="true"></span></span></button>
 </nav>
 <div class="time-controls" role="group" aria-label="島嶼時間">
 <output id="island-time" aria-label="島嶼目前時間">12:00<small>中午</small></output>
@@ -148,15 +150,76 @@ function ribbon(points,width,tint,lift=.06,fixedHeight=null) {
  const geometry=new THREE.BufferGeometry();geometry.setAttribute('position',new THREE.Float32BufferAttribute(vertices,3));geometry.setIndex(indices);geometry.computeVertexNormals();
  const object=new THREE.Mesh(geometry,new THREE.MeshStandardMaterial({color:new THREE.Color(tint).convertSRGBToLinear(),roughness:.8,side:THREE.DoubleSide}));object.receiveShadow=true;island.add(object);return object;
 }
+const solarLights=[];
+const solarBattery={charge:100,mode:'充電中'};
+const batteryButton=document.getElementById('battery-indicator');
+const batterySegments=[...batteryButton.querySelectorAll('.battery-segment')];
+let lastBatteryLabel='';
+const lampGlowCanvas=document.createElement('canvas');lampGlowCanvas.width=lampGlowCanvas.height=128;
+const lampGlowContext=lampGlowCanvas.getContext('2d');
+const lampGradient=lampGlowContext.createRadialGradient(64,64,0,64,64,64);
+lampGradient.addColorStop(0,'rgba(255,239,181,1)');
+lampGradient.addColorStop(.3,'rgba(255,219,137,.55)');
+lampGradient.addColorStop(1,'rgba(255,206,113,0)');
+lampGlowContext.fillStyle=lampGradient;lampGlowContext.fillRect(0,0,128,128);
+const lampGlowTexture=new THREE.CanvasTexture(lampGlowCanvas);lampGlowTexture.encoding=THREE.sRGBEncoding;
+function addRoadLights(points,spacing=8){
+ const curve=new THREE.CatmullRomCurve3(points.map(([x,z])=>new THREE.Vector3(x,0,z)));
+ const length=curve.getLength();
+ for(let distance=spacing/2;distance<length;distance+=spacing){
+  const point=curve.getPointAt(distance/length),ground=height(point.x,point.z);
+  const group=new THREE.Group();group.name='Solar road light';group.position.set(point.x,ground,point.z);island.add(group);
+  const side=Math.round(distance/spacing)%2?1:-1;
+  mesh('cylinder','#3d5b50',0,1.55,0,.055,3.1,.055,group);
+  mesh('box','#3d5b50',side*.35,2.95,0,.8,.07,.07,group);
+  mesh('box','#45645a',side*.68,2.84,0,.45,.16,.34,group);
+  const bulbMaterial=new THREE.MeshStandardMaterial({color:'#ffe6a4',emissive:'#ffca65',emissiveIntensity:0,roughness:.45});
+  const bulb=new THREE.Mesh(geometries.sphere,bulbMaterial);bulb.position.set(side*.68,2.73,0);bulb.scale.set(.12,.08,.12);group.add(bulb);
+  const light=new THREE.SpotLight('#ffdf9a',0,8,.62,.75,1.5);light.position.copy(bulb.position);group.add(light);
+  light.target.position.set(side*.68,.08,0);group.add(light.target);
+  const glow=new THREE.Sprite(new THREE.SpriteMaterial({map:lampGlowTexture,transparent:true,opacity:.85,blending:THREE.AdditiveBlending,depthWrite:false,toneMapped:false}));
+  glow.name='Streetlamp bulb halo';glow.position.copy(bulb.position);glow.scale.set(.75,.75,1);glow.visible=false;group.add(glow);
+  const beamGeometry=new THREE.CylinderGeometry(.035,1.6,2.65,32,1,true);
+  const beam=new THREE.Mesh(beamGeometry,new THREE.ShaderMaterial({
+   transparent:true,depthWrite:false,side:THREE.DoubleSide,blending:THREE.AdditiveBlending,
+   vertexShader:'varying vec2 beamUv; void main(){beamUv=uv; gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}',
+   fragmentShader:'varying vec2 beamUv; void main(){float fade=sin(beamUv.y*3.14159265); gl_FragColor=vec4(1.0,0.82,0.46,fade*0.055);}'
+  }));
+  beam.name='Streetlamp downward beam';beam.position.set(side*.68,1.405,0);beam.visible=false;group.add(beam);
+  const poolGeometry=new THREE.CircleGeometry(1.65,32);poolGeometry.rotateX(-Math.PI/2);
+  const poolVertices=poolGeometry.attributes.position;
+  for(let index=0;index<poolVertices.count;index++){
+   const offsetX=side*.68+poolVertices.getX(index),offsetZ=poolVertices.getZ(index);
+   poolVertices.setY(index,height(point.x+offsetX,point.z+offsetZ)-ground+.11);
+  }
+  poolGeometry.computeVertexNormals();
+  const pool=new THREE.Mesh(poolGeometry,new THREE.MeshBasicMaterial({map:lampGlowTexture,transparent:true,opacity:.5,blending:THREE.AdditiveBlending,depthWrite:false,side:THREE.DoubleSide,toneMapped:false}));
+  pool.name='Streetlamp road light pool';pool.position.x=side*.68;pool.visible=false;group.add(pool);
+  solarLights.push({bulb,light,glow,beam,pool});
+ }
+}
+function road(points,width){ribbon(points,width,'#e4ca8b');addRoadLights(points);}
 const lake=mesh('cylinder','#2cb3d3',15,1.55,2,6.9,.12,5.6);lake.name='Moonlight Lake';
 mesh('cylinder','#35b6d2',-13,1.15,15,4,.1,4.7);
 ribbon([[-12,-11],[-12,-5],[-8,1],[-9,9],[-13,15],[-12,23],[-16,29]],1.3,'#40bddd',.08);
 ribbon([[18,8],[15,11],[18,16],[25,19]],1.1,'#40bddd',.08);
-ribbon([[0,-15],[0,-9],[0,-3],[0,2],[0,9],[-1,17],[2,24],[2,29]],1.35,'#e4ca8b');
-ribbon([[-24,9],[-19,6],[-11,3],[0,2],[9,9],[17,11],[25,12]],1.25,'#e4ca8b');
-ribbon([[-21,24],[-17,20],[-8,21],[-1,17],[8,19],[15,22],[22,23]],1.2,'#e4ca8b');
-ribbon([[7,-4],[14,-7],[22,-10],[22,-16],[18,-22]],1,'#e4ca8b');
+road([[0,-15],[0,-9],[0,-3],[0,2],[0,9],[-1,17],[2,24],[2,29]],1.35);
+road([[-24,9],[-19,6],[-11,3],[0,2],[9,9],[17,11],[25,12]],1.25);
+road([[-21,24],[-17,20],[-8,21],[-1,17],[8,19],[15,22],[22,23]],1.2);
+road([[7,-4],[14,-7],[22,-10],[22,-16],[18,-22]],1);
 const occupied=[];
+const solarStation=new THREE.Group();solarStation.name='Solar charging and battery storage';
+const stationX=4.2,stationZ=13;solarStation.position.set(stationX,height(stationX,stationZ),stationZ);island.add(solarStation);
+mesh('box','#718878',0,.52,0,1.8,1.04,1.35,solarStation);
+mesh('box','#344c43',0,.52,.7,1.15,.72,.08,solarStation);
+for(let index=0;index<5;index++)mesh('box','#55bc67',0,.25+index*.13,.75,.86,.065,.035,solarStation);
+const solarPanel=new THREE.Group();solarPanel.position.set(.35,1.48,-.8);solarPanel.rotation.x=-.38;solarStation.add(solarPanel);
+mesh('box','#24435a',0,0,0,2.55,.09,1.75,solarPanel);
+for(let index=-1;index<=1;index++)mesh('box','#74b8c2',index*.72,.055,0,.035,.015,1.62,solarPanel);
+for(let index=-1;index<=1;index++)mesh('box','#74b8c2',0,.055,index*.48,2.42,.015,.035,solarPanel);
+mesh('cylinder','#596c61',-.45,.85,-.7,.055,1.2,.055,solarStation);
+mesh('cylinder','#596c61',1.05,.85,-.7,.055,1.2,.055,solarStation);
+occupied.push([stationX,stationZ,2.5]);
 function house(x,z,size=1,roof='#b95437',tower=false) {
  const ground=height(x,z),rise=tower?size*2.7:size*1.25;
  mesh('box','#f5e1b5',x,ground+rise/2,z,size*1.35,rise,size*1.15);
@@ -670,6 +733,24 @@ function updateEnvironment(delta){
  sun.intensity=THREE.MathUtils.lerp(before.intensity,after.intensity,blend);hemisphere.intensity=THREE.MathUtils.lerp(before.ambient,after.ambient,blend);
  cloudMaterial.color.copy(before.cloud).lerp(after.cloud,blend);
  const angle=(hour-6)/12*Math.PI,daylight=Math.max(0,Math.sin(angle)),night=1-THREE.MathUtils.smoothstep(daylight,0,.4);
+ const sunAngle=THREE.MathUtils.radToDeg(angle);
+ const canCharge=!weather.raining&&sunAngle>=30&&sunAngle<=150;
+ solarBattery.mode=canCharge?'充電中':solarBattery.charge>0?'放電中':'電量不足';
+ if(delta>0){
+  const change=delta*.1*(canCharge?20:-25);
+  solarBattery.charge=THREE.MathUtils.clamp(solarBattery.charge+change,0,100);
+ }
+ const batteryLabel='電池電量 '+Math.floor(solarBattery.charge)+'%，'+solarBattery.mode+'；日照角 '+Math.round(sunAngle)+'°';
+ if(batteryLabel!==lastBatteryLabel){
+  lastBatteryLabel=batteryLabel;batteryButton.title=batteryLabel;batteryButton.setAttribute('aria-label',batteryLabel);
+  const stages=Math.floor(solarBattery.charge/20);
+  batterySegments.forEach((segment,index)=>segment.dataset.active=String(index<stages));
+ }
+ const lampsOn=(!canCharge||weather.raining)&&solarBattery.charge>0;
+ for(const {bulb,light,glow,beam,pool} of solarLights){
+  bulb.material.emissiveIntensity=lampsOn?2.8:0;light.intensity=lampsOn?3:0;
+  glow.visible=beam.visible=pool.visible=lampsOn;
+ }
  environment.sunDirection.set(Math.cos(angle),Math.sin(angle)*.85,Math.sin(angle)*.45).normalize();
  const moonAngle=angle+environment.moonPhase*Math.PI*2;
  environment.moonDirection.set(Math.cos(moonAngle),Math.sin(moonAngle)*.85,Math.sin(moonAngle)*.45).normalize();
@@ -780,7 +861,7 @@ function animate(now){
  renderer.render(scene,camera);
 }
 status.textContent='';requestAnimationFrame(animate);
-window.islandApp={scene,camera,renderer,controls,island,landmarks,schoolTrip,phaseDurations,environment,weather,shelters};
+window.islandApp={scene,camera,renderer,controls,island,landmarks,schoolTrip,phaseDurations,environment,weather,shelters,solarBattery,solarLights,solarStation};
 })();
 </script>
 </body>

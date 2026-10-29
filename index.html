@@ -37,7 +37,7 @@
 
     a { color: inherit; }
     .page { width: min(1080px, calc(100% - 48px)); margin: 0 auto; }
-    header { padding: 30px 0; }
+    header { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 12px 0; }
     .brand { display: inline-flex; align-items: center; gap: 12px; text-decoration: none; }
     .brand-mark {
       display: grid;
@@ -53,23 +53,24 @@
     }
     .brand-name { font-family: 'Noto Serif TC', 'PMingLiU', serif; font-size: 18px; font-weight: 800; letter-spacing: .08em; }
 
-    main { padding: 48px 0 86px; }
-    .intro { max-width: 680px; margin-bottom: 44px; animation: rise .65s ease both; }
+    main { padding: 0 0 24px; }
+    .home-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 12px 0 16px; }
+    .intro { min-width: 0; animation: rise .65s ease both; }
     .eyebrow { color: var(--coral); font-size: 12px; font-weight: 700; letter-spacing: .18em; }
     h1 {
-      margin: 10px 0 14px;
+      margin: 0 0 4px;
       font-family: 'Noto Serif TC', 'PMingLiU', serif;
-      font-size: clamp(38px, 7vw, 68px);
+      font-size: 26px;
       line-height: 1.2;
     }
-    .intro p { max-width: 480px; margin: 0; color: var(--muted); font-size: 16px; }
-    .visit-count { display: inline-block; margin-top: 18px; padding: 7px 12px; border: 1px solid var(--line); color: var(--teal-deep); background: rgba(255, 253, 249, .75); font-size: 13px; }
+    .intro p { margin: 0; color: var(--muted); font-size: 13px; }
+    .visit-count { flex-shrink: 0; margin: 0; color: var(--muted); font-size: 12px; text-align: right; }
     .visit-count strong { color: var(--coral); font-variant-numeric: tabular-nums; }
     .milestone-message { position: fixed; z-index: 2; top: 22px; left: 50%; width: max-content; max-width: calc(100% - 32px); transform: translateX(-50%); padding: 12px 20px; border: 1px solid var(--gold); color: var(--ink); background: var(--white); box-shadow: 0 8px 30px rgba(35, 51, 58, .16); text-align: center; animation: rise .4s ease both; }
     .milestone-message[hidden] { display: none; }
     .fireworks { position: fixed; z-index: 1; inset: 0; width: 100%; height: 100%; pointer-events: none; }
 
-    .style-picker { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin: 0 0 22px; }
+    .style-picker { display: flex; flex-shrink: 0; flex-wrap: wrap; align-items: center; gap: 8px; margin: 0; }
     .style-picker-label { margin-right: 4px; color: var(--muted); font-size: 13px; font-weight: 700; }
     .style-button { padding: 8px 14px; border: 1px solid var(--line); border-radius: 999px; color: var(--ink); background: var(--white); font: inherit; font-size: 13px; cursor: pointer; }
     .style-button[aria-pressed="true"] { border-color: var(--teal); color: var(--white); background: var(--teal); }
@@ -145,13 +146,12 @@
 
     .island-map {
       position: relative;
-      width: 100vw;
-      margin-left: calc(50% - 50vw);
+      width: 100%;
       overflow: hidden;
       background: #85d4e5;
       isolation: isolate;
     }
-    .island-frame { display: block; width: 100%; height: min(850px, 85svh); min-height: 620px; border: 0; }
+    .island-frame { display: block; width: 100%; height: calc(100svh - 160px); min-height: 360px; border: 0; }
     .island-map-image { position: absolute; z-index: -1; inset: 0; width: 100%; height: 100%; object-fit: cover; }
     .map-unit {
       position: absolute;
@@ -197,9 +197,18 @@
     @keyframes rise { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
     @media (max-width: 640px) {
       .page { width: min(100% - 32px, 480px); }
-      header { padding: 22px 0; }
-      main { padding: 42px 0 58px; }
-      .intro { margin-bottom: 30px; }
+      header { padding: 10px 0; }
+      .brand { gap: 8px; }
+      .brand-mark { width: 34px; font-size: 17px; }
+      .brand-name { font-size: 16px; }
+      .visit-count { max-width: 140px; font-size: 11px; }
+      .home-toolbar { flex-direction: column; align-items: flex-start; gap: 10px; padding: 8px 0 12px; }
+      h1 { font-size: 22px; }
+      .intro p { font-size: 12px; }
+      .style-picker { gap: 6px; }
+      .style-picker-label { font-size: 12px; }
+      .style-button { padding: 6px 12px; font-size: 12px; }
+      .island-frame { height: calc(100svh - 210px); }
       .choices { grid-template-columns: 1fr; gap: 14px; }
       .choice { min-height: 270px; padding: 22px; }
       .choice-art { min-height: 96px; }
@@ -216,14 +225,14 @@
       <span class="brand-mark" aria-hidden="true">學</span>
       <span class="brand-name">一起學習</span>
     </a>
+    <p class="visit-count" aria-live="polite">累計 <strong id="visit-count">…</strong> 人次開啟本頁</p>
   </header>
 
-  <main class="page">
+  <main>
+    <div class="home-toolbar page">
     <section class="intro" aria-labelledby="page-title">
-      <div class="eyebrow">LEARN SOMETHING TODAY</div>
       <h1 id="page-title">今天想學什麼？</h1>
-      <p>挑一個主題，從一點點開始。成語、英文時態和吉他和弦練習都整理在這裡。</p>
-      <p class="visit-count" aria-live="polite">累計 <strong id="visit-count">…</strong> 人次開啟本頁</p>
+      <p>成語、英文時態、吉他和弦，每天學一點。</p>
     </section>
 
     <div class="style-picker" role="group" aria-label="選擇首頁風格">
@@ -231,8 +240,9 @@
       <button class="style-button" type="button" data-style="cards" aria-pressed="false">Style 1 · 卡片</button>
       <button class="style-button" type="button" data-style="island" aria-pressed="true">Style 2 · 學習島</button>
     </div>
+    </div>
 
-    <nav class="choices style-view" data-style-view="cards" aria-label="選擇學習主題" hidden>
+    <nav class="choices style-view page" data-style-view="cards" aria-label="選擇學習主題" hidden>
       <a class="choice choice-idiom" href="4words_index.html">
         <span class="choice-label">中文 · 每日練習</span>
         <span class="choice-art idiom-art" aria-hidden="true">成語典故</span>
