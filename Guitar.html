@@ -3,19 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#f4f0e8">
-  <title>古典吉他和弦練習</title>
+  <meta name="theme-color" content="#ffffff">
+  <title>和弦練習室｜從第一個和弦開始</title>
   <style>
     :root {
       color-scheme: light;
-      --ink: #26352d;
-      --muted: #758078;
-      --paper: #f4f0e8;
-      --card: #fffdf8;
-      --green: #315c45;
-      --green-dark: #244633;
-      --line: #dedbd1;
-      --accent: #e5a94b;
+      --ink: #1f2828;
+      --muted: #596564;
+      --paper: #ffffff;
+      --card: #f3f6f5;
+      --green: #1b6e66;
+      --green-dark: #15574f;
+      --line: #e0e6e3;
+      --accent: #1b6e66;
     }
 
     * { box-sizing: border-box; }
@@ -25,23 +25,12 @@
       min-height: 100vh;
       margin: 0;
       padding: 32px 18px;
-      background:
-        radial-gradient(ellipse at 10% 0%, #e8e3d7 0, transparent 38%),
-        var(--paper);
+      background: var(--paper);
       color: var(--ink);
       font-family: "Segoe UI", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
     }
 
     .page { width: min(1080px, 100%); margin: 0 auto; }
-    .eyebrow {
-      margin: 0 0 9px;
-      color: var(--green);
-      font-size: .75rem;
-      font-weight: 800;
-      letter-spacing: .17em;
-      text-transform: uppercase;
-    }
-
     header { position: relative; margin: 0 0 25px; padding-right: 260px; }
     .credit {
       position: absolute;
@@ -59,7 +48,6 @@
       border: 1px solid #e7e2d8;
       border-radius: 22px;
       background: var(--card);
-      box-shadow: 0 18px 50px #34433212;
     }
 
     .toolbar {
@@ -206,7 +194,6 @@
       border: 1px solid #e7e2d8;
       border-radius: 18px;
       background: var(--card);
-      box-shadow: 0 12px 35px #3443320a;
     }
     .progression-grid {
       display: grid;
@@ -275,7 +262,6 @@
       border: 1px solid #e7e2d8;
       border-radius: 18px;
       background: var(--card);
-      box-shadow: 0 12px 35px #3443320a;
     }
     .right-hand-controls { max-width: 430px; }
     .right-hand-select { max-width: 310px; }
@@ -409,52 +395,184 @@
     @media (max-width: 390px) {
       .progression-grid { grid-template-columns: 1fr; }
     }
+
+    [hidden] { display: none !important; }
+    body {
+      display: grid;
+      grid-template-columns: 184px minmax(0, 1100px);
+      gap: 32px;
+      max-width: 1364px;
+      margin: 0 auto;
+      padding: 28px 24px;
+      font-size: 16px;
+      font-variant-numeric: tabular-nums;
+    }
+    .page { width: 100%; min-width: 0; }
+    .app-nav { position: sticky; top: 28px; align-self: start; }
+    .brand { display: flex; align-items: center; gap: 10px; margin: 0 0 12px; font-size: 18px; font-weight: 700; }
+    .brand svg { width: 28px; height: 34px; color: var(--green); flex: none; }
+    .home-link { color: var(--muted); font-size: 14px; text-underline-offset: 4px; }
+    .nav-items { display: grid; gap: 8px; margin-top: 32px; }
+    .nav-items button { padding: 0 14px; border: 0; background: transparent; text-align: left; font-weight: 500; }
+    .nav-items button[aria-current="page"] { background: #e9eeec; color: var(--ink); font-weight: 700; }
+    .nav-note { margin: 28px 12px 0; color: var(--muted); font-size: 14px; line-height: 1.8; }
+    header { padding: 0; margin-bottom: 24px; }
+    h1 { font-size: 28px; font-weight: 650; letter-spacing: -.02em; }
+    .subtitle { max-width: 680px; color: var(--muted); font-size: 15px; }
+    .practice-card, .progression-card, .music-card, .right-hand-card, .rhythm-card {
+      border: 0; border-radius: 22px; background: var(--card);
+    }
+    .toolbar { grid-template-columns: 1fr 1fr 2fr; padding: 20px 24px; background: transparent; border: 0; }
+    .chord-settings > summary { padding: 20px 24px; color: var(--muted); font-weight: 500; }
+    .chord-settings[open] > summary { padding-bottom: 0; }
+    label { font-size: 14px; font-weight: 600; }
+    button, select, .file-button, .rhythm-settings input, .rhythm-settings select, .music-form input {
+      min-height: 44px; border-color: #cbd4d0; border-radius: 10px; font-size: 14px;
+    }
+    button { transition: background-color 140ms, transform 140ms; }
+    button:active:not(:disabled) { transform: translateY(1px); }
+    button:disabled { cursor: not-allowed; color: var(--muted); }
+    button:focus-visible, select:focus-visible, input:focus-visible, summary:focus-visible, a:focus-visible, textarea:focus-visible, .file-button:focus-within {
+      outline: 3px solid var(--green); outline-offset: 3px;
+    }
+    .next { background: var(--ink); border-color: var(--ink); color: white; }
+    .next:hover { background: #35403e; }
+    .quick-chords { display: flex; flex-wrap: wrap; gap: 8px; padding: 0 24px 20px; }
+    .quick-chords button { min-width: 58px; background: white; font-size: 16px; font-weight: 500; }
+    .quick-chords button[aria-pressed="true"] { background: var(--ink); color: white; border-color: var(--ink); }
+    .content { grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 16px; padding: 0 24px 24px; align-items: start; }
+    .diagram-panel { grid-column: span 5; padding: 20px; background: white; border-radius: 14px; }
+    .details { grid-column: span 7; justify-content: flex-start; padding: 8px 8px 0 16px; }
+    .chord-name { font-size: 40px; font-weight: 500; }
+    .chord-type { margin-bottom: 4px; }
+    .diagram { width: min(100%, 260px); }
+    .note-list { margin-top: 0; background: transparent; color: var(--muted); font-size: 14px; }
+    .play { min-width: 160px; margin-top: 12px; background: var(--green); border-color: var(--green); color: white; }
+    .play:hover { background: var(--green-dark); color: white; }
+    .audio-status { font-size: 13px; }
+    .finger-list { gap: 0; }
+    .finger-list li { min-height: 42px; padding: 6px 0; background: transparent; font-size: 15px; }
+    .finger-badge { background: var(--ink); }
+    .finger-badge.open { background: #e0e8e4; color: var(--green-dark); }
+    .finger-badge.mute { background: #e8ecea; color: var(--muted); }
+    .tip { margin-top: 16px; border: 0; padding: 14px 16px; background: #e5eeea; color: var(--ink); border-radius: 10px; }
+    .tip strong, .strum-practice-tip { color: var(--ink); }
+    .reading-key { margin: 16px 0 0; font-size: 14px; color: var(--muted); line-height: 1.8; }
+    .reading-key strong { color: var(--ink); }
+    .controls { border: 0; padding: 0 24px 24px; background: transparent; }
+    .beginner-guide { margin: 0 24px 24px; padding: 16px 20px; border-radius: 14px; background: #e9eeec; }
+    summary { cursor: pointer; font-size: 15px; font-weight: 600; }
+    .guide-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-top: 16px; }
+    .guide-grid h3 { margin: 0 0 8px; font-size: 15px; }
+    .guide-grid p { margin: 0; font-size: 14px; line-height: 1.8; color: var(--muted); }
+    .sound-help { margin-top: 16px; font-size: 13px; color: var(--muted); }
+    .sound-help summary { font-size: 13px; font-weight: 400; }
+    .extra-section { margin-top: 0; }
+    .section-heading { font-size: 22px; }
+    .progression-item { background: white; border-color: var(--line); border-radius: 14px; }
+    .rhythm-settings { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .strum-slot, .metronome-beat { background: #e5eeea; }
+    .strum-slot:nth-of-type(4n + 2), .right-hand-pattern { background: #e9eeec; }
+    .right-hand-description, .video-strum-intro, .note-list { color: var(--muted); }
+    .video-strum-guide { padding: 24px; }
+    .legend, footer { font-size: 13px; }
+    .credit { position: static; margin-top: 12px; text-align: center; font-size: 12px; }
+    .song-notes textarea { max-width: 100%; }
+    .music-status:empty, .saved-songs:empty { display: none; }
+    @media (max-width: 1000px) {
+      body { display: block; padding: 20px; }
+      .app-nav { position: static; margin-bottom: 24px; }
+      .brand { display: inline-flex; margin: 0 20px 0 0; }
+      .nav-items { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 20px; }
+      .nav-items button { padding: 0 12px; }
+      .nav-note { display: none; }
+    }
+    @media (max-width: 680px) {
+      body { padding: 20px 16px; }
+      header { padding: 0; }
+      h1 { font-size: 24px; }
+      .toolbar { grid-template-columns: 1fr 1fr; padding: 16px; gap: 12px; }
+      .chord-settings > summary { padding: 16px; }
+      .toolbar > :last-child { grid-column: 1 / -1; }
+      .quick-chords { padding: 0 16px 16px; gap: 6px; }
+      .quick-chords button { flex: 1 0 20%; min-width: 44px; }
+      .content { grid-template-columns: 1fr; gap: 16px; padding: 0 16px 16px; }
+      .diagram-panel, .details { grid-column: 1; }
+      .details { padding: 0; }
+      .diagram { width: min(100%, 230px); }
+      .controls { padding: 0 16px 16px; }
+      .beginner-guide { margin: 0 16px 16px; padding: 16px; }
+      .guide-grid { grid-template-columns: 1fr; }
+      .rhythm-settings { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .music-form { grid-template-columns: 1fr; }
+      .progression-grid { grid-template-columns: 1fr; }
+      .video-strum-guide { padding: 16px 0; }
+    }
   </style>
 </head>
 <body>
+  <nav class="app-nav" aria-label="吉他練習工具">
+    <div class="brand">
+      <svg viewBox="0 0 28 36" aria-hidden="true"><path d="M17 2h7v7h-3l-5 12c5 3 6 8 2 11-4 4-11 2-13-2-3-5 0-10 5-11l6-12V2Z" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="26" r="3" fill="currentColor"/></svg>
+      和弦練習室
+    </div>
+    <a class="home-link" href="index.html">回到學習首頁</a>
+    <div class="nav-items">
+      <button type="button" data-view="chords" aria-controls="chords-view" aria-current="page">和弦入門</button>
+      <button type="button" data-view="progression" aria-controls="progression-view">換和弦練習</button>
+      <button type="button" data-view="rhythm" aria-controls="rhythm-view">節奏與節拍器</button>
+      <button type="button" data-view="right-hand" aria-controls="right-hand-view">右手怎麼彈</button>
+      <button type="button" data-view="music" aria-controls="music-view">我的曲譜</button>
+    </div>
+    <p class="nav-note">先按清楚，再換順手。<br>每天一點，慢慢練就好。</p>
+  </nav>
   <main class="page">
     <header>
-      <div class="credit">© JCLin · AI assistant using Copilot SDK in VS Code</div>
-      <p class="eyebrow">Classical Guitar · Chord Practice</p>
-      <h1>和弦指法練習</h1>
-      <p class="subtitle">選一個和弦編號，看看左手怎麼按。慢慢來，讓每一條弦都清楚響起來。</p>
+      <h1 id="view-title">從第一個和弦開始</h1>
+      <p class="subtitle" id="view-description">先試試只用兩根手指的 Em。對照指法、逐弦彈響，再聽聽和弦的聲音。</p>
     </header>
+    <noscript><p>請啟用 JavaScript，才能查看和弦指法、播放聲音與使用練習工具。</p></noscript>
 
-    <section class="practice-card" aria-label="和弦練習卡">
-      <div class="toolbar">
-        <div>
-          <label for="mode-select">練習模式</label>
-          <select id="mode-select" aria-label="選擇練習模式">
-            <option value="basic">初學模式</option>
-            <option value="advanced">進階模式</option>
-          </select>
+    <section class="practice-card" id="chords-view" data-practice-view="chords" aria-label="和弦練習卡">
+      <details class="chord-settings">
+        <summary>其他和弦與進階模式</summary>
+        <div class="toolbar">
+          <div>
+            <label for="mode-select">練習模式</label>
+            <select id="mode-select" aria-label="選擇練習模式">
+              <option value="basic">初學模式</option>
+              <option value="advanced">進階模式</option>
+            </select>
+          </div>
+          <div>
+            <label for="number-select">和弦編號</label>
+            <select id="number-select" aria-label="選擇和弦編號"></select>
+          </div>
+          <div>
+            <label for="chord-select">和弦名稱</label>
+            <select id="chord-select" aria-label="選擇和弦名稱"></select>
+          </div>
         </div>
-        <div>
-          <label for="number-select">和弦編號</label>
-          <select id="number-select" aria-label="選擇和弦編號"></select>
-        </div>
-        <div>
-          <label for="chord-select">和弦名稱</label>
-          <select id="chord-select" aria-label="選擇和弦名稱"></select>
-        </div>
-      </div>
+      </details>
+      <div class="quick-chords" id="quick-chords" role="group" aria-label="常用入門和弦"></div>
 
       <div class="content">
         <section class="diagram-panel" aria-live="polite">
           <p class="chord-number" id="chord-number"></p>
           <h2 class="chord-name" id="chord-name"></h2>
           <p class="chord-type" id="chord-type"></p>
-          <button type="button" class="play" id="play-chord" aria-label="播放目前和弦">▶ 播放和弦</button>
-          <p class="audio-status" id="audio-status" aria-live="polite"></p>
-          <p class="audio-status">若沒有聲音，請調高媒體音量並確認輸出裝置；較舊的 iPhone／iPad 請先關閉靜音模式。</p>
           <svg class="diagram" id="diagram" viewBox="0 0 300 270" role="img"></svg>
           <p class="note-list" id="note-list"></p>
+          <button type="button" class="play" id="play-chord" aria-label="播放目前和弦">▶ 聽聽這個和弦</button>
+          <p class="audio-status" id="audio-status" aria-live="polite"></p>
         </section>
 
         <section class="details" aria-label="按弦說明">
           <h3>左手按法</h3>
           <ul class="finger-list" id="finger-list"></ul>
           <div class="tip"><strong>練習小提醒</strong><span id="tip"></span></div>
+          <p class="reading-key"><strong>看懂指法圖</strong><br>● 裡的數字是手指：1 食指、2 中指、3 無名指、4 小指。<br>○ 空弦，不用按；× 不彈這條弦。<br>左邊是最粗的第 6 弦，右邊是最細的第 1 弦。</p>
+          <details class="sound-help"><summary>播放後沒有聲音？</summary><p>請調高媒體音量並確認輸出裝置；較舊的 iPhone／iPad 請先關閉靜音模式。此處為合成示範音色，並非麥克風收音或調音器。</p></details>
         </section>
       </div>
 
@@ -462,9 +580,17 @@
         <button type="button" id="previous">← 上一個</button>
         <button type="button" class="next" id="next">下一個 →</button>
       </div>
+      <details class="beginner-guide">
+        <summary>第一次拿起吉他？從這裡練</summary>
+        <div class="guide-grid">
+          <div><h3>把手指立起來</h3><p>指尖靠近琴格的金屬條，但不要壓在上面。拇指自然扶住琴頸，手腕不要硬折。</p></div>
+          <div><h3>一條一條檢查</h3><p>照著圖按好，再逐弦慢彈。有悶音就微調指尖，先求清楚，不用急著加速。</p></div>
+          <div><h3>再練兩個和弦</h3><p>先試 Em 和 Am 的轉換；換得順了，再到「節奏與節拍器」用 60 BPM 慢練。手痛就先休息。</p></div>
+        </div>
+      </details>
     </section>
 
-    <section class="extra-section" aria-labelledby="progression-heading">
+    <section class="extra-section" id="progression-view" data-practice-view="progression" aria-labelledby="progression-heading">
       <h2 class="section-heading" id="progression-heading">和弦進行練習</h2>
       <p class="section-description">排好最多六個和弦，一頁看完整段進行；每格都能單獨播放。</p>
       <div class="progression-card">
@@ -473,7 +599,7 @@
       </div>
     </section>
 
-    <section class="extra-section" aria-labelledby="rhythm-heading">
+    <section class="extra-section" id="rhythm-view" data-practice-view="rhythm" aria-labelledby="rhythm-heading">
       <h2 class="section-heading" id="rhythm-heading">節奏範例演奏</h2>
       <p class="section-description">以一行一小節編排整首歌。可選節拍細分、預備倒數，並循環播放指定小節。</p>
       <div class="rhythm-card">
@@ -544,7 +670,7 @@
       </div>
     </section>
 
-    <section class="extra-section" aria-labelledby="right-hand-heading">
+    <section class="extra-section" id="right-hand-view" data-practice-view="right-hand" aria-labelledby="right-hand-heading">
       <h2 class="section-heading" id="right-hand-heading">右手撥法介紹</h2>
       <p class="section-description">選擇一種基本撥法，搭配弦線圖和記號練習右手動作。</p>
       <div class="right-hand-card">
@@ -630,7 +756,7 @@
       </div>
     </section>
 
-    <section class="extra-section" aria-labelledby="music-heading">
+    <section class="extra-section" id="music-view" data-practice-view="music" aria-labelledby="music-heading">
       <h2 class="section-heading" id="music-heading">吉他譜搜尋與收藏</h2>
       <p class="section-description">搜尋 kanpu8 的公開頁面，或貼上找到的譜頁網址；收藏會保存在這個瀏覽器，下次開啟仍可查看。</p>
       <div class="music-card">
@@ -654,7 +780,9 @@
     </section>
 
     <p class="legend">圖上最左邊是第 6 弦（最粗），最右邊是第 1 弦（最細）。● 是按弦，○ 是空弦，× 是不彈。</p>
-    <footer>標準調弦：第 6 弦到第 1 弦為 E – A – D – G – B – E</footer>
+    <footer>標準調弦：第 6 弦到第 1 弦為 E – A – D – G – B – E
+      <div class="credit">© JCLin · AI assistant using Copilot SDK in VS Code</div>
+    </footer>
   </main>
 
   <script>
@@ -854,7 +982,7 @@
     const stringNames = ["6弦 E", "5弦 A", "4弦 D", "3弦 G", "2弦 B", "1弦 E"];
     const svgNS = "http://www.w3.org/2000/svg";
     const allChords = [...basicChords, ...advancedChords];
-    const progressionDefaults = ["F", "G", "Am", "C", "D", "Fm"];
+    const progressionDefaults = ["Em", "Am", "C", "G", "D", "Em"];
     const progressionStorageKey = "guitar-chord-practice-progression";
     const savedSongsKey = "guitar-chord-practice-saved-songs";
 
@@ -864,7 +992,7 @@
       chords.forEach((chord, index) => {
       const numberOption = document.createElement("option");
       numberOption.value = index;
-      numberOption.textContent = `${String(index + 1).padStart(2, "0")}. ${chord.name}`;
+      numberOption.textContent = `${index + 1}. ${chord.name}`;
       numberSelect.append(numberOption);
 
       const chordOption = document.createElement("option");
@@ -1067,6 +1195,9 @@
       document.getElementById("tip").textContent = chord.tip;
       drawDiagram(chord);
       renderFingerList(chord);
+      document.querySelectorAll("[data-quick-chord]").forEach((button) => {
+        button.setAttribute("aria-pressed", String(button.dataset.quickChord === chord.name));
+      });
     }
 
     function createPluckedString(context, frequency, startTime) {
@@ -1217,6 +1348,8 @@
     let rhythmPlaybackSubdivisionCount = 1;
     let rhythmPlaybackLoops = false;
     let metronomeTimer;
+    let metronomeStartRequest = 0;
+    let rhythmStartRequest = 0;
     let metronomeNextBeatTime = 0;
     let metronomeBeat = 0;
     let metronomeSubdivisionPosition = 0;
@@ -1520,6 +1653,7 @@
     }
 
     async function startMetronome() {
+      const request = ++metronomeStartRequest;
       const startButton = document.getElementById("start-metronome");
       const stopButton = document.getElementById("stop-metronome");
       const status = document.getElementById("metronome-status");
@@ -1529,6 +1663,7 @@
 
       try {
         const context = await prepareAudio();
+        if (request !== metronomeStartRequest) return;
         clearMetronomeVisualTimers();
         metronomeNextBeatTime = context.currentTime + 0.04;
         metronomeBeat = 0;
@@ -1538,6 +1673,7 @@
         stopButton.disabled = false;
         status.textContent = metronomeStatusText();
       } catch (error) {
+        if (request !== metronomeStartRequest) return;
         status.textContent = `無法啟動節拍器：${error.message}`;
         startButton.disabled = false;
         stopButton.disabled = true;
@@ -1545,6 +1681,7 @@
     }
 
     function stopMetronome() {
+      metronomeStartRequest++;
       window.clearInterval(metronomeTimer);
       metronomeTimer = undefined;
       clearMetronomeVisualTimers();
@@ -1604,6 +1741,7 @@
     }
 
     async function playRhythm() {
+      const request = ++rhythmStartRequest;
       const playButton = document.getElementById("play-rhythm");
       const stopButton = document.getElementById("stop-rhythm");
       const status = document.getElementById("rhythm-status");
@@ -1616,6 +1754,7 @@
       try {
         if (metronomeTimer !== undefined) stopMetronome();
         const context = await prepareAudio();
+        if (request !== rhythmStartRequest) return;
         window.clearTimeout(rhythmEndTimer);
         window.clearTimeout(rhythmCountInTimer);
         window.clearInterval(rhythmPlaybackTimer);
@@ -1655,6 +1794,7 @@
         scheduleRhythmPlayback(context);
         stopButton.disabled = false;
       } catch (error) {
+        if (request !== rhythmStartRequest) return;
         status.textContent = `無法播放：${error.message}`;
         playButton.disabled = false;
         window.clearInterval(rhythmPlaybackTimer);
@@ -1664,6 +1804,7 @@
     }
 
     function stopRhythm() {
+      rhythmStartRequest++;
       window.clearTimeout(rhythmEndTimer);
       window.clearTimeout(rhythmCountInTimer);
       window.clearInterval(rhythmPlaybackTimer);
@@ -2067,7 +2208,61 @@
     } catch (error) {
       document.getElementById("music-status").textContent = `無法讀取收藏：${error.message}`;
     }
-    populateChordOptions();
+  </script>
+  <script id="practice-navigation">
+    const practiceViews = {
+      chords: ["從第一個和弦開始", "先試試只用兩根手指的 Em。對照指法、逐弦彈響，再聽聽和弦的聲音。"],
+      progression: ["把和弦換順手", "先練 Em 與 Am，再慢慢加入 C、G、D。先求每條弦清楚，再追求速度。"],
+      rhythm: ["跟著拍子，慢慢彈", "剛開始可把速度設為 60 BPM，每拍往下刷一次；穩定後再練細分節奏。"],
+      "right-hand": ["左手按好，右手怎麼彈？", "先認識下掃和上掃，再試試用拇指、食指、中指和無名指分解和弦。"],
+      music: ["留住想練的那首歌", "找到喜歡的曲譜，存下連結與自己的練習筆記。收藏只保存在這個瀏覽器。"]
+    };
+    let activePracticeView;
+
+    function showPracticeView(name, moveFocus = false) {
+      const activeView = Object.hasOwn(practiceViews, name) ? name : "chords";
+      if (activeView !== "rhythm" && activePracticeView === "rhythm") {
+        stopRhythm();
+        stopMetronome();
+      }
+      activePracticeView = activeView;
+      document.querySelectorAll("[data-practice-view]").forEach((section) => {
+        section.hidden = section.dataset.practiceView !== activeView;
+      });
+      document.querySelectorAll("[data-view]").forEach((button) => {
+        if (button.dataset.view === activeView) button.setAttribute("aria-current", "page");
+        else button.removeAttribute("aria-current");
+      });
+      const heading = document.getElementById("view-title");
+      heading.textContent = practiceViews[activeView][0];
+      document.getElementById("view-description").textContent = practiceViews[activeView][1];
+      document.querySelector(".legend").hidden = activeView !== "chords";
+      if (moveFocus) {
+        heading.tabIndex = -1;
+        heading.focus();
+      }
+    }
+
+    document.querySelectorAll("[data-view]").forEach((button) => {
+      button.addEventListener("click", () => {
+        window.location.hash = button.dataset.view;
+        showPracticeView(button.dataset.view, true);
+      });
+    });
+    window.addEventListener("hashchange", () => showPracticeView(window.location.hash.slice(1)));
+    const quickChordGroup = document.getElementById("quick-chords");
+    ["Em", "Am", "C", "G", "D", "A", "E", "Dm"].forEach((name) => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.dataset.quickChord = name;
+      button.textContent = name;
+      button.setAttribute("aria-label", `練習 ${name} 和弦`);
+      button.setAttribute("aria-pressed", "false");
+      button.addEventListener("click", () => showChord(chords.findIndex((chord) => chord.name === name)));
+      quickChordGroup.append(button);
+    });
+    populateChordOptions("Em");
+    showPracticeView(window.location.hash.slice(1));
   </script>
 </body>
 </html>
