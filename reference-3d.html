@@ -24,6 +24,10 @@ footer{position:absolute;bottom:25px;right:26px;text-align:right;font-size:11px;
 <style>
 .compass{position:absolute;right:26px;bottom:86px;width:86px;color:#254c47;pointer-events:none;text-align:center}.compass-dial{position:relative;width:86px;height:86px;border:1px solid #fff9;border-radius:50%;background:#f6faf3eb;box-shadow:0 3px 14px #163c3b18}.compass-rose{position:absolute;inset:0}.compass-rose span{position:absolute;font-size:10px;line-height:12px}.compass-rose .north{top:4px;left:calc(50% - 5px);color:#bf4939;font-weight:700}.compass-rose .south{bottom:4px;left:calc(50% - 5px)}.compass-rose .east{right:4px;top:calc(50% - 6px)}.compass-rose .west{left:4px;top:calc(50% - 6px)}.compass-rose>svg{position:absolute;left:calc(50% - 10px);top:calc(50% - 10px);width:20px;height:20px;color:#bf4939;fill:#bf4939}.compass-body{position:absolute;transform:translate(-50%,-50%);line-height:0}.compass-body svg{width:12px;height:12px;stroke-width:2.2}.compass-sun{color:#bb8019}.compass-moon{color:#456b9f}.compass-body[hidden]{display:none}.compass-heading{display:block;margin-top:5px;font-size:11px;font-variant-numeric:tabular-nums}body[data-night=true] .compass-heading{color:#e4edf4}@media(max-width:600px){.compass{right:16px;bottom:174px;width:78px}.compass-dial{width:78px;height:78px}}
 </style>
+<style>
+.season-state{padding:0 4px;color:#315b5b;font-size:11px;font-weight:700;white-space:nowrap}
+@media(max-width:600px){.time-controls{max-width:calc(100vw - 36px);flex-wrap:wrap}.season-state{padding:0 2px;font-size:10px}}
+</style>
 </head>
 <body>
 <main id="scene" aria-label="學習島互動立體地圖"></main>
@@ -44,6 +48,8 @@ footer{position:absolute;bottom:25px;right:26px;text-align:right;font-size:11px;
 <button class="tool" data-hour="18" title="傍晚" aria-label="傍晚" aria-pressed="false"><i data-lucide="sunset"></i></button>
 <button class="tool" data-hour="0" title="夜晚" aria-label="夜晚" aria-pressed="false"><i data-lucide="moon"></i></button>
 <button class="tool" id="time-auto" title="自動日夜循環" aria-label="自動日夜循環" aria-pressed="true"><i data-lucide="clock-3"></i></button>
+<button class="tool" id="season-next" title="切換下一季" aria-label="切換下一季"><i data-lucide="leaf"></i></button>
+<span class="season-state" id="season-state" role="status" aria-live="polite">春季</span>
 <button class="tool" id="weather-toggle" title="切換天氣示範" aria-label="天氣：晴朗，按此開始下雨" aria-pressed="false"><i data-lucide="cloud-rain"></i></button>
 <span class="weather-state" id="weather-state" role="status" aria-live="polite">晴朗</span>
 </div>
@@ -116,9 +122,16 @@ function height(x,z) {
  value -= hill(x,z,1,27,110,24,1.8);
  return Math.max(.65,value);
 }
-const positions=[], colors=[];
-const color = new THREE.Color();
-function triangle(points,tint) { color.set(tint).convertSRGBToLinear(); for(const point of points){positions.push(...point);colors.push(color.r,color.g,color.b);} }
+const positions=[],colors=[],seasonalBaseColors=[],seasonalSnowColors=[],seasonalSnowMask=[],permanentSnowMask=[];
+const color=new THREE.Color(),snowColor=new THREE.Color();
+function triangle(points,tint,snowTint=null){
+ color.set(tint).convertSRGBToLinear();snowColor.set(snowTint||tint).convertSRGBToLinear();
+ for(const point of points){
+  positions.push(...point);colors.push(color.r,color.g,color.b);
+  seasonalBaseColors.push(color.r,color.g,color.b);seasonalSnowColors.push(snowColor.r,snowColor.g,snowColor.b);
+  seasonalSnowMask.push(snowTint?1:0);permanentSnowMask.push(snowTint&&point[1]>=11?1:0);
+ }
+}
 const step=1;
 for(let x=-32;x<32;x+=step) for(let z=-34;z<34;z+=step) {
  if(!inside(x+.5,z+.5))continue;
@@ -126,8 +139,10 @@ for(let x=-32;x<32;x+=step) for(let z=-34;z<34;z+=step) {
  const elevation=height(x+.5,z+.5);
  const snowy=z < -13 && elevation>6.5;
  const shore=!inside(x+.5,z+.5,.065);
- const tint=snowy ? ['#f3f8f6','#dde9ed','#ffffff'][Math.floor(random()*3)] : shore && z>19 ? '#ecd99a' : ['#86ae50','#92b65a','#a1bd64','#7ba24a'][Math.floor(random()*4)];
- triangle([corners[0],corners[2],corners[1]],tint);triangle([corners[0],corners[3],corners[2]],tint);
+ const variation=random();
+ const tint=snowy?['#858b85','#9b9383','#757d78','#a49a87'][Math.floor(variation*4)]:shore&&z>19?'#ecd99a':['#86ae50','#92b65a','#a1bd64','#7ba24a'][Math.floor(variation*4)];
+ const snowTint=snowy?['#f3f8f6','#dde9ed','#ffffff'][Math.floor(variation*3)]:null;
+ triangle([corners[0],corners[2],corners[1]],tint,snowTint);triangle([corners[0],corners[3],corners[2]],tint,snowTint);
  const edges=[[0,1,0,-1],[1,2,1,0],[2,3,0,1],[3,0,-1,0]];
  for(const [first,second,dx,dz] of edges) if(!inside(x+.5+dx,z+.5+dz)) {
   const topA=corners[first],topB=corners[second],baseA=[topA[0],-.9,topA[2]],baseB=[topB[0],-.9,topB[2]];
@@ -149,6 +164,89 @@ function ribbon(points,width,tint,lift=.06,fixedHeight=null) {
  const indices=[];for(let index=0;index<160;index++){const start=index*2;indices.push(start,start+2,start+1,start+1,start+2,start+3);}
  const geometry=new THREE.BufferGeometry();geometry.setAttribute('position',new THREE.Float32BufferAttribute(vertices,3));geometry.setIndex(indices);geometry.computeVertexNormals();
  const object=new THREE.Mesh(geometry,new THREE.MeshStandardMaterial({color:new THREE.Color(tint).convertSRGBToLinear(),roughness:.8,side:THREE.DoubleSide}));object.receiveShadow=true;island.add(object);return object;
+}
+function watercourse(points,width){
+ const curve=new THREE.CatmullRomCurve3(points.map(([x,z])=>new THREE.Vector3(x,0,z)));
+ const vertices=[];
+ for(let index=0;index<=160;index++){
+  const progress=index/160,point=curve.getPoint(progress),tangent=curve.getTangent(progress);
+  const normal=new THREE.Vector3(-tangent.z,0,tangent.x).normalize();
+  const terminalTaper=THREE.MathUtils.smoothstep(progress,.72,1)*.18;
+  for(const side of [-1,1]){
+   const offset=normal.clone().multiplyScalar(width*(1-terminalTaper)*side/2);
+   vertices.push(point.x+offset.x,height(point.x+offset.x,point.z+offset.z)+.08,point.z+offset.z);
+  }
+ }
+ const indices=[];for(let index=0;index<160;index++){const start=index*2;indices.push(start,start+2,start+1,start+1,start+2,start+3);}
+ const geometry=new THREE.BufferGeometry();geometry.setAttribute('position',new THREE.Float32BufferAttribute(vertices,3));geometry.setIndex(indices);geometry.computeVertexNormals();
+ const material=new THREE.MeshStandardMaterial({color:new THREE.Color('#59b9c8').convertSRGBToLinear(),roughness:.34,transparent:true,opacity:.76,depthWrite:false,side:THREE.DoubleSide});
+ const stream=new THREE.Mesh(geometry,material);stream.name='Shoreline watercourse';stream.receiveShadow=true;island.add(stream);return stream;
+}
+function distanceToPolyline(x,z,points){
+ let nearest=Infinity;
+ for(let index=1;index<points.length;index++){
+  const [startX,startZ]=points[index-1],[endX,endZ]=points[index],dx=endX-startX,dz=endZ-startZ;
+  const progress=THREE.MathUtils.clamp(((x-startX)*dx+(z-startZ)*dz)/(dx*dx+dz*dz),0,1);
+  nearest=Math.min(nearest,Math.hypot(x-(startX+dx*progress),z-(startZ+dz*progress)));
+ }
+ return nearest;
+}
+function waterfallAtEdge(name,source,flow,width){
+ const direction=new THREE.Vector3(flow[0],0,flow[1]).normalize();
+ let insideDistance=0,outsideDistance=.5;
+ while(inside(source[0]+direction.x*outsideDistance,source[1]+direction.z*outsideDistance)&&outsideDistance<64){
+  insideDistance=outsideDistance;outsideDistance*=2;
+ }
+ for(let index=0;index<28;index++){
+  const distance=(insideDistance+outsideDistance)/2;
+  if(inside(source[0]+direction.x*distance,source[1]+direction.z*distance))insideDistance=distance;
+  else outsideDistance=distance;
+ }
+ const edge=new THREE.Vector3(source[0]+direction.x*insideDistance,0,source[1]+direction.z*insideDistance);
+ const across=new THREE.Vector3(-direction.z,0,direction.x).normalize();
+ const top=height(edge.x,edge.z)+.08,bottom=sea.position.y+.04;
+ const rows=[
+  {drop:0,width:.78,flow:0},
+  {drop:.2,width:1.02,flow:.03},
+  {drop:.46,width:.88,flow:.08},
+  {drop:.73,width:1.08,flow:.17},
+  {drop:1,width:.8,flow:.24}
+ ];
+ const shades=['#8bd9dc','#c5eee6','#68c5d1'];
+ const vertices=[],colors=[],indices=[];
+ for(let row=0;row<rows.length;row++){
+  const profile=rows[row],center=edge.clone().addScaledVector(direction,width*profile.flow);
+  const level=THREE.MathUtils.lerp(top,bottom,profile.drop);
+  for(let column=0;column<3;column++){
+   const acrossOffset=(column-1)*width*profile.width/2;
+   const point=center.clone().addScaledVector(across,acrossOffset);
+   const ripple=column===1?Math.sin(row*1.7)*.07*(1-profile.drop):0;
+   vertices.push(point.x,level+ripple,point.z);
+   const shade=new THREE.Color(shades[(column+row)%shades.length]).convertSRGBToLinear();
+   colors.push(shade.r,shade.g,shade.b);
+  }
+ }
+ for(let row=0;row<rows.length-1;row++)for(let column=0;column<2;column++){
+  const first=row*3+column,next=first+3;
+  indices.push(first,next,first+1,first+1,next,next+1);
+ }
+ const geometry=new THREE.BufferGeometry();geometry.setAttribute('position',new THREE.Float32BufferAttribute(vertices,3));geometry.setAttribute('color',new THREE.Float32BufferAttribute(colors,3));geometry.setIndex(indices);geometry.computeVertexNormals();
+ const surface=new THREE.Mesh(geometry,new THREE.MeshStandardMaterial({vertexColors:true,roughness:.3,transparent:true,opacity:.76,depthWrite:false,side:THREE.DoubleSide}));
+ surface.name=name;surface.castShadow=false;island.add(surface);
+ for(const side of [-1,1]){
+  const rockPoint=edge.clone().addScaledVector(direction,-width*1.05).addScaledVector(across,side*width*.55);
+  const bankRock=mesh('sphere',side<0?'#8b9691':'#a5aba0',rockPoint.x,height(rockPoint.x,rockPoint.z)-.02,rockPoint.z,width*.24,width*.2,width*.24);
+  bankRock.name=name+' bank rock';
+ }
+ const foamPatches=[[-.36,.3,.1],[-.16,.55,.13],[.12,.34,.09],[.34,.6,.11],[0,.84,.08]];
+ for(let index=0;index<foamPatches.length;index++){
+  const [acrossOffset,flowOffset,size]=foamPatches[index];
+  const point=edge.clone().addScaledVector(direction,width*flowOffset).addScaledVector(across,width*acrossOffset);
+  const foam=mesh('sphere',index%2?'#b8e3df':'#dcefe8',point.x,sea.position.y+.025,point.z,width*size,.045,width*size*.72);
+  foam.material=foam.material.clone();foam.material.transparent=true;foam.material.opacity=.62;foam.material.depthWrite=false;
+  foam.name=name+' foam';
+ }
+ return edge;
 }
 const solarLights=[];
 const solarBattery={charge:100,mode:'充電中'};
@@ -201,8 +299,12 @@ function addRoadLights(points,spacing=8){
 function road(points,width){ribbon(points,width,'#e4ca8b');addRoadLights(points);}
 const lake=mesh('cylinder','#2cb3d3',15,1.55,2,6.9,.12,5.6);lake.name='Moonlight Lake';
 mesh('cylinder','#35b6d2',-13,1.15,15,4,.1,4.7);
-ribbon([[-12,-11],[-12,-5],[-8,1],[-9,9],[-13,15],[-12,23],[-16,29]],1.3,'#40bddd',.08);
-ribbon([[18,8],[15,11],[18,16],[25,19]],1.1,'#40bddd',.08);
+const reserve06Outlet=waterfallAtEdge('Reserve 06 waterfall',[-12,23],[-4,6],1.3);
+const reserve06WaterPoints=[[-12,-11],[-12,-5],[-8,1],[-9,9],[-13,15],[-12,23],[reserve06Outlet.x,reserve06Outlet.z]];
+watercourse(reserve06WaterPoints,1.3);
+const reserve07Outlet=waterfallAtEdge('Reserve 07 waterfall',[18,16],[7,3],1.1);
+const reserve07WaterPoints=[[18,8],[15,11],[18,16],[reserve07Outlet.x,reserve07Outlet.z]];
+watercourse(reserve07WaterPoints,1.1);
 road([[0,-15],[0,-9],[0,-3],[0,2],[0,9],[-1,17],[2,24],[2,29]],1.35);
 road([[-24,9],[-19,6],[-11,3],[0,2],[9,9],[17,11],[25,12]],1.25);
 road([[-21,24],[-17,20],[-8,21],[-1,17],[8,19],[15,22],[22,23]],1.2);
@@ -248,12 +350,55 @@ const shelters=[
 const fountainY=height(0,5)+.2;
 mesh('cylinder','#a4b8af',0,fountainY,5,1.1,.3,1.1);mesh('cylinder','#55bfcd',0,fountainY+.18,5,.9,.07,.9);mesh('cylinder','#d1d9cb',0,fountainY+.75,5,.14,1.3,.14);mesh('cylinder','#b9d1c9',0,fountainY+1.25,5,.58,.14,.58);
 house(-17,0,.95,'#795738');house(-18,10,.8,'#795738');house(-10,-8,.9,'#795738');house(-7,-17,1,'#b84938');house(4,-19,1,'#65798c');
+const seasonalTrees=[];
+const cherryBlossomPalette=['#f5b5cf','#ef8fb8','#df659b','#f7c4d9','#e77cac'];
 function tree(x,z,size=1,snow=false,pink=false){
- const ground=height(x,z);mesh('cylinder','#705d3c',x,ground+size*.65,z,.12*size,1.3*size,.12*size);
- if(pink){mesh('sphere',random()>.5?'#ed91bc':'#f1afcd',x,ground+size*1.8,z,size,size*.8,size);return;}
- const green=snow?'#497c73':['#286b46','#387b49','#508b4b','#2d6544','#679d50'][Math.floor(random()*5)];
- mesh('cone',green,x,ground+size*1.3,z,size*.67,size*1.65,size*.67);
- mesh('cone',snow?'#e7f2ef':green,x,ground+size*2,z,size*.5,size*1.35,size*.5);
+ const ground=height(x,z),foliage=[],branches=[],blossoms=[],buds=[];
+ mesh('cylinder','#705d3c',x,ground+size*.65,z,.12*size,1.3*size,.12*size);
+ if(pink){
+  const colorRoll=random();
+  for(const [offsetX,offsetZ,scale] of [[0,0,.7],[-.42,.12,.48],[.38,.18,.52],[.05,-.4,.46]]){
+   const canopy=mesh('sphere','#91b462',x+offsetX*size,ground+size*1.78+offsetZ*size,z+offsetZ*size,scale*size,scale*.72*size,scale*size);
+   canopy.material=canopy.material.clone();foliage.push(canopy);
+  }
+  for(let index=0;index<2;index++){
+   const branch=mesh('cylinder','#705d3c',x+(index?1:-1)*size*.16,ground+size*1.35,z,.045*size,.8*size,.045*size);
+   branch.rotation.z=(index?1:-1)*.62;branches.push(branch);
+  }
+  for(let index=0;index<9;index++){
+   const angle=index/9*Math.PI*2;
+   const bud=mesh('sphere','#8d6650',x+Math.cos(angle)*size*.43,ground+size*(1.55+(index%3)*.2),z+Math.sin(angle)*size*.38,size*.075,size*.11,size*.075);
+   bud.visible=false;buds.push(bud);
+  }
+  for(let index=0;index<7;index++){
+   const angle=index/7*Math.PI*2,color=cherryBlossomPalette[(index+Math.floor(colorRoll*cherryBlossomPalette.length))%cherryBlossomPalette.length];
+   const blossom=mesh('sphere',color,x+Math.cos(angle)*size*.52,ground+size*(1.72+(index%2)*.28),z+Math.sin(angle)*size*.52,size*.31,size*.25,size*.31);
+  blossom.visible=false;blossom.material=blossom.material.clone();blossom.material.transparent=true;blossom.material.depthWrite=false;blossoms.push(blossom);
+  }
+  const cherryAutumnPalette=['#ad3c35','#bd493b','#c6533f'];
+  seasonalTrees.push({evergreen:false,flowering:true,foliage,branches,blossoms,buds,origin:new THREE.Vector3(x,ground,z),size,springColor:'#258f3f',summerColor:'#216a31',autumnColor:cherryAutumnPalette[Math.floor(colorRoll*cherryAutumnPalette.length)],winterColor:'#82a856'});
+  return;
+ }
+ const colorRoll=snow?0:random(),evergreen=snow||colorRoll<.2;
+ const summerColor=snow?'#497c73':['#176632','#237a3a','#2e843e','#145d32','#3b8b43'][Math.floor(colorRoll*5)];
+ if(evergreen){
+  for(const [y,scaleX,scaleY] of [[1.3,.67,1.65],[2,.5,1.35]]){
+   const canopy=mesh('cone',summerColor,x,ground+size*y,z,size*scaleX,size*scaleY,size*scaleX);
+   canopy.material=canopy.material.clone();foliage.push(canopy);
+  }
+ }else{
+  for(const [offsetX,offsetY,offsetZ,radius] of [[0,1.72,0,.62],[-.38,1.62,.08,.44],[.36,1.68,.12,.48],[.08,1.96,-.3,.43]]){
+   const canopy=mesh('sphere',summerColor,x+offsetX*size,ground+offsetY*size,z+offsetZ*size,radius*size,radius*.72*size,radius*size);
+   canopy.material=canopy.material.clone();foliage.push(canopy);
+  }
+ }
+ if(!evergreen)for(const side of [-1,1]){
+  const branch=mesh('cylinder','#705d3c',x+side*size*.16,ground+size*1.52,z,.045*size,.82*size,.045*size);
+  branch.rotation.z=-side*.65;branches.push(branch);
+ }
+ const autumnPalette=['#e3b334','#d69a27','#f0c649','#cf8230','#e8a538'];
+ const springPalette=['#288d3f','#30a94b','#227c38','#40b84e','#1f983f'];
+ seasonalTrees.push({evergreen,flowering:false,foliage,branches,blossoms,buds,origin:new THREE.Vector3(x,ground,z),size,springColor:springPalette[Math.floor(colorRoll*springPalette.length)],summerColor,autumnColor:autumnPalette[Math.floor(colorRoll*autumnPalette.length)],winterColor:snow?'#e7f2ef':summerColor});
 }
 for(let index=0;index<1250;index++){
  const x=(random()-.5)*60,z=(random()-.5)*64;
@@ -297,25 +442,25 @@ function suspensionBridge(x,z,length,width=1.5){
  for(const offset of [-length/2,length/2])mesh('box','#795a3a',offset,.82,0,.2,1.65,width+.15,group);
 }
 suspensionBridge(15,2,14);
-bridge(24,18,8,-Math.PI/4,height(24,18)+.3);
 bridge(-21.5,19,5,Math.PI/2,height(-21.5,19)+.3);
 function satellite(x,z,radius,top){
  mesh('cylinder','#929f98',x,(top-1)/2,z,radius,top+1,radius);
  mesh('cylinder','#94b65c',x,top,z,radius*1.02,.18,radius*1.02);
 }
 satellite(25,31,4.2,2);satellite(-28,29,2.2,1);satellite(-32,-12,1.7,1.2);
-bridge(22.5,26,11.2,-1.107,2.1,1.6);
+bridge(22,25.5,12.53,-1.071,2.1,1.6);
 for(const x of [23,26]){
  mesh('box','#c2c6af',x,3.6,31,.65,3,.75);
  mesh('box','#939f91',x,2.5,31,1,.65,1.1);
 }
 mesh('box','#c9cab6',24.5,5.05,31,3.8,.65,.95);
 for(let index=0;index<7;index++)mesh('sphere','#b2b5a2',23+random()*5,2.4,29+random()*4,.5,.4,.5);
-const lighthouseX=26,lighthouseZ=20,lighthouseY=height(lighthouseX,lighthouseZ);
-mesh('cylinder','#f5eee0',lighthouseX,lighthouseY+2.3,lighthouseZ,.65,4.6,.65);
-mesh('cylinder','#bc5744',lighthouseX,lighthouseY+2.4,lighthouseZ,.67,.65,.67);
-mesh('cylinder','#4c7e82',lighthouseX,lighthouseY+4.8,lighthouseZ,.8,.65,.8);
-mesh('cone','#bf5540',lighthouseX,lighthouseY+5.4,lighthouseZ,1,.6,1);
+const lighthouseX=21,lighthouseZ=16,lighthouseY=height(lighthouseX,lighthouseZ);
+mesh('cylinder','#929f98',lighthouseX,lighthouseY+.12,lighthouseZ,1.2,.24,1.2);
+mesh('cylinder','#f5eee0',lighthouseX,lighthouseY+.24+2.3,lighthouseZ,.65,4.6,.65);
+mesh('cylinder','#bc5744',lighthouseX,lighthouseY+.24+2.4,lighthouseZ,.67,.65,.67);
+mesh('cylinder','#4c7e82',lighthouseX,lighthouseY+.24+4.8,lighthouseZ,.8,.65,.8);
+mesh('cone','#bf5540',lighthouseX,lighthouseY+.24+5.4,lighthouseZ,1,.6,1);
 function palm(x,z){const ground=height(x,z);mesh('cylinder','#96734c',x,ground+1.2,z,.13,2.4,.13);for(let index=0;index<6;index++){const angle=index*Math.PI/3;const leaf=mesh('sphere','#528647',x+Math.cos(angle)*.65,ground+2.5,z+Math.sin(angle)*.65,1,.12,.28);leaf.rotation.y=-angle;}}
 for(const [x,z] of [[-6,26],[8,26],[-7,29],[6,30],[2,25],[-3,30]])palm(x,z);
 house(7,28,.8,'#9b7447');house(-5,27,.7,'#9b7447');
@@ -373,19 +518,40 @@ function createWalker(name,shirt,index){
  }
  return {group,limbs};
 }
+function createIslandBear(){
+ const group=new THREE.Group();group.name='Island trail bear';island.add(group);
+ mesh('sphere','#684a35',0,1.02,0,.68,.55,1.05,group);
+ mesh('sphere','#75553b',0,1.48,.63,.48,.46,.48,group);
+ mesh('sphere','#997653',0,1.34,1.02,.31,.21,.34,group);
+ mesh('sphere','#20221e',0,1.41,1.31,.1,.075,.075,group);
+ for(const side of [-1,1]){
+  mesh('sphere','#60432f',side*.35,1.82,.48,.17,.18,.15,group);
+  mesh('sphere','#171a17',side*.19,1.55,1.02,.035,.045,.035,group);
+ }
+ const legs=[];
+ for(const sideX of [-1,1])for(const sideZ of [-1,1]){
+  const leg=new THREE.Group();leg.position.set(sideX*.43,.58,sideZ*.68);group.add(leg);
+  mesh('cylinder','#513a2b',0,-.22,0,.16,.48,.16,leg);
+  mesh('sphere','#513a2b',0,-.43,.07,.19,.13,.24,leg);
+  legs.push({leg,phase:(sideX+sideZ)*Math.PI/2});
+ }
+ group.visible=false;
+ return {group,legs};
+}
 const schoolRoutePoints=[
  [-22,29],[-22,25],[-22,21],[-21,16],[-21,10],[-21,4],[-20,-2],[-17,-3],
  [-15,-2],[-15,2],[-14,4.2],[-11,5.5],[-10,6],[-9,6],[-8,6],[-6.5,7.8],
  [-4.5,7.8],[-2.2,7.3],[0,7.4],[.8,9],[.8,11],[0,13],[-1,10],[1.5,5],
  [-2,0],[-4,-5],[-5,-11],[-5,-16],[-3,-20],[0,-15],[4,-10],[8,-5],
- [8,2],[12,2],[15,2],[18,2],[22,2],[22,5],[22,10],[24,15],[24,18],[25,19.6],[22,16],
- [20,21],[25,31],[20,21],[16,21],[12,21],[8,23],[5,26],
+ [8,2],[12,2],[15,2],[18,2],[22,2],[22,5],[22,10],[21,13],[19.5,15],[19,17],[19,19],
+ [19,20],[25,31],[19,20],[17,19],[16,21],[12,21],[8,23],[5,26],
  [2,28],[3,29],[3,34],[3,37]
 ];
-for(const [start,end] of [[0,18],[18,28],[28,32],[34,38],[38,41],[43,48]]){
+for(const [start,end] of [[0,18],[18,28],[28,32],[34,38],[38,43],[44,49]]){
  ribbon(schoolRoutePoints.slice(start,end+1),.95,'#e4ca8b',.1);
 }
 const schoolRoute=new THREE.CatmullRomCurve3(schoolRoutePoints.map(([x,z])=>new THREE.Vector3(x,0,z)));
+ribbon(schoolRoutePoints.slice(43,45),.8,'#e4ca8b',0,2.2);
 const ferryRoute=new THREE.CatmullRomCurve3([
  [6,38],[6,42],[0,44],[-13,43],[-24,39],[-27,36],[-26,33],[-24,32],[-22,32]
 ].map(([x,z])=>new THREE.Vector3(x,0,z)));
@@ -409,14 +575,14 @@ const schoolTrip={members:[],route:schoolRoute,routePoints:schoolRoutePoints,len
 const tripPhases=['walk','boarding','sailing','landing'];
 const phaseDurations={walk:(schoolTrip.length-6.75)/schoolTrip.speed,boarding:8.5,sailing:ferryRoute.getLength()/2.3,landing:8.5};
 const passengerSlots=[[0,2],[-.65,.8],[.65,.8],[-.65,-.65],[.65,-.65],[0,-1.9]];
+const bear=createIslandBear();
 function schoolGroundPoint(distance){
  const point=schoolTrip.route.getPointAt(THREE.MathUtils.clamp(distance/schoolTrip.length,0,1));
  let ground=height(point.x,point.z)+.12;
  for(const [centerX,centerZ,halfX,halfZ,deck] of [
   [-22,25,.65,4,1.09],[-21.5,19,.65,2.5,height(-21.5,19)+.39],
   [-9,6,1.8,.65,height(-9,6)+.39],[3,34,.65,5.5,.89],
-  [15,2,7,.9,2],[24,18,4.2,3.5,height(24,18)+.39],
-  [22.5,26,4,6,2.19],[25,31,4,4,2.84],[3,34,.65,5,.89]
+  [15,2,7,.9,2],[22,25.5,4.5,6.2,2.19],[25,31,4,4,2.84],[3,34,.65,5,.89]
  ]){
   if(Math.abs(point.x-centerX)<=halfX&&Math.abs(point.z-centerZ)<=halfZ)ground=deck;
  }
@@ -513,7 +679,16 @@ function updateSchoolTrip(delta){
 }
 updateSchoolTrip(0);
 const localTime=new Date();
-const environment={hour:localTime.getHours()+localTime.getMinutes()/60,auto:true,time:0,clouds:[],birds:[]};
+const month=localTime.getMonth()+1;
+const initialSeasonIndex=month>=3&&month<=5?0:month>=6&&month<=8?1:month>=9&&month<=11?2:3;
+const seasonOptions=[{key:'spring',name:'春季'},{key:'summer',name:'夏季'},{key:'autumn',name:'秋季'},{key:'winter',name:'冬季'}];
+const seasonalWeather=[
+ {kind:'rain',name:'春雨',duration:[14,21],interval:[64,92],lightningChance:0},
+ {kind:'rain',name:'夏季雷雨',duration:[18,28],interval:[48,76],lightningChance:.45},
+ {kind:'rain',name:'秋雨',duration:[16,24],interval:[70,104],lightningChance:.08},
+ {kind:'snow',name:'冬日飄雪',duration:[22,32],interval:[58,88],lightningChance:0}
+];
+const environment={hour:localTime.getHours()+localTime.getMinutes()/60,auto:true,time:0,seasonIndex:initialSeasonIndex,dayCount:0,springVisualHour:-1,clouds:[],birds:[]};
 environment.sunDirection=new THREE.Vector3();environment.moonDirection=new THREE.Vector3();
 const compass=document.getElementById('compass'),compassRose=document.getElementById('compass-rose'),compassHeading=document.getElementById('compass-heading');
 const compassSun=document.getElementById('compass-sun'),compassMoon=document.getElementById('compass-moon');
@@ -588,6 +763,61 @@ for(let index=0;index<7;index++){
  environment.birds.push({group,wings,phase:index*.87,radius:23+index*2,speed:.12+index*.009,height:17+(index%3)*3});
 }
 const weatherButton=document.getElementById('weather-toggle'),weatherState=document.getElementById('weather-state');
+const seasonButton=document.getElementById('season-next'),seasonState=document.getElementById('season-state');
+const cherryTrees=seasonalTrees.filter(tree=>tree.flowering),petalCount=96,petalPositions=new Float32Array(petalCount*3);
+function resetPetal(index){
+ const offset=index*3,tree=cherryTrees[index%cherryTrees.length],angle=random()*Math.PI*2,radius=tree.size*(.55+random()*.95);
+ petalPositions[offset]=tree.origin.x+Math.cos(angle)*radius;
+ petalPositions[offset+1]=tree.origin.y+tree.size*(1.9+random()*.9);
+ petalPositions[offset+2]=tree.origin.z+Math.sin(angle)*radius;
+}
+for(let index=0;index<petalCount;index++)resetPetal(index);
+const petalGeometry=new THREE.BufferGeometry();petalGeometry.setAttribute('position',new THREE.BufferAttribute(petalPositions,3));
+const petalColors=new Float32Array(petalCount*3);
+for(let index=0;index<petalCount;index++){
+ const color=new THREE.Color(cherryBlossomPalette[index%cherryBlossomPalette.length]).convertSRGBToLinear();
+ petalColors[index*3]=color.r;petalColors[index*3+1]=color.g;petalColors[index*3+2]=color.b;
+}
+petalGeometry.setAttribute('color',new THREE.BufferAttribute(petalColors,3));
+const petalCanvas=document.createElement('canvas');petalCanvas.width=petalCanvas.height=32;
+const petalContext=petalCanvas.getContext('2d');petalContext.fillStyle='#ffffff';petalContext.beginPath();petalContext.moveTo(16,2);petalContext.bezierCurveTo(23,9,29,17,16,30);petalContext.bezierCurveTo(3,17,9,9,16,2);petalContext.fill();
+const petalTexture=new THREE.CanvasTexture(petalCanvas);petalTexture.encoding=THREE.sRGBEncoding;
+const petalMaterial=new THREE.PointsMaterial({map:petalTexture,size:.24,vertexColors:true,transparent:true,alphaTest:.12,opacity:.9,depthWrite:false,sizeAttenuation:true});
+const petalDrift=new THREE.Points(petalGeometry,petalMaterial);petalDrift.name='Cherry blossom petal fall';petalDrift.visible=false;scene.add(petalDrift);
+function updateSeasonVisuals(){
+ const season=seasonOptions[environment.seasonIndex],winter=season.key==='winter';
+ const springProgress=environment.hour/24,lateSpring=THREE.MathUtils.smoothstep(springProgress,.82,.98);
+ environment.springVisualHour=season.key==='spring'?Math.floor(environment.hour):-1;
+ seasonState.textContent=season.name;
+ seasonButton.title='目前'+season.name+'，切換至'+seasonOptions[(environment.seasonIndex+1)%seasonOptions.length].name;
+ seasonButton.setAttribute('aria-label',seasonButton.title);
+ document.body.dataset.season=season.key;
+ petalDrift.visible=season.key==='spring'&&lateSpring>.03&&lateSpring<.98;
+ petalMaterial.opacity=petalDrift.visible?Math.min(lateSpring*1.5,1):0;
+ const terrainColors=terrain.geometry.attributes.color.array;
+ for(let vertex=0;vertex<seasonalSnowMask.length;vertex++){
+  if(!seasonalSnowMask[vertex])continue;
+  const snow=winter?1:permanentSnowMask[vertex];
+  const offset=vertex*3;
+  for(let channel=0;channel<3;channel++)terrainColors[offset+channel]=THREE.MathUtils.lerp(seasonalBaseColors[offset+channel],seasonalSnowColors[offset+channel],snow);
+ }
+ terrain.geometry.attributes.color.needsUpdate=true;
+ for(const tree of seasonalTrees){
+  const leafColor=season.key==='winter'&&tree.evergreen?tree.winterColor:season.key==='spring'?tree.springColor:season.key==='autumn'?tree.autumnColor:tree.summerColor;
+  for(const leaf of tree.foliage){
+  leaf.visible=tree.evergreen||(!winter&&(!tree.flowering||season.key!=='spring'||lateSpring>.15));
+   if(leaf.visible)leaf.material.color.set(leafColor).convertSRGBToLinear();
+  }
+  for(const branch of tree.branches)branch.visible=winter||(tree.flowering&&season.key==='spring'&&lateSpring>.1);
+  for(const bud of tree.buds)bud.visible=winter&&tree.flowering;
+  for(const blossom of tree.blossoms){
+  blossom.visible=tree.flowering&&season.key==='spring'&&lateSpring<.98;
+  blossom.material.opacity=1-lateSpring;
+  }
+ }
+}
+seasonButton.onclick=()=>{environment.seasonIndex=(environment.seasonIndex+1)%seasonOptions.length;updateSeasonVisuals();updateWeatherLabel();};
+updateSeasonVisuals();
 const rainCount=180,rainPositions=new Float32Array(rainCount*6);
 function resetRaindrop(index){
  const offset=index*6,x=(random()-.5)*68,z=(random()-.5)*68,y=8+random()*32;
@@ -598,19 +828,34 @@ for(let index=0;index<rainCount;index++)resetRaindrop(index);
 const rainGeometry=new THREE.BufferGeometry();rainGeometry.setAttribute('position',new THREE.BufferAttribute(rainPositions,3));
 const rainMaterial=new THREE.LineBasicMaterial({color:'#c8e9f4',transparent:true,opacity:.58,depthWrite:false});
 const rain=new THREE.LineSegments(rainGeometry,rainMaterial);rain.name='Rainfall';rain.visible=false;scene.add(rain);
+const snowCount=220,snowPositions=new Float32Array(snowCount*3);
+function resetSnowflake(index){const offset=index*3;snowPositions[offset]=(random()-.5)*68;snowPositions[offset+1]=3+random()*30;snowPositions[offset+2]=(random()-.5)*68;}
+for(let index=0;index<snowCount;index++)resetSnowflake(index);
+const snowGeometry=new THREE.BufferGeometry();snowGeometry.setAttribute('position',new THREE.BufferAttribute(snowPositions,3));
+const snowMaterial=new THREE.PointsMaterial({color:'#f4f4ee',size:.42,transparent:true,opacity:.85,depthWrite:false,sizeAttenuation:true});
+const snowfall=new THREE.Points(snowGeometry,snowMaterial);snowfall.name='Snowfall';snowfall.visible=false;scene.add(snowfall);
 const lightningBolt=new THREE.Line(new THREE.BufferGeometry(),new THREE.LineBasicMaterial({color:'#f4fbff',transparent:true,opacity:.95}));
 lightningBolt.name='Lightning';lightningBolt.visible=false;scene.add(lightningBolt);
 const lightningLight=new THREE.PointLight('#d7efff',0,140,1);lightningLight.name='Lightning flash';scene.add(lightningLight);
 const shelterSlots=[[-1.65,-.9],[0,-.9],[1.65,-.9],[-1.65,1],[0,1],[1.65,1]];
-const weather={phase:'sunny',raining:false,nextChange:55+Math.random()*35,stormDuration:0,stormElapsed:0,phaseElapsed:0,lightningIn:0,flashTime:0,evacuations:[],clearRequested:false};
+const weather={phase:'sunny',hazard:null,raining:false,precipitation:'rain',lightningEnabled:false,nextChange:55+Math.random()*35,nextBear:32+Math.random()*30,bearElapsed:0,bearDuration:16,bearFrom:null,bearTo:null,stormDuration:0,stormElapsed:0,phaseElapsed:0,lightningIn:0,flashTime:0,evacuations:[],clearRequested:false};
 function updateWeatherLabel(){
- const labels={sunny:'晴朗',seeking:'下雨，前往避雨',sheltering:'下雨，亭中避雨',returning:'放晴，返回路線'};
+ const snowing=weather.raining?weather.precipitation==='snow':seasonalWeather[environment.seasonIndex].kind==='snow';
+ const labels=weather.hazard==='bear'?{sunny:'晴朗',seeking:'熊出現，快步躲避',sheltering:'熊經過，亭中等待',returning:'熊離開，返回路線'}:{sunny:'晴朗',seeking:snowing?'下雪，前往避雪':'下雨，前往避雨',sheltering:snowing?'飄雪，亭中避雪':'下雨，亭中避雨',returning:snowing?'雪停，返回路線':'放晴，返回路線'};
  const label='天氣：'+labels[weather.phase];
  weatherState.textContent=labels[weather.phase];
- weatherButton.setAttribute('aria-label',label+'；按此切換天氣');
- weatherButton.title=label+'；按此切換天氣';
+ const action=weather.phase==='sunny'?'按此示範'+seasonalWeather[environment.seasonIndex].name:weather.phase==='returning'?'隊伍正在返回路線':'按此結束示範';
+ weatherButton.setAttribute('aria-label',label+'；'+action);
+ weatherButton.title=label+'；'+action;
  weatherButton.setAttribute('aria-pressed',String(weather.raining));
- document.body.dataset.weather=weather.raining?'rain':'clear';
+ document.body.dataset.weather=weather.raining?weather.precipitation:'clear';
+ document.body.dataset.hazard=weather.hazard||'none';
+ const iconName=snowing?'cloud-snow':'cloud-rain';
+ if(weatherButton.dataset.icon!==iconName){
+  weatherButton.dataset.icon=iconName;
+  const icon=document.createElement('i');icon.dataset.lucide=iconName;weatherButton.replaceChildren(icon);
+  if(window.lucide)lucide.createIcons();
+ }
 }
 function setEvacuationTargets(returning){
  weather.phaseElapsed=0;
@@ -631,31 +876,82 @@ function setEvacuationTargets(returning){
   }
   const origin=returning?weather.evacuations[index].origin.clone():from.clone();
   const distance=from.distanceTo(target);
-  return {origin,from,target,duration:Math.max(.7,distance/(returning?3.5:2.8)),delay:index*.22};
+  const speed=returning?3.5:weather.hazard==='bear'?6:2.8;
+  return {origin,from,target,duration:Math.max(.45,distance/speed),delay:index*(weather.hazard==='bear'?.08:.22)};
  });
 }
 function startRain(manual=false){
  if(weather.phase!=='sunny')return;
- weather.raining=true;weather.phase='seeking';weather.stormElapsed=0;weather.stormDuration=manual?18:24+Math.random()*12;
- weather.lightningIn=2+Math.random()*4;weather.flashTime=0;weather.clearRequested=false;
+ const profile=seasonalWeather[environment.seasonIndex];
+ weather.hazard='precipitation';weather.precipitation=profile.kind;weather.raining=true;weather.phase='seeking';weather.stormElapsed=0;
+ weather.stormDuration=manual?15:profile.duration[0]+random()*(profile.duration[1]-profile.duration[0]);
+ weather.nextBear=80+Math.random()*45;
+ weather.lightningEnabled=random()<profile.lightningChance;weather.lightningIn=weather.lightningEnabled?2+Math.random()*4:Infinity;weather.flashTime=0;weather.clearRequested=false;
  setEvacuationTargets(false);
  if(!motionEnabled){
   schoolTrip.members.forEach((member,index)=>member.group.position.copy(weather.evacuations[index].target));
   weather.phase='sheltering';
  }
- schoolTrip.flag.visible=false;ferryCanopy.visible=schoolTrip.phase==='sailing';rain.visible=true;
+ schoolTrip.flag.visible=false;ferryCanopy.visible=schoolTrip.phase==='sailing';rain.visible=weather.precipitation==='rain';snowfall.visible=weather.precipitation==='snow';
  environment.birds.forEach(bird=>{bird.group.visible=false;});
  updateWeatherLabel();
 }
-function clearRain(){
- if(!weather.raining)return;
- weather.raining=false;weather.phase='returning';weather.phaseElapsed=0;weather.flashTime=0;
+function startBearEncounter(){
+ if(weather.phase!=='sunny'||weather.raining||schoolTrip.phase!=='walk')return false;
+ const leader=schoolTrip.members[0].group.position;
+ const nearestShelter=shelters.reduce((nearest,candidate)=>Math.hypot(candidate.x-leader.x,candidate.z-leader.z)<Math.hypot(nearest.x-leader.x,nearest.z-leader.z)?candidate:nearest);
+ if(Math.hypot(nearestShelter.x-leader.x,nearestShelter.z-leader.z)>12){weather.nextBear=3;return false;}
+ weather.hazard='bear';weather.phase='seeking';weather.bearElapsed=0;weather.bearDuration=16+random()*4;weather.clearRequested=false;
+ const tangent=schoolTrip.route.getTangentAt(THREE.MathUtils.clamp(schoolTrip.distance/schoolTrip.length,0,1));
+ const side=new THREE.Vector3(-tangent.z,0,tangent.x).normalize();
+ let passage=null;
+ for(const offset of [6.5,8,10,12])for(const direction of [-1,1]){
+  const center=leader.clone().addScaledVector(side,offset*direction);
+  const from=center.clone().addScaledVector(tangent,-8),to=center.clone().addScaledVector(tangent,8);
+  let clearOfShelters=true,minDistance=Infinity,forestCoverage=0;
+  for(let sample=0;sample<=40;sample++){
+   const point=from.clone().lerp(to,sample/40);
+   const lakeDistance=((point.x-15)/8.1)**2+((point.z-2)/6.8)**2;
+   const pondDistance=((point.x+13)/5.3)**2+((point.z-15)/6)**2;
+  const fountainDistance=Math.hypot(point.x,point.z-5);
+   const crossesStream=distanceToPolyline(point.x,point.z,reserve06WaterPoints)<2||distanceToPolyline(point.x,point.z,reserve07WaterPoints)<1.8;
+  if(!inside(point.x,point.z)||lakeDistance<1||pondDistance<1||fountainDistance<2.4||crossesStream){clearOfShelters=false;break;}
+   for(const shelter of shelters)minDistance=Math.min(minDistance,Math.hypot(shelter.x-point.x,shelter.z-point.z));
+   const nearestTree=seasonalTrees.reduce((nearest,tree)=>Math.min(nearest,Math.hypot(tree.origin.x-point.x,tree.origin.z-point.z)),Infinity);
+   if(nearestTree<4.5)forestCoverage++;
+  }
+  const forestScore=forestCoverage/41;
+  if(clearOfShelters&&minDistance>5.5&&(!passage||forestScore>passage.forestScore||forestScore===passage.forestScore&&minDistance>passage.clearance))passage={from,to,clearance:minDistance,forestScore};
+ }
+ if(!passage){weather.phase='sunny';weather.hazard=null;weather.nextBear=5;return false;}
+ weather.bearFrom=passage.from;weather.bearTo=passage.to;
+ for(const point of [weather.bearFrom,weather.bearTo])point.y=height(point.x,point.z)+.12;
+ bear.group.position.copy(weather.bearFrom);
+ bear.group.rotation.y=Math.atan2(weather.bearTo.x-weather.bearFrom.x,weather.bearTo.z-weather.bearFrom.z);
+ bear.group.visible=true;
+ weather.nextBear=80+random()*45;
+ weather.nextChange=Math.max(weather.nextChange,28);
+ setEvacuationTargets(false);
+ schoolTrip.flag.visible=false;
+ environment.birds.forEach(bird=>{bird.group.visible=false;});
+ if(!motionEnabled){
+  schoolTrip.members.forEach((member,index)=>member.group.position.copy(weather.evacuations[index].target));
+  weather.phase='sheltering';
+ }
+ updateWeatherLabel();
+ return true;
+}
+function endShelterEvent(){
+ if(!weather.raining&&weather.hazard!=='bear')return;
+ weather.raining=false;weather.phase='returning';weather.phaseElapsed=0;weather.flashTime=0;weather.clearRequested=false;
  setEvacuationTargets(true);
- rain.visible=false;lightningBolt.visible=false;lightningLight.intensity=0;ferryCanopy.visible=false;
+ bear.group.visible=false;
+ rain.visible=false;snowfall.visible=false;lightningBolt.visible=false;lightningLight.intensity=0;ferryCanopy.visible=false;
  environment.birds.forEach(bird=>{bird.group.visible=true;});
  if(!motionEnabled){
   schoolTrip.members.forEach((member,index)=>member.group.position.copy(weather.evacuations[index].target));
-  weather.phase='sunny';weather.phaseElapsed=0;weather.nextChange=55+Math.random()*55;schoolTrip.flag.visible=true;
+  const interval=seasonalWeather[environment.seasonIndex].interval;
+  weather.phase='sunny';weather.hazard=null;weather.phaseElapsed=0;weather.nextChange=interval[0]+random()*(interval[1]-interval[0]);schoolTrip.flag.visible=true;
  }
  updateWeatherLabel();
 }
@@ -681,51 +977,95 @@ function updateShelterMovement(delta){
 }
 function updateWeather(delta){
  if(weather.phase==='seeking'){
+  if(weather.hazard==='bear')updateBearEncounter(delta);
   if(updateShelterMovement(delta)){weather.phase='sheltering';weather.phaseElapsed=0;updateWeatherLabel();}
  }else if(weather.phase==='sheltering'){
-  weather.stormElapsed+=delta;weather.lightningIn-=delta;weather.flashTime=Math.max(0,weather.flashTime-delta);
-  if(weather.lightningIn<=0){
-   const x=(Math.random()-.5)*48,z=(Math.random()-.5)*48;
-   const points=[];let boltX=x,boltZ=z;
-   for(let index=0;index<9;index++){
-    points.push(new THREE.Vector3(boltX,27-index*2.8,boltZ));
-    boltX+=(Math.random()-.5)*3;boltZ+=(Math.random()-.5)*3;
+  if(weather.hazard==='bear'){
+   if(updateBearEncounter(delta)||weather.clearRequested)endShelterEvent();
+  }else{
+   weather.stormElapsed+=delta;weather.lightningIn-=delta;weather.flashTime=Math.max(0,weather.flashTime-delta);
+   if(weather.lightningIn<=0){
+    const x=(Math.random()-.5)*48,z=(Math.random()-.5)*48;
+    const points=[];let boltX=x,boltZ=z;
+    for(let index=0;index<9;index++){
+     points.push(new THREE.Vector3(boltX,27-index*2.8,boltZ));
+     boltX+=(Math.random()-.5)*3;boltZ+=(Math.random()-.5)*3;
+    }
+    points.push(new THREE.Vector3(boltX,height(boltX,boltZ)+.5,boltZ));
+    lightningBolt.geometry.dispose();lightningBolt.geometry=new THREE.BufferGeometry().setFromPoints(points);
+    lightningBolt.visible=true;weather.flashTime=.18;weather.lightningIn=4+Math.random()*7;
+    lightningLight.position.set(boltX,10,boltZ);lightningLight.intensity=7;
    }
-   points.push(new THREE.Vector3(boltX,height(boltX,boltZ)+.5,boltZ));
-   lightningBolt.geometry.dispose();lightningBolt.geometry=new THREE.BufferGeometry().setFromPoints(points);
-   lightningBolt.visible=true;weather.flashTime=.18;weather.lightningIn=4+Math.random()*7;
-   lightningLight.position.set(boltX,10,boltZ);lightningLight.intensity=7;
+   if(weather.flashTime<=0){lightningBolt.visible=false;lightningLight.intensity=0;}
+   if(weather.stormElapsed>=weather.stormDuration||weather.clearRequested)endShelterEvent();
   }
-  if(weather.flashTime<=0){lightningBolt.visible=false;lightningLight.intensity=0;}
-  if(weather.stormElapsed>=weather.stormDuration||weather.clearRequested)clearRain();
  }else if(weather.phase==='returning'){
   if(updateShelterMovement(delta)){
-   weather.phase='sunny';weather.phaseElapsed=0;weather.nextChange=55+Math.random()*55;
+  const interval=seasonalWeather[environment.seasonIndex].interval;
+  weather.phase='sunny';weather.hazard=null;weather.phaseElapsed=0;weather.nextChange=interval[0]+random()*(interval[1]-interval[0]);
    schoolTrip.flag.visible=true;updateWeatherLabel();
   }
  }
  const positions=rainGeometry.attributes.position;
  if(weather.raining){
-  for(let index=0;index<rainCount;index++){
-   const offset=index*6;rainPositions[offset+1]-=delta*32;rainPositions[offset+4]=rainPositions[offset+1]-.75;
-   rainPositions[offset]-=delta*4;rainPositions[offset+3]=rainPositions[offset]-.12;
-   if(rainPositions[offset+1]<0)resetRaindrop(index);
+  if(weather.precipitation==='snow'){
+   for(let index=0;index<snowCount;index++){
+    const offset=index*3;snowPositions[offset+1]-=delta*(2+index%4*.55);snowPositions[offset]+=(Math.sin(environment.time+index)*.35)*delta;
+    if(snowPositions[offset+1]<0)resetSnowflake(index);
+   }
+   snowGeometry.attributes.position.needsUpdate=true;
+  }else{
+   for(let index=0;index<rainCount;index++){
+    const offset=index*6;rainPositions[offset+1]-=delta*32;rainPositions[offset+4]=rainPositions[offset+1]-.75;
+    rainPositions[offset]-=delta*4;rainPositions[offset+3]=rainPositions[offset]-.12;
+    if(rainPositions[offset+1]<0)resetRaindrop(index);
+   }
+   positions.needsUpdate=true;
   }
-  positions.needsUpdate=true;
   environment.birds.forEach(bird=>{bird.group.visible=false;});
  }
 }
+function updateBearEncounter(delta){
+ weather.bearElapsed+=delta;
+ const progress=THREE.MathUtils.clamp(weather.bearElapsed/weather.bearDuration,0,1);
+ const eased=progress*progress*(3-2*progress);
+ bear.group.position.lerpVectors(weather.bearFrom,weather.bearTo,eased);
+ bear.group.position.y=height(bear.group.position.x,bear.group.position.z)+.12;
+ bear.legs.forEach(({leg,phase})=>{leg.rotation.x=progress<1?Math.sin(weather.bearElapsed*5+phase)*.32:0;});
+ return progress>=1;
+}
 weatherButton.onclick=()=>{
  if(weather.phase==='sunny')startRain(true);
+ else if(weather.phase==='returning')return;
  else if(motionEnabled)weather.clearRequested=true;
- else clearRain();
+ else endShelterEvent();
 };
 updateWeatherLabel();
 const timeOutput=document.getElementById('island-time');let displayedMinute=-1;
 function updateEnvironment(delta){
  environment.time+=delta;
  updateMoonPhase();
- if(environment.auto)environment.hour=(environment.hour+delta*.1)%24;
+ if(environment.auto){
+  const previousHour=environment.hour;
+  environment.hour=(environment.hour+delta*.1)%24;
+  if(environment.hour<previousHour){
+   environment.dayCount++;
+   environment.seasonIndex=(environment.seasonIndex+1)%seasonOptions.length;
+  updateSeasonVisuals();updateWeatherLabel();
+  }
+ }
+ if(environment.seasonIndex===0&&environment.springVisualHour!==Math.floor(environment.hour))updateSeasonVisuals();
+ if(petalDrift.visible&&delta>0){
+  const positions=petalGeometry.attributes.position;
+  for(let index=0;index<petalCount;index++){
+   const offset=index*3;
+   petalPositions[offset+1]-=delta*(.2+index%4*.08);
+   petalPositions[offset]+=Math.sin(environment.time+index)*delta*.2;
+   petalPositions[offset+2]+=Math.cos(environment.time*.7+index)*delta*.16;
+   if(petalPositions[offset+1]<height(petalPositions[offset],petalPositions[offset+2])+.8)resetPetal(index);
+  }
+  positions.needsUpdate=true;
+ }
  const hour=environment.hour,nextIndex=skyFrames.findIndex(frame=>frame.hour>hour);
  const before=skyFrames[nextIndex-1],after=skyFrames[nextIndex],blend=THREE.MathUtils.smoothstep(hour,before.hour,after.hour);
  scene.background.copy(before.sky).lerp(after.sky,blend);scene.fog.color.copy(scene.background);
@@ -815,12 +1155,12 @@ const landmarks=[
  {name:'四字成語',x:-17,z:-3,color:'#367a4b',href:'4words_index.html'},
  {name:'英文時態',x:0,z:5,color:'#b7513b',href:'English_tenses.html'},
  {name:'吉他和弦',x:2,z:28,color:'#c49a38',href:'Guitar.html'},
- {name:'預留 04',x:-3,z:-20,color:'#548bb2'}, {name:'預留 05',x:15,z:2,color:'#219cba'},
- {name:'預留 06',x:-22,z:25,color:'#547f99'}, {name:'預留 07',x:26,z:20,color:'#568488'},
+ {name:'唐詩',x:-3,z:-20,color:'#548bb2',href:'tang_poems.html'}, {name:'預留 05',x:15,z:2,color:'#219cba'},
+ {name:'預留 06',x:-22,z:25,color:'#547f99'}, {name:'預留 07',x:21,z:16,color:'#568488'},
  {name:'預留 08',x:25,z:31,color:'#867194'}
 ];
 let flight=null;
-function home(){const mobile=innerWidth<600;flight={from:camera.position.clone(),to:new THREE.Vector3(55,mobile?100:75,mobile?115:88),targetFrom:controls.target.clone(),targetTo:new THREE.Vector3(0,2,mobile?5:1),start:performance.now()};document.querySelectorAll('.places button').forEach(button=>button.setAttribute('aria-pressed','false'));}
+function home(){const mobile=innerWidth<600;flight={from:camera.position.clone(),to:new THREE.Vector3(mobile?25:55,mobile?130:75,mobile?55:88),targetFrom:controls.target.clone(),targetTo:new THREE.Vector3(0,2,mobile?5:1),start:performance.now()};document.querySelectorAll('.places button').forEach(button=>button.setAttribute('aria-pressed','false'));}
 function focus(place){controls.autoRotate=false;document.getElementById('rotate').setAttribute('aria-pressed','false');const target=new THREE.Vector3(place.x,height(place.x,place.z),place.z);flight={from:camera.position.clone(),to:target.clone().add(new THREE.Vector3(17,21,26)),targetFrom:controls.target.clone(),targetTo:target,start:performance.now()};document.querySelectorAll('.places button').forEach(button=>button.setAttribute('aria-pressed',String(button.textContent===place.name)));}
 for(const place of landmarks){
  const button=document.createElement(place.href?'a':'button');button.innerHTML='<span class="dot" style="--dot:'+place.color+'"></span>'+place.name;
@@ -831,7 +1171,7 @@ for(const place of landmarks){
  }
  document.getElementById('places').appendChild(button);document.getElementById('labels').appendChild(label);place.label=label;
 }
-camera.position.set(55,innerWidth<600?100:75,innerWidth<600?115:88);controls.target.set(0,2,innerWidth<600?5:1);controls.update();
+camera.position.set(innerWidth<600?25:55,innerWidth<600?130:75,innerWidth<600?55:88);controls.target.set(0,2,innerWidth<600?5:1);controls.update();
 document.getElementById('home').onclick=home;
 document.getElementById('rotate').onclick=event=>{controls.autoRotate=!controls.autoRotate;event.currentTarget.setAttribute('aria-pressed',String(controls.autoRotate));};
 document.getElementById('image').onclick=event=>{const reference=document.getElementById('reference');reference.hidden=!reference.hidden;event.currentTarget.setAttribute('aria-pressed',String(!reference.hidden));};
@@ -850,7 +1190,9 @@ function animate(now){
   if(weather.phase==='sunny'){
    updateSchoolTrip(delta);
    weather.nextChange-=delta;
+    weather.nextBear-=delta;
    if(weather.nextChange<=0)startRain();
+    else if(weather.nextBear<=0&&schoolTrip.phase==='walk')startBearEncounter();
   }else updateWeather(delta);
  }
  if(flight){const progress=Math.min((now-flight.start)/950,1),ease=1-(1-progress)**3;camera.position.lerpVectors(flight.from,flight.to,ease);controls.target.lerpVectors(flight.targetFrom,flight.targetTo,ease);if(progress===1)flight=null;}
@@ -861,7 +1203,7 @@ function animate(now){
  renderer.render(scene,camera);
 }
 status.textContent='';requestAnimationFrame(animate);
-window.islandApp={scene,camera,renderer,controls,island,landmarks,schoolTrip,phaseDurations,environment,weather,shelters,solarBattery,solarLights,solarStation};
+window.islandApp={scene,camera,renderer,controls,island,landmarks,schoolTrip,phaseDurations,environment,weather,seasonOptions,seasonalTrees,seasonalSnowMask,permanentSnowMask,terrain,snowfall,watercourses:[{points:reserve06WaterPoints,width:1.3},{points:reserve07WaterPoints,width:1.1}],updateSeasonVisuals,updateEnvironment,shelters,bear:bear.group,startBearEncounter,solarBattery,solarLights,solarStation};
 })();
 </script>
 </body>

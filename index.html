@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#f7f3ec">
-  <meta name="description" content="從成語與英文時態開始，選擇今天想學習的內容。">
-  <title>一起學習｜成語與英文時態</title>
+  <meta name="description" content="從成語、英文時態、吉他和弦與唐詩開始，選擇今天想學習的內容。">
+  <title>一起學習｜成語、英文時態、吉他與唐詩</title>
   <style>
     :root {
       color-scheme: light;
@@ -77,7 +77,7 @@
     .style-button:focus-visible { outline: 3px solid rgba(23, 107, 103, .35); outline-offset: 2px; }
     .style-view[hidden] { display: none; }
 
-    .choices { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+    .choices { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; }
     .choice {
       position: relative;
       display: flex;
@@ -94,6 +94,7 @@
     }
     .choice:nth-child(2) { animation-delay: .12s; }
     .choice:nth-child(3) { animation-delay: .24s; }
+    .choice:nth-child(4) { animation-delay: .36s; }
     .choice:hover, .choice:focus-visible {
       transform: translateY(-4px);
       border-color: var(--teal);
@@ -103,6 +104,7 @@
     .choice-idiom { border-top: 5px solid var(--coral); }
     .choice-english { border-top: 5px solid var(--teal); }
     .choice-guitar { border-top: 5px solid var(--gold); }
+    .choice-poems { border-top: 5px solid #47798c; }
     .choice-label { color: var(--muted); font-size: 12px; letter-spacing: .12em; }
     .choice-art {
       display: grid;
@@ -143,6 +145,10 @@
     .choice p { margin: 3px 0 0; color: var(--muted); font-size: 13px; }
     .arrow { color: var(--coral); font-size: 26px; line-height: 1; transition: transform .2s ease; }
     .choice:hover .arrow { transform: translateX(4px); }
+
+    @media (max-width: 900px) {
+      .choices { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
 
     .island-map {
       position: relative;
@@ -232,7 +238,7 @@
     <div class="home-toolbar page">
     <section class="intro" aria-labelledby="page-title">
       <h1 id="page-title">今天想學什麼？</h1>
-      <p>成語、英文時態、吉他和弦，每天學一點。</p>
+      <p>成語、英文時態、吉他和弦、唐詩，每天學一點。</p>
     </section>
 
     <div class="style-picker" role="group" aria-label="選擇首頁風格">
@@ -280,9 +286,21 @@
           <span class="arrow" aria-hidden="true">→</span>
         </span>
       </a>
+
+      <a class="choice choice-poems" href="tang_poems.html">
+        <span class="choice-label">中文 · 古典詩歌</span>
+        <span class="choice-art idiom-art" aria-hidden="true">春眠不覺曉</span>
+        <span class="choice-bottom">
+          <span>
+            <h2>唐詩小箋</h2>
+            <p>讀 100 首唐詩，附注音、解釋與收藏。</p>
+          </span>
+          <span class="arrow" aria-hidden="true">→</span>
+        </span>
+      </a>
     </nav>
 
-    <section class="style-view" data-style-view="island" aria-label="學習島 3D 地圖，含三個開放單元與五個預留位置">
+    <section class="style-view" data-style-view="island" aria-label="學習島 3D 地圖，含四個開放單元與四個預留位置">
       <div class="island-map">
         <iframe class="island-frame" title="學習島互動 3D 地圖" src="reference-3d.html"></iframe>
       </div>

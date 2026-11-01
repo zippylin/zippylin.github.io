@@ -1,0 +1,1864 @@
+{
+ "url": "http://localhost:8008/tang_poems.html",
+ "at": "2026-11-01T07:21:39.689Z",
+ "allow": [],
+ "viewports": [
+  {
+   "width": 1440,
+   "height": 900,
+   "load": "load",
+   "screens": 3,
+   "filled": [
+    0.53,
+    0.21,
+    0.15
+   ],
+   "motion": {
+    "elements": 0,
+    "css": 0,
+    "transitions": 0,
+    "scripted": 0,
+    "videos": 0,
+    "playingVideos": 0
+   },
+   "metrics": {
+    "viewport": {
+     "w": 1440,
+     "h": 900
+    },
+    "page": {
+     "height": 1996,
+     "screens": 2.2,
+     "words": 61,
+     "img": 0,
+     "video": 0,
+     "canvas": 0,
+     "svg": 0,
+     "sections": 5,
+     "horizontalOverflow": 0,
+     "overflowCulprits": [],
+     "uiFragments": 0,
+     "uiAbuse": false,
+     "realPictures": 0,
+     "videoCount": 0,
+     "uiPictures": 0,
+     "pictureSamples": [],
+     "blendText": 0,
+     "sideScrollers": 0,
+     "brokenImages": [],
+     "emoji": [],
+     "videosNoPoster": 0
+    },
+    "hero": {
+     "text": "渡荊門送別",
+     "words": 1,
+     "chars": 5,
+     "lines": 1,
+     "size": 52,
+     "vw": 3.6,
+     "font": "Noto Serif TC",
+     "weight": 700,
+     "tracking": 0,
+     "leading": 1.25,
+     "upper": false,
+     "italic": false,
+     "mono": false,
+     "align": "left",
+     "position": "left",
+     "widthRatio": 0.43,
+     "top": 374,
+     "tag": "h2",
+     "kind": "heading"
+    },
+    "h1": {
+     "text": "讀一首唐詩",
+     "words": 1,
+     "lines": 1,
+     "size": 40,
+     "font": "Noto Serif TC"
+    },
+    "headings": [
+     {
+      "text": "讀一首唐詩",
+      "words": 1,
+      "chars": 5,
+      "lines": 1,
+      "size": 40,
+      "vw": 2.8,
+      "font": "Noto Serif TC",
+      "weight": 700,
+      "tracking": 0,
+      "leading": 1.2,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.78,
+      "top": 128,
+      "tag": "h1",
+      "kind": "heading"
+     },
+     {
+      "text": "渡荊門送別",
+      "words": 1,
+      "chars": 5,
+      "lines": 1,
+      "size": 52,
+      "vw": 3.6,
+      "font": "Noto Serif TC",
+      "weight": 700,
+      "tracking": 0,
+      "leading": 1.25,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "left",
+      "widthRatio": 0.43,
+      "top": 374,
+      "tag": "h2",
+      "kind": "heading"
+     }
+    ],
+    "headingSummary": {
+     "count": 2,
+     "maxLines": 1,
+     "over2Lines": 0,
+     "statements": 0,
+     "centered": 0,
+     "medianWords": 1,
+     "mixedFontHeadings": 0
+    },
+    "type": {
+     "families": [
+      {
+       "family": "Noto Sans TC",
+       "share": 0.83,
+       "mono": false
+      },
+      {
+       "family": "Noto Serif TC",
+       "share": 0.17,
+       "mono": false
+      }
+     ],
+     "familyCount": 2,
+     "sizes": [
+      11,
+      12,
+      13,
+      14,
+      16,
+      18,
+      20,
+      21,
+      27,
+      40,
+      52
+     ],
+     "sizeCount": 11,
+     "notLoaded": [],
+     "body": null,
+     "measureChars": null,
+     "max": {
+      "size": 52,
+      "vw": 3.6,
+      "font": "Noto Serif TC",
+      "text": "渡荊門送別"
+     },
+     "monoShare": 0,
+     "monoProseShare": 0,
+     "monoFamilies": [],
+     "monoSamples": [],
+     "microLabels": 0,
+     "microLabelShare": 0,
+     "microSamples": [],
+     "upperShare": 0,
+     "centerShare": 0.04,
+     "smallText": 3
+    },
+    "eyebrows": [
+     {
+      "text": "第 34 首／100",
+      "above": "渡荊門送別",
+      "upper": false,
+      "tracked": false,
+      "mono": false,
+      "pill": false,
+      "size": 13,
+      "top": 328
+     }
+    ],
+    "numbered": [],
+    "color": {
+     "bodyBg": "#f7f3ec",
+     "bodyBgHsl": {
+      "h": 38,
+      "s": 0.41,
+      "l": 0.95
+     },
+     "dark": false,
+     "sectionBgs": [
+      {
+       "color": "#fffdf9",
+       "top": 275,
+       "hsl": {
+        "h": 40,
+        "s": 1,
+        "l": 0.99
+       }
+      }
+     ],
+     "textColors": [
+      {
+       "color": "#687477",
+       "share": 0.43
+      },
+      {
+       "color": "#b94d39",
+       "share": 0.26
+      },
+      {
+       "color": "#23333a",
+       "share": 0.21
+      },
+      {
+       "color": "#0f4d4b",
+       "share": 0.04
+      },
+      {
+       "color": "#dc765e",
+       "share": 0.03
+      }
+     ],
+     "button": {
+      "bg": "#eee6d9",
+      "hsl": {
+       "h": 37,
+       "s": 0.38,
+       "l": 0.89
+      },
+      "fg": "#176b67"
+     },
+     "lowContrast": [
+      {
+       "text": "100 首唐詩",
+       "ratio": 2.8,
+       "need": 4.5,
+       "size": 13,
+       "fg": "#dc765e",
+       "bg": "#f7f3ec"
+      },
+      {
+       "text": "閱讀詩句 →",
+       "ratio": 2.8,
+       "need": 4.5,
+       "size": 12,
+       "fg": "#dc765e",
+       "bg": "#f7f3ec"
+      },
+      {
+       "text": "一首一首，讀懂詩裡的意思",
+       "ratio": 4.4,
+       "need": 4.5,
+       "size": 12,
+       "fg": "#687477",
+       "bg": "#f7f3ec"
+      },
+      {
+       "text": "回學習首頁",
+       "ratio": 4.4,
+       "need": 4.5,
+       "size": 16,
+       "fg": "#687477",
+       "bg": "#f7f3ec"
+      },
+      {
+       "text": "今日唐詩",
+       "ratio": 4.4,
+       "need": 4.5,
+       "size": 16,
+       "fg": "#687477",
+       "bg": "#f7f3ec"
+      },
+      {
+       "text": "搜尋索引",
+       "ratio": 4.4,
+       "need": 4.5,
+       "size": 16,
+       "fg": "#687477",
+       "bg": "#f7f3ec"
+      }
+     ]
+    },
+    "buttons": {
+     "count": 4,
+     "inHero": 2,
+     "radius": 4,
+     "height": 47,
+     "withShadow": 0,
+     "withGradient": 0,
+     "mono": 0,
+     "upper": 0,
+     "heroLabels": [
+      "換一首",
+      "收藏這首"
+     ]
+    },
+    "surfaces": {
+     "shadowStatic": 1,
+     "shadowOverlay": 0,
+     "shadowSamples": [
+      "span.brand-mark → rgb(214, 166, 79) 5px 5px 0px 0px"
+     ],
+     "gradients": 0,
+     "scrims": 0,
+     "gradientSamples": [],
+     "gradientText": 0,
+     "hairlines": 4,
+     "hairlineSamples": [
+      "div.section-panel 1120px",
+      "div.section-panel 1120px",
+      "div.section-panel 1120px",
+      "footer.shell 1120px"
+     ],
+     "outlinedBoxes": 1,
+     "dashed": 0,
+     "blurred": 0,
+     "roundedBoxes": 0,
+     "boxRadius": 0,
+     "squareMedia": 0,
+     "roundedMedia": 0,
+     "mediaRadius": 0,
+     "textShadow": 0,
+     "cardRows": []
+    },
+    "heroMedia": [],
+    "nav": {
+     "links": 6,
+     "fixed": false,
+     "height": 98,
+     "floatingPill": false,
+     "blur": false
+    },
+    "fontsLoaded": []
+   },
+   "layout": {
+    "viewport": {
+     "w": 1440,
+     "h": 900
+    },
+    "pageH": 1996,
+    "margins": {
+     "left": 160,
+     "right": 160
+    },
+    "sections": [
+     {
+      "sel": "section.intro",
+      "tag": "section",
+      "top": 98,
+      "height": 177,
+      "words": 6,
+      "media": 0,
+      "middle": 0,
+      "heading": {
+       "text": "讀一首唐詩",
+       "size": 40,
+       "tag": "h1"
+      },
+      "left": 160,
+      "right": 926,
+      "textLeft": 160,
+      "textRight": 926,
+      "fullBleed": false,
+      "footer": false,
+      "hero": true,
+      "continues": false,
+      "pinned": false
+     },
+     {
+      "sel": "section#today.poem-feature",
+      "tag": "section",
+      "top": 275,
+      "height": 596,
+      "words": 50,
+      "media": 0,
+      "middle": 292,
+      "heading": {
+       "text": "渡荊門送別",
+       "size": 52,
+       "tag": "h2"
+      },
+      "left": 213,
+      "right": 213,
+      "textLeft": 213,
+      "textRight": 213,
+      "fullBleed": false,
+      "footer": false,
+      "hero": true,
+      "continues": false,
+      "pinned": false
+     },
+     {
+      "sel": "section#catalog.content-section",
+      "tag": "section",
+      "top": 872,
+      "height": 333,
+      "words": 7,
+      "media": 0,
+      "middle": 0,
+      "heading": {
+       "text": "搜尋 100 首唐詩",
+       "size": 27,
+       "tag": "h2"
+      },
+      "left": 160,
+      "right": 160,
+      "textLeft": 160,
+      "textRight": 160,
+      "fullBleed": false,
+      "footer": false,
+      "hero": false,
+      "continues": false,
+      "pinned": false
+     },
+     {
+      "sel": "section#saved.content-section",
+      "tag": "section",
+      "top": 1205,
+      "height": 333,
+      "words": 6,
+      "media": 0,
+      "middle": 10,
+      "heading": {
+       "text": "我的收藏",
+       "size": 27,
+       "tag": "h2"
+      },
+      "left": 160,
+      "right": 160,
+      "textLeft": 160,
+      "textRight": 160,
+      "fullBleed": false,
+      "footer": false,
+      "hero": false,
+      "continues": false,
+      "pinned": false
+     },
+     {
+      "sel": "section#history.content-section",
+      "tag": "section",
+      "top": 1538,
+      "height": 324,
+      "words": 14,
+      "media": 0,
+      "middle": 10,
+      "heading": {
+       "text": "閱讀歷程",
+       "size": 27,
+       "tag": "h2"
+      },
+      "left": 160,
+      "right": 160,
+      "textLeft": 160,
+      "textRight": 160,
+      "fullBleed": false,
+      "footer": true,
+      "hero": false,
+      "continues": false,
+      "pinned": false
+     }
+    ],
+    "gaps": [],
+    "h1s": [
+     {
+      "text": "讀一首唐詩",
+      "size": 40,
+      "top": 128,
+      "firstScreen": true
+     }
+    ],
+    "edgeText": [],
+    "edges": [
+     {
+      "x": 160,
+      "n": 4
+     },
+     {
+      "x": 174,
+      "n": 1
+     },
+     {
+      "x": 213,
+      "n": 1
+     },
+     {
+      "x": 914,
+      "n": 1
+     }
+    ],
+    "leftBlocks": 7,
+    "bodySize": 16,
+    "stage": false,
+    "explains": false,
+    "slivers": [],
+    "voidShare": 0.14,
+    "voidBox": {
+     "x": 660,
+     "y": 120,
+     "w": 240,
+     "h": 780
+    }
+   },
+   "app": null,
+   "consoleErrors": []
+  },
+  {
+   "width": 768,
+   "height": 1024,
+   "load": "load",
+   "screens": 2,
+   "filled": [
+    0.62,
+    0.21
+   ],
+   "motion": {
+    "elements": 0,
+    "css": 0,
+    "transitions": 0,
+    "scripted": 0,
+    "videos": 0,
+    "playingVideos": 0
+   },
+   "metrics": {
+    "viewport": {
+     "w": 768,
+     "h": 1024
+    },
+    "page": {
+     "height": 1926,
+     "screens": 1.9,
+     "words": 68,
+     "img": 0,
+     "video": 0,
+     "canvas": 0,
+     "svg": 0,
+     "sections": 5,
+     "horizontalOverflow": 0,
+     "overflowCulprits": [],
+     "uiFragments": 0,
+     "uiAbuse": false,
+     "realPictures": 0,
+     "videoCount": 0,
+     "uiPictures": 0,
+     "pictureSamples": [],
+     "blendText": 0,
+     "sideScrollers": 0,
+     "brokenImages": [],
+     "emoji": [],
+     "videosNoPoster": 0
+    },
+    "hero": {
+     "text": "自遣",
+     "words": 1,
+     "chars": 2,
+     "lines": 1,
+     "size": 46.1,
+     "vw": 6,
+     "font": "Noto Serif TC",
+     "weight": 700,
+     "tracking": 0,
+     "leading": 1.25,
+     "upper": false,
+     "italic": false,
+     "mono": false,
+     "align": "left",
+     "position": "left",
+     "widthRatio": 0.44,
+     "top": 361,
+     "tag": "h2",
+     "kind": "heading"
+    },
+    "h1": {
+     "text": "讀一首唐詩",
+     "words": 1,
+     "lines": 1,
+     "size": 40,
+     "font": "Noto Serif TC"
+    },
+    "headings": [
+     {
+      "text": "讀一首唐詩",
+      "words": 1,
+      "chars": 5,
+      "lines": 1,
+      "size": 40,
+      "vw": 5.2,
+      "font": "Noto Serif TC",
+      "weight": 700,
+      "tracking": 0,
+      "leading": 1.2,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.95,
+      "top": 128,
+      "tag": "h1",
+      "kind": "heading"
+     },
+     {
+      "text": "自遣",
+      "words": 1,
+      "chars": 2,
+      "lines": 1,
+      "size": 46.1,
+      "vw": 6,
+      "font": "Noto Serif TC",
+      "weight": 700,
+      "tracking": 0,
+      "leading": 1.25,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "left",
+      "widthRatio": 0.44,
+      "top": 361,
+      "tag": "h2",
+      "kind": "heading"
+     },
+     {
+      "text": "搜尋 100 首唐詩",
+      "words": 3,
+      "chars": 10,
+      "lines": 1,
+      "size": 27,
+      "vw": 3.5,
+      "font": "Noto Serif TC",
+      "weight": 700,
+      "tracking": 0,
+      "leading": 1.7,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "left",
+      "widthRatio": 0.29,
+      "top": 857,
+      "tag": "h2",
+      "kind": "heading"
+     },
+     {
+      "text": "我的收藏",
+      "words": 1,
+      "chars": 4,
+      "lines": 1,
+      "size": 27,
+      "vw": 3.5,
+      "font": "Noto Serif TC",
+      "weight": 700,
+      "tracking": 0,
+      "leading": 1.7,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "left",
+      "widthRatio": 0.24,
+      "top": 1191,
+      "tag": "h2",
+      "kind": "heading"
+     },
+     {
+      "text": "閱讀歷程",
+      "words": 1,
+      "chars": 4,
+      "lines": 1,
+      "size": 27,
+      "vw": 3.5,
+      "font": "Noto Serif TC",
+      "weight": 700,
+      "tracking": 0,
+      "leading": 1.7,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "left",
+      "widthRatio": 0.27,
+      "top": 1524,
+      "tag": "h2",
+      "kind": "heading"
+     }
+    ],
+    "headingSummary": {
+     "count": 5,
+     "maxLines": 1,
+     "over2Lines": 0,
+     "statements": 0,
+     "centered": 0,
+     "medianWords": 1,
+     "mixedFontHeadings": 0
+    },
+    "type": {
+     "families": [
+      {
+       "family": "Noto Sans TC",
+       "share": 0.85,
+       "mono": false
+      },
+      {
+       "family": "Noto Serif TC",
+       "share": 0.15,
+       "mono": false
+      }
+     ],
+     "familyCount": 2,
+     "sizes": [
+      11,
+      12,
+      13,
+      14,
+      16,
+      18,
+      20,
+      21,
+      25,
+      27,
+      40,
+      46
+     ],
+     "sizeCount": 12,
+     "notLoaded": [],
+     "body": null,
+     "measureChars": null,
+     "max": {
+      "size": 46.1,
+      "vw": 6,
+      "font": "Noto Serif TC",
+      "text": "自遣"
+     },
+     "monoShare": 0,
+     "monoProseShare": 0,
+     "monoFamilies": [],
+     "monoSamples": [],
+     "microLabels": 0,
+     "microLabelShare": 0,
+     "microSamples": [],
+     "upperShare": 0,
+     "centerShare": 0.06,
+     "smallText": 3
+    },
+    "eyebrows": [
+     {
+      "text": "第 84 首／100",
+      "above": "自遣",
+      "upper": false,
+      "tracked": false,
+      "mono": false,
+      "pill": false,
+      "size": 13,
+      "top": 315
+     }
+    ],
+    "numbered": [],
+    "color": {
+     "bodyBg": "#f7f3ec",
+     "bodyBgHsl": {
+      "h": 38,
+      "s": 0.41,
+      "l": 0.95
+     },
+     "dark": false,
+     "sectionBgs": [
+      {
+       "color": "#fffdf9",
+       "top": 275,
+       "hsl": {
+        "h": 40,
+        "s": 1,
+        "l": 0.99
+       }
+      }
+     ],
+     "textColors": [
+      {
+       "color": "#687477",
+       "share": 0.52
+      },
+      {
+       "color": "#23333a",
+       "share": 0.19
+      },
+      {
+       "color": "#b94d39",
+       "share": 0.17
+      },
+      {
+       "color": "#dc765e",
+       "share": 0.04
+      },
+      {
+       "color": "#0f4d4b",
+       "share": 0.04
+      }
+     ],
+     "button": {
+      "bg": "#eee6d9",
+      "hsl": {
+       "h": 37,
+       "s": 0.38,
+       "l": 0.89
+      },
+      "fg": "#176b67"
+     },
+     "lowContrast": [
+      {
+       "text": "100 首唐詩",
+       "ratio": 2.8,
+       "need": 4.5,
+       "size": 13,
+       "fg": "#dc765e",
+       "bg": "#f7f3ec"
+      },
+      {
+       "text": "閱讀詩句 →",
+       "ratio": 2.8,
+       "need": 4.5,
+       "size": 12,
+       "fg": "#dc765e",
+       "bg": "#f7f3ec"
+      },
+      {
+       "text": "閱讀詩句 →",
+       "ratio": 2.8,
+       "need": 4.5,
+       "size": 12,
+       "fg": "#dc765e",
+       "bg": "#f7f3ec"
+      },
+      {
+       "text": "一首一首，讀懂詩裡的意思",
+       "ratio": 4.4,
+       "need": 4.5,
+       "size": 12,
+       "fg": "#687477",
+       "bg": "#f7f3ec"
+      },
+      {
+       "text": "回學習首頁",
+       "ratio": 4.4,
+       "need": 4.5,
+       "size": 16,
+       "fg": "#687477",
+       "bg": "#f7f3ec"
+      },
+      {
+       "text": "今日唐詩",
+       "ratio": 4.4,
+       "need": 4.5,
+       "size": 16,
+       "fg": "#687477",
+       "bg": "#f7f3ec"
+      }
+     ]
+    },
+    "buttons": {
+     "count": 4,
+     "inHero": 2,
+     "radius": 4,
+     "height": 47,
+     "withShadow": 0,
+     "withGradient": 0,
+     "mono": 0,
+     "upper": 0,
+     "heroLabels": [
+      "換一首",
+      "收藏這首"
+     ]
+    },
+    "surfaces": {
+     "shadowStatic": 1,
+     "shadowOverlay": 0,
+     "shadowSamples": [
+      "span.brand-mark → rgb(214, 166, 79) 5px 5px 0px 0px"
+     ],
+     "gradients": 0,
+     "scrims": 0,
+     "gradientSamples": [],
+     "gradientText": 0,
+     "hairlines": 4,
+     "hairlineSamples": [
+      "div.section-panel 728px",
+      "div.section-panel 728px",
+      "div.section-panel 728px",
+      "footer.shell 728px"
+     ],
+     "outlinedBoxes": 1,
+     "dashed": 0,
+     "blurred": 0,
+     "roundedBoxes": 0,
+     "boxRadius": 0,
+     "squareMedia": 0,
+     "roundedMedia": 0,
+     "mediaRadius": 0,
+     "textShadow": 0,
+     "cardRows": []
+    },
+    "heroMedia": [],
+    "nav": {
+     "links": 6,
+     "fixed": false,
+     "height": 98,
+     "floatingPill": false,
+     "blur": false
+    },
+    "fontsLoaded": []
+   },
+   "layout": {
+    "viewport": {
+     "w": 768,
+     "h": 1024
+    },
+    "pageH": 1926,
+    "margins": {
+     "left": 20,
+     "right": 20
+    },
+    "sections": [
+     {
+      "sel": "section.intro",
+      "tag": "section",
+      "top": 98,
+      "height": 177,
+      "words": 6,
+      "media": 0,
+      "middle": 0,
+      "heading": {
+       "text": "讀一首唐詩",
+       "size": 40,
+       "tag": "h1"
+      },
+      "left": 20,
+      "right": 394,
+      "textLeft": 20,
+      "textRight": 394,
+      "fullBleed": false,
+      "footer": false,
+      "hero": true,
+      "continues": false,
+      "pinned": false
+     },
+     {
+      "sel": "section#today.poem-feature",
+      "tag": "section",
+      "top": 275,
+      "height": 526,
+      "words": 37,
+      "media": 0,
+      "middle": 83,
+      "heading": {
+       "text": "自遣",
+       "size": 46,
+       "tag": "h2"
+      },
+      "left": 59,
+      "right": 59,
+      "textLeft": 59,
+      "textRight": 59,
+      "fullBleed": false,
+      "footer": false,
+      "hero": true,
+      "continues": false,
+      "pinned": false
+     },
+     {
+      "sel": "section#catalog.content-section",
+      "tag": "section",
+      "top": 801,
+      "height": 333,
+      "words": 7,
+      "media": 0,
+      "middle": 0,
+      "heading": {
+       "text": "搜尋 100 首唐詩",
+       "size": 27,
+       "tag": "h2"
+      },
+      "left": 20,
+      "right": 20,
+      "textLeft": 20,
+      "textRight": 20,
+      "fullBleed": false,
+      "footer": false,
+      "hero": false,
+      "continues": false,
+      "pinned": false
+     },
+     {
+      "sel": "section#saved.content-section",
+      "tag": "section",
+      "top": 1135,
+      "height": 333,
+      "words": 6,
+      "media": 0,
+      "middle": 10,
+      "heading": {
+       "text": "我的收藏",
+       "size": 27,
+       "tag": "h2"
+      },
+      "left": 20,
+      "right": 20,
+      "textLeft": 20,
+      "textRight": 20,
+      "fullBleed": false,
+      "footer": false,
+      "hero": false,
+      "continues": false,
+      "pinned": false
+     },
+     {
+      "sel": "section#history.content-section",
+      "tag": "section",
+      "top": 1468,
+      "height": 324,
+      "words": 23,
+      "media": 0,
+      "middle": 10,
+      "heading": {
+       "text": "閱讀歷程",
+       "size": 27,
+       "tag": "h2"
+      },
+      "left": 20,
+      "right": 20,
+      "textLeft": 20,
+      "textRight": 20,
+      "fullBleed": false,
+      "footer": true,
+      "hero": false,
+      "continues": false,
+      "pinned": false
+     }
+    ],
+    "gaps": [],
+    "h1s": [
+     {
+      "text": "讀一首唐詩",
+      "size": 40,
+      "top": 128,
+      "firstScreen": true
+     }
+    ],
+    "edgeText": [],
+    "edges": [
+     {
+      "x": 20,
+      "n": 4
+     },
+     {
+      "x": 34,
+      "n": 1
+     },
+     {
+      "x": 59,
+      "n": 1
+     },
+     {
+      "x": 281,
+      "n": 1
+     },
+     {
+      "x": 460,
+      "n": 1
+     }
+    ],
+    "leftBlocks": 8,
+    "bodySize": 16,
+    "stage": false,
+    "explains": false,
+    "slivers": [],
+    "voidShare": 0,
+    "voidBox": null
+   },
+   "app": null,
+   "consoleErrors": []
+  },
+  {
+   "width": 390,
+   "height": 844,
+   "load": "load",
+   "screens": 3,
+   "filled": [
+    0.84,
+    0.32,
+    0.39
+   ],
+   "motion": {
+    "elements": 0,
+    "css": 0,
+    "transitions": 0,
+    "scripted": 0,
+    "videos": 0,
+    "playingVideos": 0
+   },
+   "metrics": {
+    "viewport": {
+     "w": 390,
+     "h": 844
+    },
+    "page": {
+     "height": 2266,
+     "screens": 2.7,
+     "words": 76,
+     "img": 0,
+     "video": 0,
+     "canvas": 0,
+     "svg": 0,
+     "sections": 5,
+     "horizontalOverflow": 0,
+     "overflowCulprits": [],
+     "uiFragments": 0,
+     "uiAbuse": false,
+     "realPictures": 0,
+     "videoCount": 0,
+     "uiPictures": 0,
+     "pictureSamples": [],
+     "blendText": 0,
+     "sideScrollers": 0,
+     "brokenImages": [],
+     "emoji": [],
+     "videosNoPoster": 0
+    },
+    "hero": {
+     "text": "讀一首唐詩",
+     "words": 1,
+     "chars": 5,
+     "lines": 1,
+     "size": 32,
+     "vw": 8.2,
+     "font": "Noto Serif TC",
+     "weight": 700,
+     "tracking": 0,
+     "leading": 1.2,
+     "upper": false,
+     "italic": false,
+     "mono": false,
+     "align": "left",
+     "position": "center",
+     "widthRatio": 0.93,
+     "top": 128,
+     "tag": "h1",
+     "kind": "heading"
+    },
+    "h1": {
+     "text": "讀一首唐詩",
+     "words": 1,
+     "lines": 1,
+     "size": 32,
+     "font": "Noto Serif TC"
+    },
+    "headings": [
+     {
+      "text": "讀一首唐詩",
+      "words": 1,
+      "chars": 5,
+      "lines": 1,
+      "size": 32,
+      "vw": 8.2,
+      "font": "Noto Serif TC",
+      "weight": 700,
+      "tracking": 0,
+      "leading": 1.2,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.93,
+      "top": 128,
+      "tag": "h1",
+      "kind": "heading"
+     },
+     {
+      "text": "登樂遊原",
+      "words": 1,
+      "chars": 4,
+      "lines": 1,
+      "size": 32,
+      "vw": 8.2,
+      "font": "Noto Serif TC",
+      "weight": 700,
+      "tracking": 0,
+      "leading": 1.25,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.83,
+      "top": 315,
+      "tag": "h2",
+      "kind": "heading"
+     },
+     {
+      "text": "搜尋 100 首唐詩",
+      "words": 3,
+      "chars": 10,
+      "lines": 1,
+      "size": 27,
+      "vw": 6.9,
+      "font": "Noto Serif TC",
+      "weight": 700,
+      "tracking": 0,
+      "leading": 1.7,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "left",
+      "widthRatio": 0.57,
+      "top": 875,
+      "tag": "h2",
+      "kind": "heading"
+     },
+     {
+      "text": "我的收藏",
+      "words": 1,
+      "chars": 4,
+      "lines": 1,
+      "size": 27,
+      "vw": 6.9,
+      "font": "Noto Serif TC",
+      "weight": 700,
+      "tracking": 0,
+      "leading": 1.7,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "left",
+      "widthRatio": 0.47,
+      "top": 1234,
+      "tag": "h2",
+      "kind": "heading"
+     },
+     {
+      "text": "閱讀歷程",
+      "words": 1,
+      "chars": 4,
+      "lines": 1,
+      "size": 27,
+      "vw": 6.9,
+      "font": "Noto Serif TC",
+      "weight": 700,
+      "tracking": 0,
+      "leading": 1.7,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "left",
+      "widthRatio": 0.53,
+      "top": 1594,
+      "tag": "h2",
+      "kind": "heading"
+     }
+    ],
+    "headingSummary": {
+     "count": 5,
+     "maxLines": 1,
+     "over2Lines": 0,
+     "statements": 0,
+     "centered": 0,
+     "medianWords": 1,
+     "mixedFontHeadings": 0
+    },
+    "type": {
+     "families": [
+      {
+       "family": "Noto Sans TC",
+       "share": 0.84,
+       "mono": false
+      },
+      {
+       "family": "Noto Serif TC",
+       "share": 0.16,
+       "mono": false
+      }
+     ],
+     "familyCount": 2,
+     "sizes": [
+      11,
+      12,
+      13,
+      14,
+      16,
+      18,
+      20,
+      21,
+      27,
+      32
+     ],
+     "sizeCount": 10,
+     "notLoaded": [],
+     "body": null,
+     "measureChars": null,
+     "max": {
+      "size": 32,
+      "vw": 8.2,
+      "font": "Noto Serif TC",
+      "text": "讀一首唐詩"
+     },
+     "monoShare": 0,
+     "monoProseShare": 0,
+     "monoFamilies": [],
+     "monoSamples": [],
+     "microLabels": 0,
+     "microLabelShare": 0,
+     "microSamples": [],
+     "upperShare": 0,
+     "centerShare": 0.08,
+     "smallText": 2
+    },
+    "eyebrows": [
+     {
+      "text": "第 9 首／100",
+      "above": "登樂遊原",
+      "upper": false,
+      "tracked": false,
+      "mono": false,
+      "pill": false,
+      "size": 13,
+      "top": 269
+     }
+    ],
+    "numbered": [],
+    "color": {
+     "bodyBg": "#f7f3ec",
+     "bodyBgHsl": {
+      "h": 38,
+      "s": 0.41,
+      "l": 0.95
+     },
+     "dark": false,
+     "sectionBgs": [
+      {
+       "color": "#fffdf9",
+       "top": 244,
+       "hsl": {
+        "h": 40,
+        "s": 1,
+        "l": 0.99
+       }
+      }
+     ],
+     "textColors": [
+      {
+       "color": "#687477",
+       "share": 0.55
+      },
+      {
+       "color": "#23333a",
+       "share": 0.17
+      },
+      {
+       "color": "#b94d39",
+       "share": 0.13
+      },
+      {
+       "color": "#dc765e",
+       "share": 0.06
+      },
+      {
+       "color": "#0f4d4b",
+       "share": 0.06
+      }
+     ],
+     "button": {
+      "bg": "#eee6d9",
+      "hsl": {
+       "h": 37,
+       "s": 0.38,
+       "l": 0.89
+      },
+      "fg": "#176b67"
+     },
+     "lowContrast": [
+      {
+       "text": "100 首唐詩",
+       "ratio": 2.8,
+       "need": 4.5,
+       "size": 13,
+       "fg": "#dc765e",
+       "bg": "#f7f3ec"
+      },
+      {
+       "text": "閱讀詩句 →",
+       "ratio": 2.8,
+       "need": 4.5,
+       "size": 12,
+       "fg": "#dc765e",
+       "bg": "#f7f3ec"
+      },
+      {
+       "text": "閱讀詩句 →",
+       "ratio": 2.8,
+       "need": 4.5,
+       "size": 12,
+       "fg": "#dc765e",
+       "bg": "#f7f3ec"
+      },
+      {
+       "text": "閱讀詩句 →",
+       "ratio": 2.8,
+       "need": 4.5,
+       "size": 12,
+       "fg": "#dc765e",
+       "bg": "#f7f3ec"
+      },
+      {
+       "text": "回學習首頁",
+       "ratio": 4.4,
+       "need": 4.5,
+       "size": 11,
+       "fg": "#687477",
+       "bg": "#f7f3ec"
+      },
+      {
+       "text": "今日唐詩",
+       "ratio": 4.4,
+       "need": 4.5,
+       "size": 11,
+       "fg": "#687477",
+       "bg": "#f7f3ec"
+      }
+     ]
+    },
+    "buttons": {
+     "count": 4,
+     "inHero": 2,
+     "radius": 4,
+     "height": 47,
+     "withShadow": 0,
+     "withGradient": 0,
+     "mono": 0,
+     "upper": 0,
+     "heroLabels": [
+      "換一首",
+      "收藏這首"
+     ]
+    },
+    "surfaces": {
+     "shadowStatic": 1,
+     "shadowOverlay": 0,
+     "shadowSamples": [
+      "span.brand-mark → rgb(214, 166, 79) 5px 5px 0px 0px"
+     ],
+     "gradients": 0,
+     "scrims": 0,
+     "gradientSamples": [],
+     "gradientText": 0,
+     "hairlines": 4,
+     "hairlineSamples": [
+      "div.section-panel 362px",
+      "div.section-panel 362px",
+      "div.section-panel 362px",
+      "footer.shell 362px"
+     ],
+     "outlinedBoxes": 1,
+     "dashed": 0,
+     "blurred": 0,
+     "roundedBoxes": 0,
+     "boxRadius": 0,
+     "squareMedia": 0,
+     "roundedMedia": 0,
+     "mediaRadius": 0,
+     "textShadow": 0,
+     "cardRows": []
+    },
+    "heroMedia": [],
+    "nav": {
+     "links": 6,
+     "fixed": false,
+     "height": 114,
+     "floatingPill": false,
+     "blur": false
+    },
+    "fontsLoaded": []
+   },
+   "layout": {
+    "viewport": {
+     "w": 390,
+     "h": 844
+    },
+    "pageH": 2266,
+    "margins": {
+     "left": 14,
+     "right": 14
+    },
+    "sections": [
+     {
+      "sel": "section.intro",
+      "tag": "section",
+      "top": 114,
+      "height": 131,
+      "words": 6,
+      "media": 0,
+      "middle": 0,
+      "heading": {
+       "text": "讀一首唐詩",
+       "size": 32,
+       "tag": "h1"
+      },
+      "left": 14,
+      "right": 22,
+      "textLeft": 14,
+      "textRight": 22,
+      "fullBleed": false,
+      "footer": false,
+      "hero": true,
+      "continues": false,
+      "pinned": false
+     },
+     {
+      "sel": "section#today.poem-feature",
+      "tag": "section",
+      "top": 244,
+      "height": 574,
+      "words": 30,
+      "media": 0,
+      "middle": 0,
+      "heading": {
+       "text": "登樂遊原",
+       "size": 32,
+       "tag": "h2"
+      },
+      "left": 33,
+      "right": 33,
+      "textLeft": 33,
+      "textRight": 33,
+      "fullBleed": false,
+      "footer": false,
+      "hero": true,
+      "continues": false,
+      "pinned": false
+     },
+     {
+      "sel": "section#catalog.content-section",
+      "tag": "section",
+      "top": 819,
+      "height": 359,
+      "words": 7,
+      "media": 0,
+      "middle": 0,
+      "heading": {
+       "text": "搜尋 100 首唐詩",
+       "size": 27,
+       "tag": "h2"
+      },
+      "left": 14,
+      "right": 14,
+      "textLeft": 14,
+      "textRight": 58,
+      "fullBleed": false,
+      "footer": false,
+      "hero": false,
+      "continues": false,
+      "pinned": false
+     },
+     {
+      "sel": "section#saved.content-section",
+      "tag": "section",
+      "top": 1178,
+      "height": 359,
+      "words": 6,
+      "media": 0,
+      "middle": 10,
+      "heading": {
+       "text": "我的收藏",
+       "size": 27,
+       "tag": "h2"
+      },
+      "left": 14,
+      "right": 14,
+      "textLeft": 14,
+      "textRight": 27,
+      "fullBleed": false,
+      "footer": false,
+      "hero": false,
+      "continues": false,
+      "pinned": false
+     },
+     {
+      "sel": "section#history.content-section",
+      "tag": "section",
+      "top": 1538,
+      "height": 571,
+      "words": 32,
+      "media": 0,
+      "middle": 10,
+      "heading": {
+       "text": "閱讀歷程",
+       "size": 27,
+       "tag": "h2"
+      },
+      "left": 14,
+      "right": 14,
+      "textLeft": 14,
+      "textRight": 26,
+      "fullBleed": false,
+      "footer": true,
+      "hero": false,
+      "continues": false,
+      "pinned": false
+     }
+    ],
+    "gaps": [],
+    "h1s": [
+     {
+      "text": "讀一首唐詩",
+      "size": 32,
+      "top": 128,
+      "firstScreen": true
+     }
+    ],
+    "edgeText": [
+     {
+      "text": "讀一首唐詩",
+      "side": "left",
+      "px": 14
+     },
+     {
+      "text": "從詩句、注音到白話解釋，慢慢讀懂 100 首唐詩。",
+      "side": "left",
+      "px": 14
+     },
+     {
+      "text": "100 首唐詩",
+      "side": "left",
+      "px": 14
+     },
+     {
+      "text": "搜尋 100 首唐詩",
+      "side": "left",
+      "px": 14
+     },
+     {
+      "text": "可搜尋詩人、題名、詩句或白話解釋。",
+      "side": "left",
+      "px": 14
+     },
+     {
+      "text": "100 首收錄",
+      "side": "left",
+      "px": 14
+     },
+     {
+      "text": "我的收藏",
+      "side": "left",
+      "px": 14
+     },
+     {
+      "text": "收藏的詩會保存在這個瀏覽器。",
+      "side": "left",
+      "px": 14
+     }
+    ],
+    "edges": [
+     {
+      "x": 14,
+      "n": 4
+     },
+     {
+      "x": 28,
+      "n": 4
+     },
+     {
+      "x": 54,
+      "n": 1
+     }
+    ],
+    "leftBlocks": 9,
+    "bodySize": 16,
+    "stage": false,
+    "explains": false,
+    "slivers": [],
+    "voidShare": 0,
+    "voidBox": null
+   },
+   "app": null,
+   "consoleErrors": []
+  }
+ ],
+ "findings": [
+  {
+   "level": "FAIL",
+   "id": "eyebrow",
+   "width": 1440,
+   "message": "1 eyebrow/kicker label(s) above headings: \"第 34 首／100\" above \"渡荊門送別\"",
+   "fix": "Delete them. If the label carried real information, fold it into the headline or the supporting sentence.",
+   "alsoAt": [
+    768,
+    390
+   ]
+  },
+  {
+   "level": "FAIL",
+   "id": "shadow",
+   "width": 1440,
+   "message": "1 box-shadow(s) on elements at rest: span.brand-mark → rgb(214, 166, 79) 5px 5px 0px 0px",
+   "fix": "Remove. Separate surfaces with a tone step or space. Shadows are for things that really float (menus, dialogs, sticky bars).",
+   "alsoAt": [
+    768,
+    390
+   ]
+  },
+  {
+   "level": "FAIL",
+   "id": "hairline",
+   "width": 1440,
+   "message": "4 thin rule(s)/divider line(s): div.section-panel 1120px | div.section-panel 1120px | div.section-panel 1120px | footer.shell 1120px",
+   "fix": "Delete. Separate with space, a tone change, or scale. Lines are only for real tables and form fields.",
+   "alsoAt": [
+    768,
+    390
+   ]
+  },
+  {
+   "level": "WARN",
+   "id": "outlined-box",
+   "width": 1440,
+   "message": "1 box(es) drawn with a 1px outline.",
+   "fix": "Prefer a filled surface or no box.",
+   "alsoAt": [
+    768,
+    390
+   ]
+  },
+  {
+   "level": "FAIL",
+   "id": "palette-claude",
+   "width": 1440,
+   "message": "Cream + terracotta palette (page background #f7f3ec, section #fffdf9, button #eee6d9, text #b94d39).",
+   "fix": "Re-draw the palette from the library. This pairing reads as an assistant brand, not yours.",
+   "alsoAt": [
+    768,
+    390
+   ]
+  },
+  {
+   "level": "WARN",
+   "id": "contrast",
+   "width": 1440,
+   "message": "Low-contrast text: \"100 首唐詩\" 2.8:1 needs 4.5:1; \"閱讀詩句 →\" 2.8:1 needs 4.5:1; \"一首一首，讀懂詩裡的意思\" 4.4:1 needs 4.5:1; \"回學習首頁\" 4.4:1 needs 4.5:1",
+   "fix": "Darken or lighten the text colour.",
+   "alsoAt": [
+    768,
+    390
+   ]
+  },
+  {
+   "level": "WARN",
+   "id": "size-count",
+   "width": 1440,
+   "message": "11 different font sizes (11, 12, 13, 14, 16, 18, 20, 21, 27, 40, 52).",
+   "fix": "A page needs about five: display, heading, lead, body, small.",
+   "alsoAt": [
+    768,
+    390
+   ]
+  },
+  {
+   "level": "FAIL",
+   "id": "few-pictures",
+   "width": 1440,
+   "message": "Only 0 picture(s) on the page (0 photographs, footage or raster images, 0 interface fragments). Drawings in SVG do not count.",
+   "fix": "Find real pictures of the subject's world with scripts/assets.mjs (photographs, archival images, maps, engravings, footage), download them to assets/ and give them room: a hero picture, one per section that has a subject, a full-width band. At least four, usually six to twelve."
+  },
+  {
+   "level": "WARN",
+   "id": "no-footage",
+   "width": 1440,
+   "message": "No video anywhere on the page.",
+   "fix": "Look for one honest clip with scripts/assets.mjs --video (the place, the material, the process) and use it as a muted loop with a poster frame. Defend its absence only if no clip fits the subject."
+  },
+  {
+   "level": "WARN",
+   "id": "small-text",
+   "width": 1440,
+   "message": "3 text block(s) under 13px.",
+   "fix": "Nothing meant to be read goes below 13px.",
+   "alsoAt": [
+    768,
+    390
+   ]
+  },
+  {
+   "level": "FAIL",
+   "id": "focal-point",
+   "width": 1440,
+   "message": "The first screen has no dominant element: the largest type is 52px (3.6vw) and no single picture holds a third of the viewport.",
+   "fix": "Make one thing lead: the headline at display size, or one large picture. A grid of many small pictures is not one thing; in blind tests jurors marked a first screen without a headline down every time. On the strongest studied sites the largest type has a median of 8.4vw."
+  },
+  {
+   "level": "WARN",
+   "id": "name-only-title",
+   "width": 1440,
+   "message": "The h1 is a bare name (\"讀一首唐詩\") and nothing else on the first screen says what this is.",
+   "fix": "Keep the name if it leads, and give the line under it (18px or more) the plain words: what it is, for whom, where or when. In the study of 97 Sites of the Day, first screens that named nothing lost usability and content points.",
+   "alsoAt": [
+    768,
+    390
+   ]
+  },
+  {
+   "level": "FAIL",
+   "id": "still-page",
+   "width": 1440,
+   "message": "Only 0 element(s) moved while the page loaded and scrolled.",
+   "fix": "Build the motion layer (SKILL.md step 9, references/motion.md): the signature move, an entrance for the parts of every section, feedback on every control, and one moving picture. Transform and opacity only, with a reduced-motion fallback."
+  },
+  {
+   "level": "WARN",
+   "id": "edge-text",
+   "width": 390,
+   "message": "8 text block(s) sit 12–15px from the phone's edge: \"讀一首唐詩\" (14px); \"從詩句、注音到白話解釋，慢慢讀懂 100 首唐詩。\" (14px); \"100 首唐詩\" (14px)",
+   "fix": "The page margin is 16–20px on a phone; the header and the corner labels sit on it too."
+  }
+ ],
+ "images": [
+  {
+   "viewport": "desktop",
+   "width": 1440,
+   "fold": "C:\\Users\\linjingc\\jclin\\temp\\#temp\\19-Four-character idiom\\.taste-skill\\after\\desktop-fold.jpg",
+   "pages": [
+    "C:\\Users\\linjingc\\jclin\\temp\\#temp\\19-Four-character idiom\\.taste-skill\\after\\desktop-page-01.jpg"
+   ],
+   "film": []
+  },
+  {
+   "viewport": "tablet",
+   "width": 768,
+   "fold": "C:\\Users\\linjingc\\jclin\\temp\\#temp\\19-Four-character idiom\\.taste-skill\\after\\tablet-fold.jpg",
+   "pages": [
+    "C:\\Users\\linjingc\\jclin\\temp\\#temp\\19-Four-character idiom\\.taste-skill\\after\\tablet-page-01.jpg"
+   ],
+   "film": []
+  },
+  {
+   "viewport": "mobile",
+   "width": 390,
+   "fold": "C:\\Users\\linjingc\\jclin\\temp\\#temp\\19-Four-character idiom\\.taste-skill\\after\\mobile-fold.jpg",
+   "pages": [
+    "C:\\Users\\linjingc\\jclin\\temp\\#temp\\19-Four-character idiom\\.taste-skill\\after\\mobile-page-01.jpg"
+   ],
+   "film": []
+  }
+ ]
+}

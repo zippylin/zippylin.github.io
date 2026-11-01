@@ -55,10 +55,10 @@
     }
     .brand-name { font-family: 'Noto Serif TC', serif; font-weight: 900; font-size: 21px; letter-spacing: .08em; }
     .brand-note { color: var(--muted); font-size: 12px; letter-spacing: .1em; }
-    nav { display: flex; gap: 6px; }
+    nav { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 6px; }
     .nav-button {
       border: 0; border-radius: 5px; background: transparent; padding: 10px 14px; color: var(--muted);
-      transition: .2s ease;
+      text-decoration: none; transition: .2s ease;
     }
     .nav-button:hover, .nav-button.active { color: var(--teal); background: rgba(23, 107, 103, .09); }
     .nav-button span { margin-left: 5px; font-size: 12px; }
@@ -173,6 +173,7 @@
         <div><div class="brand-name">日日成語</div><div class="brand-note">一日一語，積累自己的語感</div></div>
       </a>
       <nav aria-label="主要導覽">
+        <a class="nav-button" href="index.html">學習首頁</a>
         <button class="nav-button active" data-target="top">今日 <span>DAILY</span></button>
         <button class="nav-button" data-target="matching">連連看 <span>MATCH</span></button>
         <button class="nav-button" data-target="catalog">索引 <span>INDEX</span></button>

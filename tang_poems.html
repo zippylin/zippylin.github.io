@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f5efe6">
+  <meta name="description" content="隨機讀一首唐詩，附逐字注音、白話解釋、收藏與本機閱讀歷史。">
+  <title>唐詩小箋｜100首唐詩，慢慢讀懂</title>
+  <style>
+    :root {
+      --paper: #f7f3ec;
+      --paper-deep: #eee6d9;
+      --ink: #23333a;
+      --muted: #687477;
+      --line: #d8cec0;
+      --teal: #176b67;
+      --teal-deep: #0f4d4b;
+      --coral: #dc765e;
+      --gold: #d6a64f;
+      --white: #fffdf9;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    [hidden] { display: none !important; }
+    body {
+      display: grid;
+      width: min(1440px, 100%);
+      grid-template-columns: 220px minmax(0, 1fr);
+      column-gap: 40px;
+      align-items: start;
+      margin: 0;
+      padding: 0 24px;
+      min-width: 320px;
+      color: var(--ink);
+      background: var(--paper);
+      font-family: 'Noto Sans TC', 'Microsoft JhengHei', sans-serif;
+      line-height: 1.7;
+    }
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: .4;
+      background-image: radial-gradient(rgba(23, 107, 103, .1) .7px, transparent .7px);
+      background-size: 18px 18px;
+      mask-image: linear-gradient(to bottom, black, transparent 72%);
+    }
+    button, input { font: inherit; }
+    button { cursor: pointer; }
+    a { color: inherit; }
+    .shell { position: relative; width: auto; margin: 0; min-width: 0; }
+    header.shell { position: sticky; top: 24px; grid-column: 1; grid-row: 1 / span 2; align-self: start; padding: 24px 0; }
+    main.shell { grid-column: 2; grid-row: 1; padding: 24px 0 60px; }
+    footer.shell { grid-column: 2; grid-row: 2; }
+    header { padding: 24px 0 18px; }
+    .topbar { display: flex; flex-direction: column; align-items: stretch; gap: 18px; }
+    .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+    .brand-mark {
+      display: grid; width: 46px; height: 46px; place-items: center; border-radius: 50%;
+      color: var(--white); background: var(--teal); font-family: 'Noto Serif TC', serif;
+      font-size: 20px; box-shadow: 5px 5px 0 var(--gold);
+    }
+    .brand-name { display: block; font-family: 'Noto Serif TC', serif; font-size: 21px; font-weight: 900; letter-spacing: .08em; }
+    .brand-note { display: block; color: var(--muted); font-size: 12px; }
+    nav { display: flex; flex-direction: column; align-items: stretch; gap: 6px; }
+    .tab-list { display: grid; gap: 4px; }
+    .nav-link { display: inline-flex; width: 100%; min-height: 42px; align-items: center; border: 0; border-radius: 4px; padding: 8px 11px; color: var(--muted); background: transparent; font: inherit; text-align: left; text-decoration: none; cursor: pointer; }
+    .nav-link:hover, .nav-link:focus-visible, .nav-link[aria-selected="true"] { color: var(--teal-deep); background: rgba(23,107,103,.09); }
+    .nav-link[aria-selected="true"] { font-weight: 700; }
+    .nav-link:focus-visible { outline: 2px solid var(--teal); outline-offset: 2px; }
+    main { padding-bottom: 60px; }
+    .intro { padding: 30px 0 28px; }
+    .intro h1 { margin: 0; color: var(--teal-deep); font-family: 'Noto Serif TC', serif; font-size: 40px; line-height: 1.2; }
+    .intro p { max-width: 680px; margin: 10px 0 0; color: var(--muted); }
+    .intro-count { margin-top: 12px; color: var(--coral); font-size: 13px; font-weight: 700; }
+    .poem-feature { position: relative; display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(270px, .7fr); column-gap: clamp(28px, 5vw, 60px); align-items: start; padding: clamp(24px, 5vw, 52px); border: 1px solid var(--line); background: var(--white); }
+    .poem-feature::before { content: ''; position: absolute; inset: 0 auto 0 0; width: 5px; background: var(--coral); }
+    .poem-meta { display: flex; grid-column: 1 / -1; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; color: var(--muted); font-size: 13px; }
+    .poem-meta-left { display: flex; flex-wrap: wrap; gap: 12px; }
+    .poem-feature h2 { grid-column: 1; grid-row: 2; margin: 24px 0 14px; color: var(--teal-deep); font-family: 'Noto Serif TC', serif; font-size: clamp(32px, 6vw, 52px); line-height: 1.25; }
+    .poem-lines { grid-column: 1; grid-row: 3; display: grid; gap: 7px; padding: 12px 0 20px; }
+    .poem-line { margin: 0; color: var(--ink); font-family: 'Noto Serif TC', 'PMingLiU', serif; font-size: clamp(21px, 3.2vw, 27px); line-height: 2.25; }
+    ruby { ruby-position: over; }
+    rt { color: #b94d39; font-family: 'Noto Sans TC', sans-serif; font-size: 13px; line-height: 1.3; }
+    .meaning-box { grid-column: 2; grid-row: 2 / 4; align-self: center; margin-top: 10px; padding: 16px 18px; border-left: 3px solid var(--gold); background: #fffaf0; }
+    .meaning-box h3 { margin: 0 0 5px; color: var(--teal-deep); font-size: 14px; }
+    .meaning-box p { margin: 0; font-size: 16px; }
+    .actions { display: flex; grid-column: 1 / -1; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
+    .action-button { display: inline-flex; min-height: 42px; align-items: center; justify-content: center; gap: 8px; border: 1px solid var(--teal); border-radius: 4px; padding: 9px 15px; color: var(--teal); background: transparent; transition: background .2s ease, color .2s ease; }
+    .action-button:hover { background: rgba(23,107,103,.08); }
+    .action-button.primary { color: var(--white); background: var(--teal); }
+    .action-button.primary:hover { background: var(--teal-deep); }
+    .action-button.is-saved { border-color: var(--coral); color: var(--white); background: var(--coral); }
+    .content-section { padding-top: 56px; scroll-margin-top: 20px; }
+    .section-heading { display: flex; align-items: end; justify-content: space-between; gap: 20px; margin-bottom: 18px; }
+    .section-heading h2 { margin: 0; font-family: 'Noto Serif TC', serif; font-size: 27px; }
+    .section-heading p { margin: 0; color: var(--muted); font-size: 13px; }
+    .section-panel { border-top: 1px solid var(--line); padding-top: 18px; }
+    .search-row { display: flex; gap: 10px; margin-bottom: 16px; }
+    .search-box { width: 100%; min-height: 44px; border: 1px solid var(--line); border-radius: 4px; padding: 10px 13px; color: var(--ink); background: var(--white); }
+    .search-box:focus-visible { outline: 3px solid rgba(23,107,103,.25); outline-offset: 2px; }
+    .results { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 22px; }
+    .poem-result { display: grid; width: 100%; gap: 3px; border: 0; border-bottom: 1px solid var(--line); padding: 13px 4px; color: var(--ink); background: transparent; text-align: left; }
+    .poem-result:hover, .poem-result:focus-visible { color: var(--teal-deep); background: rgba(255,253,249,.7); }
+    .result-title { font-family: 'Noto Serif TC', serif; font-size: 18px; font-weight: 700; }
+    .result-meta, .result-snippet { color: var(--muted); font-size: 12px; }
+    .result-snippet { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .entries { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+    .entry { padding: 14px 15px; border-left: 3px solid var(--teal); background: rgba(255,253,249,.76); }
+    .entry-top { display: flex; justify-content: space-between; gap: 8px; }
+    .entry h3 { margin: 0; color: var(--teal-deep); font-family: 'Noto Serif TC', serif; font-size: 18px; }
+    .entry-date { color: var(--muted); font-size: 11px; white-space: nowrap; }
+    .entry p { margin: 6px 0 0; color: var(--muted); font-size: 13px; }
+    .entry button { margin-top: 10px; border: 0; padding: 0; color: var(--coral); background: transparent; font-size: 12px; }
+    .history-entry { grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 4px 12px; padding: 10px 12px; border-left-width: 2px; }
+    .history-entry .entry-top { grid-column: 1 / -1; }
+    .history-entry .entry-author { margin: 0; font-size: 12px; }
+    .history-entry .entry-open { margin: 0; justify-self: end; white-space: nowrap; }
+    .clear-button { min-width: 90px; border: 0; border-radius: 4px; padding: 0 13px; color: var(--teal); background: var(--paper-deep); }
+    .empty { grid-column: 1 / -1; padding: 24px 14px; color: var(--muted); }
+    footer { display: flex; justify-content: space-between; gap: 16px; padding: 20px 0 32px; border-top: 1px solid var(--line); color: var(--muted); font-size: 12px; }
+    @media (max-width: 760px) {
+      .shell { width: min(100% - 28px, 620px); }
+      header { padding-top: 16px; }
+      .brand-note { display: none; }
+      .topbar { align-items: flex-start; }
+      nav { max-width: 210px; }
+      .nav-link { padding: 7px 8px; font-size: 13px; }
+      .intro { padding-top: 22px; }
+      .intro h1 { font-size: 32px; }
+      .results { grid-template-columns: 1fr; }
+      .entries { grid-template-columns: 1fr; }
+      .section-heading { align-items: start; flex-direction: column; gap: 4px; }
+      footer { flex-direction: column; gap: 4px; }
+    }
+    @media (max-width: 430px) {
+      .topbar { flex-direction: column; gap: 7px; }
+      nav { width: 100%; max-width: none; justify-content: space-between; gap: 0; }
+      .nav-link { padding: 4px; font-size: 11px; white-space: nowrap; }
+      .tab-list { width: 100%; justify-content: space-between; }
+      .intro { padding: 14px 0; }
+      .intro-count { margin-top: 5px; }
+      .poem-meta { align-items: flex-start; }
+      .poem-feature { grid-template-columns: minmax(0, 1fr); }
+      .poem-feature h2, .poem-lines, .meaning-box, .actions { grid-column: 1; grid-row: auto; }
+      .poem-lines { padding-top: 12px; }
+      .meaning-box { align-self: auto; }
+      .poem-feature { padding: 24px 18px; }
+      .search-row { align-items: stretch; }
+    }
+    @media (max-width: 1000px) {
+      body { width: 100%; grid-template-columns: minmax(0, 1fr); column-gap: 0; padding: 0 20px; }
+      .shell { width: auto; margin: 0; }
+      header.shell { position: static; grid-column: 1; grid-row: 1; padding: 16px 0 0; }
+      main.shell { grid-column: 1; grid-row: 2; padding: 18px 0 48px; }
+      footer.shell { grid-column: 1; grid-row: 3; }
+      .topbar { flex-direction: row; align-items: center; justify-content: space-between; gap: 12px; }
+      nav { max-width: none; flex-direction: row; flex-wrap: wrap; justify-content: flex-end; gap: 4px; }
+      .tab-list { display: flex; flex-wrap: wrap; gap: 2px; }
+      .nav-link { width: auto; min-height: 40px; padding: 7px 9px; font-size: 13px; }
+    }
+    @media (max-width: 600px) {
+      body { padding: 0 16px; }
+      .topbar { flex-direction: column; align-items: stretch; gap: 8px; }
+      nav { width: 100%; justify-content: flex-start; }
+      .tab-list { width: 100%; justify-content: space-between; }
+      .nav-link { min-height: 40px; padding: 5px 7px; font-size: 12px; }
+    }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; } }
+  </style>
+</head>
+<body>
+  <header class="shell">
+    <div class="topbar">
+      <div class="brand" aria-label="唐詩小箋">
+        <span class="brand-mark" aria-hidden="true">唐</span>
+        <span><span class="brand-name">唐詩小箋</span><span class="brand-note">一首一首，讀懂詩裡的意思</span></span>
+      </div>
+      <nav aria-label="唐詩單元導覽">
+        <a class="nav-link" href="index.html">回學習首頁</a>
+        <div class="tab-list" role="tablist" aria-label="唐詩分頁">
+          <button class="nav-link" id="tab-today" type="button" role="tab" aria-selected="true" aria-controls="today" tabindex="0">今日唐詩</button>
+          <button class="nav-link" id="tab-catalog" type="button" role="tab" aria-selected="false" aria-controls="catalog" tabindex="-1">搜尋索引</button>
+          <button class="nav-link" id="tab-saved" type="button" role="tab" aria-selected="false" aria-controls="saved" tabindex="-1">我的收藏</button>
+          <button class="nav-link" id="tab-history" type="button" role="tab" aria-selected="false" aria-controls="history" tabindex="-1">閱讀歷程</button>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main class="shell">
+    <section class="intro" aria-labelledby="page-title">
+      <h1 id="page-title">讀一首唐詩</h1>
+      <p>從詩句、注音到白話解釋，慢慢讀懂 100 首唐詩。</p>
+      <div class="intro-count" id="poemCount">100 首唐詩</div>
+    </section>
+
+    <section class="poem-feature" id="today" role="tabpanel" tabindex="0" aria-labelledby="tab-today poemTitle" aria-live="polite">
+      <div class="poem-meta">
+        <div class="poem-meta-left"><span id="poemNumber">第 1 首／100</span><span id="poemAuthor">李白</span></div>
+        <span id="savedStatus">尚未收藏</span>
+      </div>
+      <h2 id="poemTitle">黃鶴樓送孟浩然之廣陵</h2>
+      <div class="poem-lines" id="poemLines"></div>
+      <div class="meaning-box">
+        <h3>白話解釋</h3>
+        <p id="poemMeaning"></p>
+      </div>
+      <div class="actions">
+        <button class="action-button primary" id="randomPoem" type="button">換一首</button>
+        <button class="action-button" id="savePoem" type="button" aria-pressed="false">收藏這首</button>
+      </div>
+    </section>
+
+    <section class="content-section" id="catalog" role="tabpanel" tabindex="0" aria-labelledby="tab-catalog catalogTitle" hidden>
+      <div class="section-heading"><div><h2 id="catalogTitle">搜尋 100 首唐詩</h2><p>可搜尋詩人、題名、詩句或白話解釋。</p></div><p id="searchCount">100 首</p></div>
+      <div class="section-panel">
+        <div class="search-row"><input class="search-box" id="poemSearch" type="search" placeholder="搜尋詩人、詩題或關鍵字…" aria-label="搜尋詩人、詩題、詩句或解釋"></div>
+        <div class="results" id="searchResults"></div>
+      </div>
+    </section>
+
+    <section class="content-section" id="saved" role="tabpanel" tabindex="0" aria-labelledby="tab-saved savedTitle" hidden>
+      <div class="section-heading"><div><h2 id="savedTitle">我的收藏</h2><p>收藏的詩會保存在這個瀏覽器。</p></div><p id="savedCount">0 首</p></div>
+      <div class="section-panel">
+        <div class="search-row"><input class="search-box" id="savedSearch" type="search" placeholder="搜尋收藏…" aria-label="搜尋收藏中的唐詩"><button class="clear-button" id="clearSaved" type="button">清除收藏</button></div>
+        <div class="entries" id="savedEntries"></div>
+      </div>
+    </section>
+
+    <section class="content-section" id="history" role="tabpanel" tabindex="0" aria-labelledby="tab-history historyTitle" hidden>
+      <div class="section-heading"><div><h2 id="historyTitle">閱讀歷程</h2><p>最近讀過的詩會保存在這個瀏覽器。</p></div><p id="historyCount">0 首</p></div>
+      <div class="section-panel">
+        <div class="search-row"><input class="search-box" id="historySearch" type="search" placeholder="搜尋閱讀歷程…" aria-label="搜尋閱讀過的唐詩"><button class="clear-button" id="clearHistory" type="button">清除歷程</button></div>
+        <div class="entries" id="historyEntries"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="shell"><span>唐詩小箋 · 篇目依本專案提供的 100 首唐詩資料整理</span><span>注音與白話解釋供閱讀參考</span></footer>
+
+  <script src="tang-poems-data.js"></script>
+  <script>
+    (() => {
+      'use strict';
+
+      const poems = window.TANG_POEMS || [];
+      const storageKeys = { saved: 'tang-poems-saved-v1', history: 'tang-poems-history-v1' };
+      const byId = id => document.getElementById(id);
+      let current = null;
+      const tabs = [...document.querySelectorAll('[role="tab"]')];
+
+      function activateTab(panelId, { writeHash = false, focus = false } = {}) {
+        const panel = byId(panelId);
+        if (!panel) return;
+        for (const tab of tabs) {
+          const selected = tab.getAttribute('aria-controls') === panelId;
+          tab.setAttribute('aria-selected', String(selected));
+          tab.tabIndex = selected ? 0 : -1;
+          byId(tab.getAttribute('aria-controls')).hidden = !selected;
+          if (selected && focus) tab.focus();
+        }
+        if (writeHash) history.replaceState(null, '', `${location.pathname}#${panelId}`);
+      }
+
+      tabs.forEach((tab, index) => {
+        tab.addEventListener('click', () => activateTab(tab.getAttribute('aria-controls'), { writeHash: true }));
+        tab.addEventListener('keydown', event => {
+          let nextIndex = index;
+          if (event.key === 'ArrowRight') nextIndex = (index + 1) % tabs.length;
+          else if (event.key === 'ArrowLeft') nextIndex = (index + tabs.length - 1) % tabs.length;
+          else if (event.key === 'Home') nextIndex = 0;
+          else if (event.key === 'End') nextIndex = tabs.length - 1;
+          else return;
+          event.preventDefault();
+          activateTab(tabs[nextIndex].getAttribute('aria-controls'), { writeHash: true, focus: true });
+        });
+      });
+
+      const requestedTab = location.hash.slice(1);
+      activateTab(tabs.some(tab => tab.getAttribute('aria-controls') === requestedTab) ? requestedTab : 'today');
+      window.addEventListener('hashchange', () => {
+        const panelId = location.hash.slice(1);
+        if (tabs.some(tab => tab.getAttribute('aria-controls') === panelId)) activateTab(panelId);
+      });
+
+      function readStorage(key) {
+        try { return JSON.parse(localStorage.getItem(key) || '[]'); }
+        catch { return []; }
+      }
+
+      function writeStorage(key, value) {
+        try { localStorage.setItem(key, JSON.stringify(value)); }
+        catch { byId('savedStatus').textContent = '本機儲存不可用'; }
+      }
+
+      function isSaved(id) { return readStorage(storageKeys.saved).includes(id); }
+
+      function searchableText(poem) {
+        return `${poem.author}${poem.title}${poem.meaning}${poem.lines.map(line => line.text).join('')}`.toLocaleLowerCase();
+      }
+
+      function renderAnnotatedLine(line) {
+        const paragraph = document.createElement('p');
+        paragraph.className = 'poem-line';
+        Array.from(line.text).forEach((character, index) => {
+          if (/\p{Script=Han}/u.test(character)) {
+            const ruby = document.createElement('ruby');
+            ruby.append(document.createTextNode(character));
+            const reading = document.createElement('rt');
+            reading.textContent = line.zhuyin[index] || '';
+            ruby.append(reading);
+            paragraph.append(ruby);
+          } else paragraph.append(document.createTextNode(character));
+        });
+        return paragraph;
+      }
+
+      function recordHistory(poem) {
+        const history = readStorage(storageKeys.history).filter(item => item.id !== poem.id);
+        history.unshift({ id: poem.id, viewedAt: new Date().toISOString() });
+        writeStorage(storageKeys.history, history.slice(0, 100));
+        renderCollections();
+      }
+
+      function showPoem(poem, record = true) {
+        current = poem;
+        byId('poemNumber').textContent = `第 ${poem.number} 首／${poems.length}`;
+        byId('poemAuthor').textContent = poem.author;
+        byId('poemTitle').textContent = poem.title;
+        byId('poemMeaning').textContent = poem.meaning;
+        const lines = byId('poemLines');
+        lines.replaceChildren(...poem.lines.map(renderAnnotatedLine));
+        const saved = isSaved(poem.id);
+        byId('savePoem').classList.toggle('is-saved', saved);
+        byId('savePoem').setAttribute('aria-pressed', String(saved));
+        byId('savePoem').textContent = saved ? '已收藏' : '收藏這首';
+        byId('savedStatus').textContent = saved ? '已收藏' : '尚未收藏';
+        if (record) recordHistory(poem);
+      }
+
+      function makeResultButton(poem, dateLabel = '') {
+        const button = document.createElement('button');
+        button.className = 'poem-result';
+        button.type = 'button';
+        const title = document.createElement('span');
+        title.className = 'result-title';
+        title.textContent = poem.title;
+        const meta = document.createElement('span');
+        meta.className = 'result-meta';
+        meta.textContent = `第 ${poem.number} 首 · ${poem.author}${dateLabel ? ` · ${dateLabel}` : ''}`;
+        const snippet = document.createElement('span');
+        snippet.className = 'result-snippet';
+        snippet.textContent = `${poem.lines.map(line => line.text).join(' ')}　${poem.meaning}`;
+        button.append(title, meta, snippet);
+        button.addEventListener('click', () => {
+          showPoem(poem);
+          activateTab('today', { writeHash: true });
+          byId('today').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+        return button;
+      }
+
+      function renderSearch() {
+        const query = byId('poemSearch').value.trim().toLocaleLowerCase();
+        const matches = query ? poems.filter(poem => searchableText(poem).includes(query)) : [];
+        const visible = matches.slice(0, 24);
+        byId('searchCount').textContent = query ? `${matches.length} 首` : `${poems.length} 首收錄`;
+        const resultList = byId('searchResults');
+        resultList.replaceChildren();
+        if (!query) {
+          const prompt = document.createElement('p');
+          prompt.className = 'empty';
+          prompt.textContent = '輸入詩人、題名、詩句或解釋，開始搜尋。';
+          resultList.append(prompt);
+          return;
+        }
+        if (!matches.length) {
+          const empty = document.createElement('p');
+          empty.className = 'empty';
+          empty.textContent = '沒有找到相符的唐詩。';
+          resultList.append(empty);
+          return;
+        }
+        visible.forEach(poem => resultList.append(makeResultButton(poem)));
+        if (matches.length > visible.length) {
+          const note = document.createElement('p');
+          note.className = 'empty';
+          note.textContent = `共找到 ${matches.length} 首，先顯示前 ${visible.length} 首；可增加關鍵字縮小結果。`;
+          resultList.append(note);
+        }
+      }
+
+      function renderCollection(section, key, searchInput, countId, emptyText) {
+        const isHistory = section === 'historyEntries';
+        const items = readStorage(key);
+        const query = byId(searchInput).value.trim().toLocaleLowerCase();
+        const poemsInList = items.map(entry => {
+          const poem = poems.find(item => item.id === (typeof entry === 'string' ? entry : entry.id));
+          return poem ? { poem, viewedAt: typeof entry === 'object' ? entry.viewedAt : '' } : null;
+        }).filter(Boolean).filter(item => !query || searchableText(item.poem).includes(query));
+        byId(countId).textContent = `${items.length} 首`;
+        const list = byId(section);
+        list.replaceChildren();
+        if (!poemsInList.length) {
+          const empty = document.createElement('p');
+          empty.className = 'empty';
+          empty.textContent = query ? '沒有找到相符的唐詩。' : emptyText;
+          list.append(empty);
+          return;
+        }
+        for (const item of poemsInList) {
+          const article = document.createElement('article');
+          article.className = isHistory ? 'entry history-entry' : 'entry';
+          const top = document.createElement('div');
+          top.className = 'entry-top';
+          const heading = document.createElement('h3');
+          heading.textContent = item.poem.title;
+          const date = document.createElement('span');
+          date.className = 'entry-date';
+          date.textContent = item.viewedAt ? new Intl.DateTimeFormat('zh-TW', { month: 'numeric', day: 'numeric' }).format(new Date(item.viewedAt)) : '已收藏';
+          top.append(heading, date);
+          const author = document.createElement('p');
+          author.className = 'entry-author';
+          author.textContent = `${item.poem.author} · 第 ${item.poem.number} 首`;
+          const meaning = document.createElement('p');
+          meaning.textContent = item.poem.meaning;
+          const open = document.createElement('button');
+          open.className = 'entry-open';
+          open.type = 'button';
+          open.textContent = isHistory ? '閱讀詩句 →' : '重新閱讀 →';
+          open.addEventListener('click', () => {
+            showPoem(item.poem);
+            activateTab('today', { writeHash: true });
+            byId('today').scrollIntoView({ behavior: 'smooth', block: 'start' });
+          });
+          if (isHistory) article.append(top, author, open);
+          else article.append(top, author, meaning, open);
+          list.append(article);
+        }
+      }
+
+      function renderCollections() {
+        renderCollection('savedEntries', storageKeys.saved, 'savedSearch', 'savedCount', '還沒有收藏的唐詩。');
+        renderCollection('historyEntries', storageKeys.history, 'historySearch', 'historyCount', '讀過的唐詩會出現在這裡。');
+      }
+
+      byId('randomPoem').addEventListener('click', () => {
+        const choices = poems.filter(poem => poem.id !== current?.id);
+        showPoem(choices[Math.floor(Math.random() * choices.length)] || poems[0]);
+      });
+      byId('savePoem').addEventListener('click', () => {
+        const saved = readStorage(storageKeys.saved);
+        writeStorage(storageKeys.saved, saved.includes(current.id) ? saved.filter(id => id !== current.id) : [current.id, ...saved]);
+        showPoem(current, false);
+        renderCollections();
+      });
+      byId('poemSearch').addEventListener('input', renderSearch);
+      byId('savedSearch').addEventListener('input', renderCollections);
+      byId('historySearch').addEventListener('input', renderCollections);
+      byId('clearSaved').addEventListener('click', () => { writeStorage(storageKeys.saved, []); showPoem(current, false); renderCollections(); });
+      byId('clearHistory').addEventListener('click', () => { writeStorage(storageKeys.history, []); renderCollections(); });
+
+      byId('poemCount').textContent = `${poems.length} 首唐詩`;
+      current = poems[Math.floor(Math.random() * poems.length)];
+      showPoem(current);
+      renderSearch();
+      renderCollections();
+    })();
+  </script>
+</body>
+</html>
